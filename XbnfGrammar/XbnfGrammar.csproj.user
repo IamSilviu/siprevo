@@ -1,0 +1,6 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <StartAction>Program</StartAction>
+    <StartProgram>C:\Projects\OfficeSIP\Experimental\Sip\XbnfGrammar\Irony.GrammarExplorer.exe</StartProgram>
+  </PropertyGroup>
+</Project>

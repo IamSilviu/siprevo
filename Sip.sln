@@ -1,0 +1,90 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sip", "Sip\Sip.csproj", "{BD0C82BD-42DC-4E59-89AA-3829E70C1A78}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sip.Message", "Sip.Message\Sip.Message.csproj", "{33B6452A-AEFF-4DA5-84EE-B0652E09C0DB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5D6AD8A0-E6D7-4734-A8A8-AEA64FB90BEA} = {5D6AD8A0-E6D7-4734-A8A8-AEA64FB90BEA}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fsm", "Fsm\Fsm.csproj", "{EB73E534-0377-4329-85CF-141F9433EC1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fsm.Tests", "Fsm.Tests\Fsm.Tests.csproj", "{616B529A-EA40-437D-98C7-120146BDAE6C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E8F9AC44-C1CB-4B65-99D9-53B7B7A29DE4}"
+	ProjectSection(SolutionItems) = preProject
+		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
+		Sip.vsmdi = Sip.vsmdi
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SipDfaCompiler", "SipDfaCompiler\SipDfaCompiler.csproj", "{5D6AD8A0-E6D7-4734-A8A8-AEA64FB90BEA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{692A724E-DF1F-4873-986A-6E3C4FD9719A} = {692A724E-DF1F-4873-986A-6E3C4FD9719A}
+		{570FE0F2-0DBD-4B0E-BBCA-1748FC65F161} = {570FE0F2-0DBD-4B0E-BBCA-1748FC65F161}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XbnfGrammar", "XbnfGrammar\XbnfGrammar.csproj", "{692A724E-DF1F-4873-986A-6E3C4FD9719A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XbnfParser", "XbnfParser\XbnfParser.csproj", "{570FE0F2-0DBD-4B0E-BBCA-1748FC65F161}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sip.Message.Test", "Sip.Message.Test\Sip.Message.Test.csproj", "{8BC5CCFC-D7C5-4281-B67E-68FFB91A2190}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SipDfaTester", "SipDfaTester\SipDfaTester.csproj", "{731BA125-29A5-49F3-A914-270775C1BB15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.Memory", "Server.Memory\Server.Memory.csproj", "{3830C8B5-6853-417F-B5A9-5C0B5A5A9163}"
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Sip.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD0C82BD-42DC-4E59-89AA-3829E70C1A78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD0C82BD-42DC-4E59-89AA-3829E70C1A78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD0C82BD-42DC-4E59-89AA-3829E70C1A78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD0C82BD-42DC-4E59-89AA-3829E70C1A78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33B6452A-AEFF-4DA5-84EE-B0652E09C0DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33B6452A-AEFF-4DA5-84EE-B0652E09C0DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33B6452A-AEFF-4DA5-84EE-B0652E09C0DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33B6452A-AEFF-4DA5-84EE-B0652E09C0DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB73E534-0377-4329-85CF-141F9433EC1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB73E534-0377-4329-85CF-141F9433EC1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB73E534-0377-4329-85CF-141F9433EC1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB73E534-0377-4329-85CF-141F9433EC1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{616B529A-EA40-437D-98C7-120146BDAE6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{616B529A-EA40-437D-98C7-120146BDAE6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{616B529A-EA40-437D-98C7-120146BDAE6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{616B529A-EA40-437D-98C7-120146BDAE6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D6AD8A0-E6D7-4734-A8A8-AEA64FB90BEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D6AD8A0-E6D7-4734-A8A8-AEA64FB90BEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D6AD8A0-E6D7-4734-A8A8-AEA64FB90BEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D6AD8A0-E6D7-4734-A8A8-AEA64FB90BEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{692A724E-DF1F-4873-986A-6E3C4FD9719A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{692A724E-DF1F-4873-986A-6E3C4FD9719A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{692A724E-DF1F-4873-986A-6E3C4FD9719A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{692A724E-DF1F-4873-986A-6E3C4FD9719A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{570FE0F2-0DBD-4B0E-BBCA-1748FC65F161}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{570FE0F2-0DBD-4B0E-BBCA-1748FC65F161}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{570FE0F2-0DBD-4B0E-BBCA-1748FC65F161}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{570FE0F2-0DBD-4B0E-BBCA-1748FC65F161}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BC5CCFC-D7C5-4281-B67E-68FFB91A2190}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BC5CCFC-D7C5-4281-B67E-68FFB91A2190}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BC5CCFC-D7C5-4281-B67E-68FFB91A2190}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BC5CCFC-D7C5-4281-B67E-68FFB91A2190}.Release|Any CPU.Build.0 = Release|Any CPU
+		{731BA125-29A5-49F3-A914-270775C1BB15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{731BA125-29A5-49F3-A914-270775C1BB15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{731BA125-29A5-49F3-A914-270775C1BB15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{731BA125-29A5-49F3-A914-270775C1BB15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3830C8B5-6853-417F-B5A9-5C0B5A5A9163}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3830C8B5-6853-417F-B5A9-5C0B5A5A9163}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3830C8B5-6853-417F-B5A9-5C0B5A5A9163}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3830C8B5-6853-417F-B5A9-5C0B5A5A9163}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

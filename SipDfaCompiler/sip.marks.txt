@@ -1,0 +1,323 @@
+﻿
+//
+// Marks description rules:
+//
+// PATH -> Range [= VARNAME];
+//
+// PATH -> Decimal [= VARNAME];
+// PATH -> Hex [= VARNAME];
+//
+// PATH -> Const [= VARNAME [, ConstValue [, Priority]]];
+//
+// PATH -> Bool [= VARNAME];
+//
+// PATH -> Count = COUNTNAME [, MAXVALUE [, INITIALVALUE]];
+//
+// PATH -> Group = SUBSTITION, GROUPNAME
+//
+// PATH -> Reset [= VARNAME]           // this mark will reset range to empty value
+//
+// PATH -> ResetIfInvalid [= VARNAME]  // this reset range begin if end is invalid
+//
+//   VARNAME is pathname to variable, e.g. SomeStruct.NestedStruct.NestedStruct2.VarName
+//   VARNAME may include global struct description, e.g. StructVarName<GlobalStructType>.VarName
+//   VARNAME may include references to array var, e.g. VarName[CountName] or Struct[CountName].VarName
+//
+// Group description:
+//
+// .GROUPNAME.extra.path -> ANY DESCRIPTION;
+//   ANY DESCRIPTION may contain ? simbol, it will be replaced by SUBSTITION from Group rule. 
+//   A group's definition MUST precede its use.
+//
+
+//
+// -------------------------------------------------------------------------------[ .HOSTPORT
+//
+.HOSTPORT.host -> Range = ?<Hostport>.Host;
+.HOSTPORT.port.DIGIT -> Decimal = ?<Hostport>.Port;
+
+//
+// -------------------------------------------------------------------------------[ .ADDRSPEC
+//
+.ADDRSPEC.SIP-URI.sip: -> Const = ?<Addrspec>.UriScheme, Sip;
+.ADDRSPEC.SIPS-URI.sips: -> Const = ?<Addrspec>.UriScheme, Sips;
+.ADDRSPEC.absoluteURI.: -> Const = ?<Addrspec>.UriScheme, Absolute, 20;
+.ADDRSPEC.SIP-URI.userinfo.user -> Range = ?<Addrspec>.User;
+.ADDRSPEC.SIPS-URI.userinfo.user -> Range = ?<Addrspec>.User;
+.ADDRSPEC.SIP-URI.uri-parameters.uri-parameter.ms-received-cid-param.pvalue -> Range = ?<Addrspec>.MsReceivedCid;
+.ADDRSPEC.SIPS-URI.uri-parameters.uri-parameter.ms-received-cid-param.pvalue -> Range = ?<Addrspec>.MsReceivedCid;
+.ADDRSPEC.SIP-URI.hostport -> Group = ?<Addrspec>.Hostport, HOSTPORT;
+.ADDRSPEC.SIPS-URI.hostport -> Group = ?<Addrspec>.Hostport, HOSTPORT;
+.ADDRSPEC.SIP-URI.userinfo.@ -> Reset = ?<Addrspec>.Hostport;
+.ADDRSPEC.SIPS-URI.userinfo.@ -> Reset = ?<Addrspec>.Hostport;
+
+//
+// -------------------------------------------------------------------------------[ .FROMTO
+//
+.FROMTO.name-addr.addr-spec -> Group = ?<Fromto>.AddrSpec1, ADDRSPEC;
+.FROMTO.addr-spec -> Group = ?<Fromto>.AddrSpec2, ADDRSPEC;
+.FROMTO.from-param.tag-param.token -> Range = ?<Fromto>.Tag;
+.FROMTO.to-param.tag-param.token -> Range = ?<Fromto>.Tag;
+.FROMTO.from-param.epid-param.epid-param-value -> Range = ?<Fromto>.Epid;
+.FROMTO.to-param.epid-param.epid-param-value -> Range = ?<Fromto>.Epid;
+
+//
+// -------------------------------------------------------------------------------[ .METHOD
+//
+.METHOD.INVITEm -> Const = ?Method;
+.METHOD.ACKm -> Const = ?Method;
+.METHOD.OPTIONSm -> Const = ?Method;
+.METHOD.BYEm -> Const = ?Method;
+.METHOD.CANCELm -> Const = ?Method;
+.METHOD.REGISTERm -> Const = ?Method;
+.METHOD.extension-method.SUBSCRIBEm -> Const = ?Method;
+.METHOD.extension-method.NOTIFYm -> Const = ?Method;
+.METHOD.extension-method.SERVICEm -> Const = ?Method;
+.METHOD.extension-method -> Const = ?Method, Extension, 20;
+
+//
+// -------------------------------------------------------------------------------[ .CREDENTIALS
+//
+.CREDENTIALS.Digest -> Const = ?<Credentials>.AuthScheme;
+.CREDENTIALS.NTLM -> Const = ?<Credentials>.AuthScheme;
+.CREDENTIALS.Kerberos -> Const = ?<Credentials>.AuthScheme;
+.CREDENTIALS.TLS-DSK -> Const = ?<Credentials>.AuthScheme;
+.CREDENTIALS.digest-response.dig-resp.username.username-value.quoted-string.qdtext -> Range = ?<Credentials>.Username;
+.CREDENTIALS.digest-response.dig-resp.username.username-value.quoted-string.quoted-pair -> Range = ?<Credentials>.Username
+.CREDENTIALS.digest-response.dig-resp.realm.realm-value.quoted-string.qdtext -> Range = ?<Credentials>.Realm;
+.CREDENTIALS.digest-response.dig-resp.realm.realm-value.quoted-string.quoted-pair -> Range = ?<Credentials>.Realm;
+.CREDENTIALS.msspi-response.msspi-resp.realm.realm-value.quoted-string.qdtext -> Range = ?<Credentials>.Realm;
+.CREDENTIALS.msspi-response.msspi-resp.realm.realm-value.quoted-string.quoted-pair -> Range = ?<Credentials>.Realm;
+.CREDENTIALS.digest-response.dig-resp.nonce.nonce-value.quoted-string.qdtext -> Range = ?<Credentials>.Nonce;
+.CREDENTIALS.digest-response.dig-resp.nonce.nonce-value.quoted-string.quoted-pair -> Range = ?<Credentials>.Nonce;
+.CREDENTIALS.digest-response.dig-resp.digest-uri.digest-uri-value -> Range = ?<Credentials>.DigestUri;
+.CREDENTIALS.digest-response.dig-resp.dresponse.request-digest.LHEX -> Range = ?<Credentials>.Response;
+.CREDENTIALS.digest-response.dig-resp.algorithm.MD5 -> Const = ?<Credentials>.AuthAlgorithm;
+.CREDENTIALS.digest-response.dig-resp.algorithm.MD5-sess -> Const = ?<Credentials>.AuthAlgorithm;
+.CREDENTIALS.digest-response.dig-resp.algorithm.token -> Const = ?<Credentials>.AuthAlgorithm, Other, 20;
+.CREDENTIALS.digest-response.dig-resp.cnonce.cnonce-value.nonce-value.quoted-string.qdtext -> Range = ?<Credentials>.Cnonce;
+.CREDENTIALS.digest-response.dig-resp.cnonce.cnonce-value.nonce-value.quoted-string.quoted-pair -> Range = ?<Credentials>.Cnonce;
+.CREDENTIALS.digest-response.dig-resp.opaque.quoted-string.qdtext -> Range = ?<Credentials>.Opaque;
+.CREDENTIALS.digest-response.dig-resp.opaque.quoted-string.quoted-pair -> Range = ?<Credentials>.Opaque;
+.CREDENTIALS.digest-response.dig-resp.message-qop.qop-value -> Range = ?<Credentials>.MessageQop;
+.CREDENTIALS.digest-response.dig-resp.nonce-count.nc-value.LHEX -> Hex = ?<Credentials>.NonceCount;
+.CREDENTIALS.msspi-response.msspi-resp.targetname.target-value.ntlm-target-val -> Range = ?<Credentials>.Targetname;
+.CREDENTIALS.msspi-response.msspi-resp.targetname.target-value.kerberos-target-val -> Range = ?<Credentials>.Targetname;
+.CREDENTIALS.msspi-response.msspi-resp.targetname.target-value.tls-dsk-target-val.token -> Range = ?<Credentials>.Targetname;
+.CREDENTIALS.msspi-response.msspi-resp.version.version-value.DIGIT -> Decimal = ?<Credentials>.Version;
+.CREDENTIALS.msspi-response.msspi-resp.gssapi-data.gssapi-data-value.quoted-string.qdtext -> Range = ?<Credentials>.GssapiData;
+.CREDENTIALS.msspi-response.msspi-resp.gssapi-data.gssapi-data-value.quoted-string.quoted-pair -> Range = ?<Credentials>.GssapiData;
+.CREDENTIALS.msspi-response.msspi-resp.crand.crand-val.LHEX -> Hex = ?<Credentials>.Crand;
+.CREDENTIALS.msspi-response.msspi-resp.cnum.cnum-value.DIGIT -> Decimal = ?<Credentials>.Cnum;
+
+//
+// -------------------------------------------------------------------------------[ Authorization
+//
+SIP-messageX.message-headerX.Authorization.credentials -> Group = Authorization, CREDENTIALS;
+
+//
+// -------------------------------------------------------------------------------[ Proxy-Authorization
+//
+SIP-messageX.message-headerX.Proxy-Authorization.credentials -> Group = ProxyAuthorization, CREDENTIALS;
+
+//
+// -------------------------------------------------------------------------------[ From
+//
+SIP-messageX.message-headerX.From.from-spec -> Group = From, FROMTO;
+
+//
+// -------------------------------------------------------------------------------[ To
+//
+SIP-messageX.message-headerX.To -> Group = To, FROMTO;
+
+//
+// -------------------------------------------------------------------------------[ Request-Line
+//
+SIP-messageX.Request-Line.Method -> Group = , METHOD;
+SIP-messageX.Request-Line.Request-URI -> Group = RequestUri, ADDRSPEC;
+SIP-messageX.Request-Line.SIP-Version.DIGIT -> Decimal = SipVersion;
+
+//
+// -------------------------------------------------------------------------------[ Event
+//
+SIP-messageX.message-headerX.extension-header.Event.event-param.token -> Range = Event.Id;
+SIP-messageX.message-headerX.extension-header.Event.event-type -> Range = Event.EventType;
+
+//
+// -------------------------------------------------------------------------------[ Headers
+//
+SIP-messageX.message-headerX.extension-header.header-name -> Range = Headers<Header>[HeaderCount].Name;
+SIP-messageX.message-headerX.extension-header.header-value -> Range = Headers<Header>[HeaderCount].Value;
+SIP-messageX.message-headerX.Accept.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, Accept;
+SIP-messageX.message-headerX.Accept-Encoding.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, AcceptEncoding;
+SIP-messageX.message-headerX.Accept-Language.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, AcceptLanguage;
+SIP-messageX.message-headerX.Alert-Info.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, AlertInfo;
+SIP-messageX.message-headerX.Allow.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, Allow;
+SIP-messageX.message-headerX.Authentication-Info.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, AuthenticationInfo;
+SIP-messageX.message-headerX.Authorization.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, Authorization;
+SIP-messageX.message-headerX.Call-ID.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, CallId;
+SIP-messageX.message-headerX.Call-Info.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, CallInfo;
+SIP-messageX.message-headerX.Content-Disposition.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, ContentDisposition;
+SIP-messageX.message-headerX.Content-Encoding.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, ContentEncoding;
+SIP-messageX.message-headerX.Content-Language.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, ContentLanguage;
+SIP-messageX.message-headerX.Content-Length.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, ContentLength;
+SIP-messageX.message-headerX.Content-Type.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, ContentType;
+SIP-messageX.message-headerX.CSeq.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, CSeq;
+SIP-messageX.message-headerX.Date.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, Date;
+SIP-messageX.message-headerX.Error-Info.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, ErrorInfo;
+SIP-messageX.message-headerX.In-Reply-To.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, InReplyTo;
+SIP-messageX.message-headerX.Max-Forwards.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, MaxForwards;
+SIP-messageX.message-headerX.MIME-Version.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, MimeVersion;
+SIP-messageX.message-headerX.Min-Expires.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, MinExpires;
+SIP-messageX.message-headerX.Organization.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, Organization;
+SIP-messageX.message-headerX.Priority.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, Priority;
+SIP-messageX.message-headerX.Proxy-Authenticate.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, ProxyAuthenticate;
+SIP-messageX.message-headerX.Proxy-Authorization.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, ProxyAuthorization;
+SIP-messageX.message-headerX.Proxy-Require.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, ProxyRequire;
+SIP-messageX.message-headerX.Reply-To.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, ReplyTo;
+SIP-messageX.message-headerX.Require.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, Require;
+SIP-messageX.message-headerX.Retry-After.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, RetryAfter;
+SIP-messageX.message-headerX.Server.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, Server;
+SIP-messageX.message-headerX.Subject.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, Subject;
+SIP-messageX.message-headerX.Supported.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, Supported;
+SIP-messageX.message-headerX.Timestamp.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, Timestamp;
+SIP-messageX.message-headerX.Unsupported.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, Unsupported;
+SIP-messageX.message-headerX.User-Agent.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, UserAgent;
+SIP-messageX.message-headerX.Warning.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, Warning;
+SIP-messageX.message-headerX.WWW-Authenticate.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, WwwAuthenticate;
+SIP-messageX.message-headerX.Contact.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, Contact;
+SIP-messageX.message-headerX.From.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, From;
+SIP-messageX.message-headerX.Record-Route.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, RecordRoute;
+SIP-messageX.message-headerX.Route.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, Route;
+SIP-messageX.message-headerX.To.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, To;
+SIP-messageX.message-headerX.Via.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, Via;
+SIP-messageX.message-headerX.CRLF -> Count = HeaderCount, 200;
+
+//
+// -------------------------------------------------------------------------------[ Status-Line
+//
+SIP-messageX.Status-Line.SIP-Version.DIGIT -> Decimal = SipVersion;
+SIP-messageX.Status-Line.Status-Code -> Decimal;
+
+//
+// -------------------------------------------------------------------------------[ Contact
+//
+SIP-messageX.message-headerX.Contact.HCOLON.: -> Count = ContactCount, 25, -1;
+SIP-messageX.message-headerX.Contact.COMMA., -> Count = ContactCount, 25, -1;
+SIP-messageX.message-headerX.Contact.STAR.* -> Bool = IsContactStar;
+SIP-messageX.message-headerX.Contact.contact-param.name-addr.addr-spec -> Group = Contact[ContactCount].AddrSpec2, ADDRSPEC;
+SIP-messageX.message-headerX.Contact.contact-param.addr-spec -> Group = Contact[ContactCount].AddrSpec1, ADDRSPEC;
+SIP-messageX.message-headerX.Contact.contact-param.contact-params.c-p-expires.delta-seconds.DIGIT -> Decimal = Contact[ContactCount].Expires;
+SIP-messageX.message-headerX.Contact.contact-param.contact-params.c-p-instance.instance-val -> Range = Contact[ContactCount].SipInstance;
+SIP-messageX.message-headerX.Contact.contact-param.contact-params.c-p-q.qvalue -> Range = Contact[ContactCount].Q;
+SIP-messageX.message-headerX.Contact.contact-param.contact-params.c-p-proxy -> Range = Contact[ContactCount].ProxyReplace;
+SIP-messageX.message-headerX.Contact.contact-param.SEMI -> ContinueRange = Contact[ContactCount].ProxyReplace;
+SIP-messageX.message-headerX.Contact.contact-param.SEMI.; -> ResetIfInvalid = Contact[ContactCount].ProxyReplace;
+
+//
+// CSeq
+//
+SIP-messageX.message-headerX.CSeq.DIGIT -> Decimal = CSeq.Value;
+SIP-messageX.message-headerX.CSeq.Method -> Group = CSeq., METHOD;
+
+//
+// Call-ID
+//
+SIP-messageX.message-headerX.Call-ID.callid -> Range = CallId;
+
+//
+// Expires
+//
+SIP-messageX.message-headerX.Expires.delta-seconds.DIGIT -> Decimal = Expires;
+
+//
+// Min-Expires
+//
+SIP-messageX.message-headerX.Min-Expires.delta-seconds.DIGIT -> Decimal = MinExpires;
+
+//
+// Max-Forwards
+//
+SIP-messageX.message-headerX.Max-Forwards.DIGIT -> Decimal = MaxForwards;
+
+//
+// Date
+//
+SIP-messageX.message-headerX.Date.SIP-date.rfc1123-date.wkday.Mon -> Const = Date.Wkday;
+SIP-messageX.message-headerX.Date.SIP-date.rfc1123-date.wkday.Tue -> Const = Date.Wkday;
+SIP-messageX.message-headerX.Date.SIP-date.rfc1123-date.wkday.Wed -> Const = Date.Wkday;
+SIP-messageX.message-headerX.Date.SIP-date.rfc1123-date.wkday.Thu -> Const = Date.Wkday;
+SIP-messageX.message-headerX.Date.SIP-date.rfc1123-date.wkday.Fri -> Const = Date.Wkday;
+SIP-messageX.message-headerX.Date.SIP-date.rfc1123-date.wkday.Sat -> Const = Date.Wkday;
+SIP-messageX.message-headerX.Date.SIP-date.rfc1123-date.wkday.Sun -> Const = Date.Wkday;
+SIP-messageX.message-headerX.Date.SIP-date.rfc1123-date.date1.month.Jan -> Const = Date.Month;
+SIP-messageX.message-headerX.Date.SIP-date.rfc1123-date.date1.month.Feb -> Const = Date.Month;
+SIP-messageX.message-headerX.Date.SIP-date.rfc1123-date.date1.month.Mar -> Const = Date.Month;
+SIP-messageX.message-headerX.Date.SIP-date.rfc1123-date.date1.month.Apr -> Const = Date.Month;
+SIP-messageX.message-headerX.Date.SIP-date.rfc1123-date.date1.month.May -> Const = Date.Month;
+SIP-messageX.message-headerX.Date.SIP-date.rfc1123-date.date1.month.Jun -> Const = Date.Month;
+SIP-messageX.message-headerX.Date.SIP-date.rfc1123-date.date1.month.Jul -> Const = Date.Month;
+SIP-messageX.message-headerX.Date.SIP-date.rfc1123-date.date1.month.Aug -> Const = Date.Month;
+SIP-messageX.message-headerX.Date.SIP-date.rfc1123-date.date1.month.Sep -> Const = Date.Month;
+SIP-messageX.message-headerX.Date.SIP-date.rfc1123-date.date1.month.Oct -> Const = Date.Month;
+SIP-messageX.message-headerX.Date.SIP-date.rfc1123-date.date1.month.Nov -> Const = Date.Month;
+SIP-messageX.message-headerX.Date.SIP-date.rfc1123-date.date1.month.Dec -> Const = Date.Month;
+SIP-messageX.message-headerX.Date.SIP-date.rfc1123-date.date1.DIGIT -> Decimal = Date.DayYear;
+SIP-messageX.message-headerX.Date.SIP-date.rfc1123-date.time.DIGIT -> Decimal = Date.Time;
+
+//
+// Via
+//
+SIP-messageX.message-headerX.Via.HCOLON.: -> Count = ViaCount, 25, -1;
+SIP-messageX.message-headerX.Via.COMMA., -> Count = ViaCount, 25, -1;
+SIP-messageX.message-headerX.Via.via-parm.sent-by.host -> Range = Via[ViaCount].SentBy.Host;
+SIP-messageX.message-headerX.Via.via-parm.sent-by.port.DIGIT -> Decimal = Via[ViaCount].SentBy.Port;
+SIP-messageX.message-headerX.Via.via-parm.via-params.via-ttl.ttl.DIGIT -> Decimal = Via[ViaCount].Ttl;
+SIP-messageX.message-headerX.Via.via-parm.via-params.via-maddr.host -> Range = Via[ViaCount].Maddr;
+SIP-messageX.message-headerX.Via.via-parm.via-params.via-branch.token -> Range = Via[ViaCount].Branch;
+SIP-messageX.message-headerX.Via.via-parm.via-params.via-received.IPv4address -> Range = Via[ViaCount].Received;
+SIP-messageX.message-headerX.Via.via-parm.via-params.via-received.IPv6address -> Range = Via[ViaCount].Received;
+SIP-messageX.message-headerX.Via.via-parm.sent-protocol.transport.UDP -> Const = Via[ViaCount].Transport;
+SIP-messageX.message-headerX.Via.via-parm.sent-protocol.transport.TCP -> Const = Via[ViaCount].Transport;
+SIP-messageX.message-headerX.Via.via-parm.sent-protocol.transport.TLS -> Const = Via[ViaCount].Transport;
+SIP-messageX.message-headerX.Via.via-parm.sent-protocol.transport.SCTP -> Const = Via[ViaCount].Transport;
+SIP-messageX.message-headerX.Via.via-parm.sent-protocol.transport.other-transport -> Const = Via[ViaCount].Transport, Other, 20;
+
+//
+// Content-Type
+//
+SIP-messageX.message-headerX.Content-Type.media-type.m-type -> Range = ContentType.Type;
+SIP-messageX.message-headerX.Content-Type.media-type.m-subtype -> Range = ContentType.Subtype;
+
+//
+// Content-Length
+//
+SIP-messageX.message-headerX.Content-Length.DIGIT -> Decimal = ContentLength;
+
+//
+// Route
+//
+SIP-messageX.message-headerX.Route.HCOLON.: -> Count = RouteCount, 25, -1;
+SIP-messageX.message-headerX.Route.COMMA., -> Count = RouteCount, 25, -1;
+SIP-messageX.message-headerX.Route.route-param.name-addr.addr-spec -> Group = Route[RouteCount].AddrSpec, ADDRSPEC;
+
+//
+// Record-Route
+//
+SIP-messageX.message-headerX.Record-Route.HCOLON.: -> Count = RecordRouteCount, 25, -1;
+SIP-messageX.message-headerX.Record-Route.COMMA., -> Count = RecordRouteCount, 25, -1;
+SIP-messageX.message-headerX.Record-Route.rec-route.name-addr.addr-spec -> Group = RecordRoute[RecordRouteCount].AddrSpec, ADDRSPEC;
+
+//
+// -------------------------------------------------------------------------------[ .Supported
+//
+SIP-messageX.message-headerX.Supported.HCOLON.: -> Count = SupportedCount, 25, -1;
+SIP-messageX.message-headerX.Supported.COMMA., -> Count = SupportedCount, 25, -1;
+SIP-messageX.message-headerX.Supported.option-tag -> Range = Supported[SupportedCount].Option;
+
+
+//
+//
+//
+//
+///////////////////////////////////////////////////////
