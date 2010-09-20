@@ -58,7 +58,7 @@ namespace SipDfaTester
 			Console.WriteLine("AddrSpec #2: |{0}| : {1}", dfa.Contact[2].AddrSpec2.Hostport.Host.ToString(), dfa.Contact[2].AddrSpec2.Hostport.Port);
 			Console.WriteLine("AddrSpec #3: |{0}| : {1}", dfa.Contact[3].AddrSpec2.Hostport.Host.ToString(), dfa.Contact[3].AddrSpec2.Hostport.Port);
 
-			Console.WriteLine("RequestUri: |{0}|", dfa.RequestUri.ToString());
+			Console.WriteLine("RequestUri: |{0}|", dfa.RequestUri.Hostport.Host.ToString());
 			Console.WriteLine("ContactCount: {0}", dfa.Count.ContactCount);
 			Console.WriteLine("AddrSpec #0: |{0}| : {1}", dfa.Contact[0].AddrSpec2.Hostport.Host.ToString(), dfa.Contact[0].AddrSpec2.Hostport.Port);
 			Console.WriteLine("AddrSpec #1: |{0}| : {1}", dfa.Contact[1].AddrSpec2.Hostport.Host.ToString(), dfa.Contact[1].AddrSpec2.Hostport.Port);
@@ -92,20 +92,34 @@ namespace SipDfaTester
 			//for (int i = 0; i < dfa.Count.HeaderCount; i++)
 			//    Console.WriteLine("{0}:\r\n|{1}|", dfa.Headers[i].Name.ToString(), dfa.Headers[i].Value.ToString());
 
-			//var message2 = utf.GetBytes(
-			//    "REGISTER sip:officesip.local SIP/2.0\r\n" +
-			//    "Contact: *\r\n" +
-			//    "\r\n");
+			var message2 = utf.GetBytes(
+				"BENOTIFY sip:officesip.local SIP/2.0\r\n" +
+				"Contact: *\r\n" +
+				"Require: token1, token2, token3\r\n" +
+				"Require: token4\r\n" +
+				"Proxy-Require: token1, token2, token3\r\n" +
+				"\r\n");
 
-			//dfa.SetDefaultValue();
-			//proccessed = dfa.Parse(message2, 0, message2.Length);
+			dfa.SetDefaultValue();
+			dfa.SetArray(message2);
+			proccessed = dfa.Parse(message2, 0, message2.Length);
 
-			//Console.WriteLine("--");
-			//Console.WriteLine("Total: {0}", message2.Length);
-			//Console.WriteLine("Proccessed: {0}", proccessed);
-			//Console.WriteLine("Final: {0}", dfa.Final);
-			////Console.WriteLine("ContactCount: {0}", dfa.Count.ContactCount);
-			////Console.WriteLine("Star: {0}", dfa.IsContactStar);
+			Console.WriteLine("--");
+			Console.WriteLine("Total: {0}", message2.Length);
+			Console.WriteLine("Proccessed: {0}", proccessed);
+			Console.WriteLine("Final: {0}", dfa.Final);
+			Console.WriteLine("Method: {0}", dfa.Method);
+			Console.WriteLine("ContactCount: {0}", dfa.Count.ContactCount);
+			Console.WriteLine("RequireCount: {0}", dfa.Count.RequireCount);
+			Console.Write("Require: ");
+			for (int i = 0; i <= dfa.Count.RequireCount; i++)
+				Console.Write("{0}, ", dfa.Require[i].ToString());
+			Console.WriteLine();
+			Console.Write("Proxy-Require: ");
+			for (int i = 0; i <= dfa.Count.ProxyRequireCount; i++)
+				Console.Write("{0}, ", dfa.ProxyRequire[i].ToString());
+			Console.WriteLine();
+			Console.WriteLine("Star: {0}", dfa.IsContactStar);
 
 			//Console.ReadKey();
 

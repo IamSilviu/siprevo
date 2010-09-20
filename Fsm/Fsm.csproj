@@ -50,6 +50,7 @@
     <Compile Include="Dfa.cs" />
     <Compile Include="DfaState.cs" />
     <Compile Include="DfaToNfa.cs" />
+    <Compile Include="Indexer.cs" />
     <Compile Include="IntArrayComparer.cs" />
     <Compile Include="IntSet.cs" />
     <Compile Include="Map.cs" />

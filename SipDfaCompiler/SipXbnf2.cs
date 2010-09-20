@@ -1636,9 +1636,14 @@ namespace SipDfaCompiler
 			State rule = (State)(new byte[] {0x53,0x45,0x52,0x56,0x49,0x43,0x45,});
 			return rule;
 		}
+		public State GetBENOTIFYm0(List<string> rulenames)
+		{
+			State rule = (State)(new byte[] {0x42,0x45,0x4E,0x4F,0x54,0x49,0x46,0x59,});
+			return rule;
+		}
 		public State Getextension_method2(List<string> rulenames)
 		{
-			State rule = GetSERVICEm(rulenames);
+			State rule = State.NoCloneAlternation(GetSERVICEm(rulenames),GetBENOTIFYm(rulenames));
 			return rule;
 		}
 		public State Getfrom_param1(List<string> rulenames)
@@ -4324,6 +4329,14 @@ namespace SipDfaCompiler
 		{
 			rulenames.Insert(0, "SERVICEm");
 			State rule = State.NoCloneAlternation(GetSERVICEm0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State GetBENOTIFYm(List<string> rulenames)
+		{
+			rulenames.Insert(0, "BENOTIFYm");
+			State rule = State.NoCloneAlternation(GetBENOTIFYm0(rulenames));
 			rule = OnMarkRule(rule, rulenames);
 			rulenames.RemoveAt(0);
 			return rule;

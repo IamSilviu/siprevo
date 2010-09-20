@@ -240,7 +240,20 @@ namespace SipDfaCompiler
 			}
 
 			foreach (var begin in item.Begins1)
-				_main.WriteLine("{0}.Bytes = bytes;", begin.Value.ShortName);
+			{
+				if (HasBrackets(begin.Value.ShortName))
+				{
+					var name = RemoveExtraInfo(RemoveBrackets(begin.Value.ShortName));
+					var counter = GetCounter(begin.Value.ShortName);
+
+					_main.WriteLine("for(int i=0; i<Max.{0}; i++)", counter);
+					_main.WriteLine("{0}[i].Bytes = bytes;", name);
+				}
+				else
+				{
+					_main.WriteLine("{0}.Bytes = bytes;", begin.Value.ShortName);
+				}
+			}
 
 			_main.WriteLine("}");
 		}
@@ -259,19 +272,21 @@ namespace SipDfaCompiler
 
 		private void GenerateInitializer(string shortName, string type1, string prefix, string value)
 		{
+			if (value.StartsWith(".") == false)
+				value = " = " + value;
+				
 			if (HasBrackets(shortName))
 			{
 				var name = RemoveExtraInfo(RemoveBrackets(shortName));
 				var counter = GetCounter(shortName);
 
 				_main.WriteLine("if({0}{1}==null) {0}{1}=new {2}[Max.{3}];", prefix, name, type1, counter);
-				_main.WriteLine("for(int i=0; i<Max.{2}; i++) {0}{1}[i] = {3};", prefix, name, counter, value);
+				_main.WriteLine("for(int i=0; i<Max.{2}; i++) {0}{1}[i]{3};", prefix, name, counter, value);
 			}
 			else
 			{
 				_main.Write(prefix);
 				_main.Write(shortName);
-				_main.Write("=");
 				_main.Write(value);
 				_main.Write(";");
 				_main.WriteLine();
@@ -324,8 +339,9 @@ namespace SipDfaCompiler
 				GenerateInitializer(pair.Key, name + "s", "", name + "s.None");
 			}
 
-			foreach(var begin in item.Begins1)
-				_main.WriteLine("{0}.SetDefaultValue();", begin.Value.ShortName);
+			//foreach(var begin in item.Begins1)
+			//    _main.WriteLine("{0}.SetDefaultValue();", begin.Value.ShortName);
+			GenerateInitializers(item.Begins1, "ByteArrayPartRef", "", ".SetDefaultValue()");
 
 			GenerateInitializers(item.Counts, "int", "Count.");
 			GenerateInitializers(item.Decimals1, "int", "" , "int.MinValue");

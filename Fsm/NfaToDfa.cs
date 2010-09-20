@@ -119,8 +119,8 @@ namespace Fsm
 			var dfaStates = new Dictionary<int[], DfaState>(3000000, new IntArrayComparer());
 			var notMarkedStates = new Queue<DfaState>(500000);
 
-			dfaStart = new DfaState(start.Eclosure());
-			dfaStates.Add(dfaStart.GetNfaIds(), dfaStart);
+			dfaStart = new DfaState(DfaState.GetNfaIds(start.Eclosure()));
+			dfaStates.Add(dfaStart.NfaIds, dfaStart);
 			notMarkedStates.Enqueue(dfaStart);
 
 			int i = 0;
@@ -163,7 +163,7 @@ namespace Fsm
 							DfaState u;
 							if (dfaStates.TryGetValue(uUnique, out u) == false)
 							{
-								u = new DfaState(states);
+								u = new DfaState(uUnique);
 								dfaStates.Add(uUnique, u);
 								notMarkedStates.Enqueue(u);
 							}
@@ -205,8 +205,8 @@ namespace Fsm
 			var notMarkedStates = new Queue<DfaState>(500000);
 			var notMarkedSync = new object();
 
-			dfaStart = new DfaState(start.Eclosure());
-			dfaStates.Add(dfaStart.GetNfaIds(), dfaStart);
+			dfaStart = new DfaState(DfaState.GetNfaIds(start.Eclosure()));
+			dfaStates.Add(dfaStart.NfaIds, dfaStart);
 			notMarkedStates.Enqueue(dfaStart);
 
 			Thread[] threads = new Thread[Environment.ProcessorCount * 2];
@@ -258,14 +258,17 @@ namespace Fsm
 			if (p.Main)
 			{
 				GC.Collect();
+				GC.WaitForFullGCComplete();
+				GC.WaitForPendingFinalizers();
 				memStart = GC.GetTotalMemory(true);
 			}
 			else
 			{
-				Thread.Sleep(5000);
+				Thread.Sleep(20000);
 			}
 
-			for (; ; )
+			int memPerState = 0;
+			for (; ; i++)
 			{
 				DfaState t = null;
 				lock (p.NotMarkedSync)
@@ -275,11 +278,12 @@ namespace Fsm
 					t = p.NotMarkedStates.Dequeue();
 				}
 
-				if (p.Main && i++ % 100 == 0)
+				if (p.Main &&  (i % 100) == 0)
 				{
-					int memPerState = (int)((GC.GetTotalMemory(true) - memStart) / (long)p.DfaStates.Count);
+					if ((i % 25000) == 0 && i > 0)
+						memPerState = (int)((GC.GetTotalMemory(true) - memStart) / (long)p.DfaStates.Count);
 					int time1 = Environment.TickCount;
-					Console.Write("{2}\t({3} ms)\t\t{0} ({4} b)\t\t{1}\t\t", p.DfaStates.Count, p.NotMarkedStates.Count, p.DfaStates.Count - p.NotMarkedStates.Count, time1 - time, memPerState);
+					Console.Write("{2}\t({3} ms)\t\t{0} ({4} b)\t\t{1}  ", p.DfaStates.Count, p.NotMarkedStates.Count, p.DfaStates.Count - p.NotMarkedStates.Count, time1 - time, memPerState);
 					Console.Write("\r");
 					time = time1;
 				}
@@ -306,7 +310,7 @@ namespace Fsm
 							{
 								if (p.DfaStates.TryGetValue(uUnique, out u) == false)
 								{
-									u = new DfaState(states);
+									u = new DfaState(uUnique);
 									p.DfaStates.Add(uUnique, u);
 									lock (p.NotMarkedSync)
 										p.NotMarkedStates.Enqueue(u);
@@ -319,7 +323,7 @@ namespace Fsm
 
 					if (p.Main)
 					{
-						if (i % 1000 == 0)
+						if (i % 10000 == 0)
 						{
 							GC.Collect();
 							GC.WaitForFullGCComplete();

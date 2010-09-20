@@ -7,33 +7,42 @@ using System.Linq;
 namespace Fsm
 {
 	public class DfaState
+		: IIndexed
 	{
-		DfaState[] _trasition;
-		State[] _nfaStates;
+		private Indexer<DfaState>.Array _trasition;
+		private Indexer<State>.Array _nfaStates;
 
-		public DfaState(ICollection<State> nfaStates)
+		public DfaState(Int32[] nfaIds)
 		{
-			_trasition = new DfaState[byte.MaxValue + 1];
+			Indexer<DfaState>.Add(this);
 
-			_nfaStates = new State[nfaStates.Count];
-			int i = 0;
-			foreach (var item in nfaStates)
-				NfaStates[i++] = item;
+			_trasition = new Indexer<DfaState>.Array(byte.MaxValue + 1);
+			_nfaStates = new Indexer<State>.Array(nfaIds);
 		}
 
-		public void AddNfaStates(ICollection<State> nfaStates)
+		#region IIndexed
+
+		public Int32 Id
 		{
-			int i = _nfaStates.Length;
-
-			Array.Resize<State>(ref _nfaStates, _nfaStates.Length + nfaStates.Count);
-
-			foreach (var state in nfaStates)
-				_nfaStates[i++] = state;
+			get;
+			private set;
 		}
 
-		public State[] NfaStates
+		void IIndexed.SetId(int id)
 		{
-			get { return _nfaStates; }
+			Id = id;
+		}
+
+		#endregion
+
+		public IEnumerable<State> NfaStates
+		{
+			get { return _nfaStates.Items; }
+		}
+
+		public int[] NfaIds
+		{
+			get { return _nfaStates.Ids; }
 		}
 
 		#region Transition
@@ -52,7 +61,7 @@ namespace Fsm
 			_trasition[char1] = state;
 		}
 
-		public DfaState[] Transition 
+		public Indexer<DfaState>.Array Transition 
 		{
 			get { return _trasition; }
 		}
@@ -248,135 +257,6 @@ namespace Fsm
 			}
 		}
 
-		//public bool RouteJoinTo(string name, DfaState to)
-		//{
-		//    var joins = new List<DfaState>();
-		//    ForEach((state) =>
-		//        {
-		//            foreach (var mark in state.AllMarks)
-		//                if (mark.Mark == Marks.JoinPin && mark.Name == name)
-		//                {
-		//                    to.AddNfaStates(state.NfaStates);
-		//                    joins.Add(state);
-		//                    break;
-		//                }
-		//        });
-
-		//    bool routed = false;
-		//    ForEach((state) =>
-		//    {
-		//        for (int i = 0; i <= byte.MaxValue; i++)
-		//            if (joins.Contains(state._trasition[i]))
-		//            {
-		//                state._trasition[i] = to;
-		//                routed = true;
-		//            }
-		//    });
-
-		//    return routed;
-		//}
-
-		//public List<DfaState> FindPins(string name)
-		//{
-		//    var states = new List<DfaState>();
-		//    ForEach((state) =>
-		//    {
-		//        foreach (var mark in state.AllMarks)
-		//            if (mark.Mark == Marks.JoinPin && mark.Name == name)
-		//            {
-		//                states.Add(state);
-		//                break;
-		//            }
-		//    });
-
-		//    return states;
-		//}
-
-		//public void ResolvePins(Func<string, DfaState> resolve)
-		//{
-		//    for (; ; )
-		//    {
-		//        DfaState sub = null;
-		//        DfaState pin = null;
-
-		//        ForEach((state) =>
-		//        {
-		//            if (pin == null)
-		//            {
-		//                foreach (var mark in state.AllMarks)
-		//                    if (mark.Mark == Marks.JoinPin)
-		//                    {
-		//                        if (mark.Name != "out")
-		//                        {
-		//                            sub = resolve(mark.Name);
-		//                            pin = state;
-		//                            break;
-		//                        }
-		//                    }
-		//            }
-		//        });
-
-		//        if (sub == null)
-		//            break;
-
-		//        var subPins = sub.FindPins("out");
-
-		//        foreach(var out1 in subPins)
-		//            for (int i = 0; i <= byte.MaxValue; i++)
-		//            {
-		//                if (pin._trasition[i] != null)
-		//                {
-		//                    if (out1._trasition[i] != null)
-		//                        Console.WriteLine("Conflict [{0}]", i);
-		//                    else
-		//                        out1.AddTransition((byte)i, pin.Transition[i]);
-		//                }
-		//            }
-
-		//        ForEach((state) =>
-		//        {
-		//            if (state != pin)
-		//            {
-		//                for (int i = 0; i <= byte.MaxValue; i++)
-		//                    if (state._trasition[i] == pin)
-		//                        state._trasition[i] = sub;
-		//            }
-		//            // else ? selflink ?
-		//        });
-		//    }
-		//}
-
-		//public bool InsertTo(string name1, DfaState dfa2, string name2)
-		//{
-		//    var joins1 = FindJoinPins(name1);
-		//    var joins = new Dictionary<DfaState, DfaState>();
-
-		//    ForEach((state) =>
-		//    {
-		//        foreach (var mark in state.AllMarks)
-		//            if (mark.Mark == Marks.JoinPin && mark.Name == name)
-		//            {
-		//                var dfa = dfa1;
-		//                joins.Add(state, dfa);
-		//                break;
-		//            }
-		//    });
-
-		//    bool routed = false;
-		//    ForEach((state) =>
-		//    {
-		//        for (int i = 0; i <= byte.MaxValue; i++)
-		//            if (joins.ContainsKey(state._trasition[i]))
-		//            {
-		//                var dfa = joins[state._trasition[i]];
-		//                state._trasition[i] = dfa;
-		//                routed = true;
-		//            }
-		//    });
-
-		//    return routed;
-		//}
-
 		#region SetId - for DFA minimize
 
 		private int _setId;
@@ -415,11 +295,6 @@ namespace Fsm
 		#endregion
 
 		#region NFA IDs, ToString()
-
-		public int[] GetNfaIds()
-		{
-			return GetNfaIds(NfaStates);
-		}
 
 		public static int[] GetNfaIds(ICollection<State> states)
 		{

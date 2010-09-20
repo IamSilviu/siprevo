@@ -1,5 +1,4 @@
-﻿
-//
+﻿//
 // Marks description rules:
 //
 // PATH -> Range [= VARNAME];
@@ -73,6 +72,7 @@
 .METHOD.extension-method.SUBSCRIBEm -> Const = ?Method;
 .METHOD.extension-method.NOTIFYm -> Const = ?Method;
 .METHOD.extension-method.SERVICEm -> Const = ?Method;
+.METHOD.extension-method.BENOTIFYm -> Const = ?Method;
 .METHOD.extension-method -> Const = ?Method, Extension, 20;
 
 //
@@ -213,6 +213,20 @@ SIP-messageX.message-headerX.Contact.contact-param.contact-params.c-p-q.qvalue -
 SIP-messageX.message-headerX.Contact.contact-param.contact-params.c-p-proxy -> Range = Contact[ContactCount].ProxyReplace;
 SIP-messageX.message-headerX.Contact.contact-param.SEMI -> ContinueRange = Contact[ContactCount].ProxyReplace;
 SIP-messageX.message-headerX.Contact.contact-param.SEMI.; -> ResetIfInvalid = Contact[ContactCount].ProxyReplace;
+
+//
+// -------------------------------------------------------------------------------[ Require
+//
+SIP-messageX.message-headerX.Require.HCOLON.: -> Count = RequireCount, 25, -1;
+SIP-messageX.message-headerX.Require.COMMA., -> Count = RequireCount, 25, -1;
+SIP-messageX.message-headerX.Require.option-tag -> Range = Require[RequireCount];
+
+//
+// -------------------------------------------------------------------------------[ Proxy-Require
+//
+SIP-messageX.message-headerX.Proxy-Require.HCOLON.: -> Count = ProxyRequireCount, 25, -1;
+SIP-messageX.message-headerX.Proxy-Require.COMMA., -> Count = ProxyRequireCount, 25, -1;
+SIP-messageX.message-headerX.Proxy-Require.option-tag -> Range = ProxyRequire[ProxyRequireCount];
 
 //
 // CSeq

@@ -40,6 +40,7 @@ namespace SipDfaCompiler
 			Console.WriteLine("Creating NFA...");
 			var nfa = xbnf.GetSIP_messageX(new List<string>());
 			nfa.MarkFinal();
+			Console.WriteLine("Max NFA state id: {0}", State.MaxId);
 			Console.WriteLine("Done.");
 
 			foreach (var pair in _marks)

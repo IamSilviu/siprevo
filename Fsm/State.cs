@@ -5,18 +5,17 @@ namespace Fsm
 {
 	public class State
 		: MarkImpl
+		, IIndexed
 	{
-		private static int _idCounter;
 		public static readonly byte? Epsilon = null;
 
-		private Int32 _id;
 		private Map<byte?, State> _transition;
 
 		public State()
 		{
-			_id = _idCounter++;
+			Indexer<State>.Add(this);
+
 			_transition = new Map<byte?, State>();
-			//Console.WriteLine("{0}", _idCounter);
 		}
 
 		public State(byte? c, State s)
@@ -32,14 +31,29 @@ namespace Fsm
 			_transition.Add(c, s2);
 		}
 
+		#region IIndexed
+
+		public Int32 Id
+		{
+			get;
+			private set;
+		}
+
+		void IIndexed.SetId(int id)
+		{
+			Id = id;
+		}
+
+		#endregion
+
 		public Map<byte?, State> Transition
 		{
 			get { return _transition; }
 		}
 
-		public int Id
+		public static int MaxId
 		{
-			get { return _id; }
+			get { return Indexer<State>.MaxId; }
 		}
 
 		#region Legacy
@@ -161,16 +175,6 @@ namespace Fsm
 			var end1 = FindEnd();
 			end1.Transition.Add(Epsilon, end2);
 		}
-
-		//public void MarkJoinPin(string name)
-		//{
-		//    var end2 = new State();
-		//    end2.Mark = Marks.JoinPin;
-		//    end2.Name = name;
-
-		//    var end1 = FindEnd();
-		//    end1.Transition.Add(Epsilon, end2);
-		//}
 
 		public void MarkDecimal(string name)
 		{
