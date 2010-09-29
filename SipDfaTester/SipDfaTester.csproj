@@ -45,12 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Sip.Message\ByteArrayPart.cs">
+    <Compile Include="..\Sip.Message\ByteArrayPart.cs">
       <Link>ByteArrayPart.cs</Link>
-    </None>
-    <None Include="..\SipDfaCompiler\bin\Debug\SipMessageReader.cs">
+    </Compile>
+    <Compile Include="..\SipDfaCompiler\bin\Debug\SipMessageReader.cs">
       <Link>SipMessageReader.cs</Link>
-    </None>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -58,10 +58,6 @@
     <ProjectReference Include="..\Server.Memory\Server.Memory.csproj">
       <Project>{3830C8B5-6853-417F-B5A9-5C0B5A5A9163}</Project>
       <Name>Server.Memory</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sip.Message\Sip.Message.csproj">
-      <Project>{33B6452A-AEFF-4DA5-84EE-B0652E09C0DB}</Project>
-      <Name>Sip.Message</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

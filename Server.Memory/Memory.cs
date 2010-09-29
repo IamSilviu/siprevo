@@ -30,11 +30,10 @@ namespace Server.Memory
 
 		public static void Free(T item)
 		{
+			item.SetDefaultValue();
+
 			lock (_items)
-			{
-				item.SetDefaultValue();
 				_items.Push(item);
-			}
 		}
 
 		public static void Free(ref T item)

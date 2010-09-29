@@ -10,8 +10,8 @@ namespace SipDfaTester
 		{
 			Console.Write("Loading...");
 			var dfa = new SipMessageReader();
-			dfa.LoadTables(@"..\..\..\Sip.Message\SipMessageReader.dfa");
-			//dfa.LoadTables(@"..\..\..\SipDfaCompiler\bin\Debug\SipMessageReader.dfa");
+			//dfa.LoadTables(@"..\..\..\Sip.Message\SipMessageReader.dfa");
+			dfa.LoadTables(@"..\..\..\SipDfaCompiler\bin\Debug\SipMessageReader.dfa");
 			dfa.SetDefaultValue();
 			dfa.Parse(new byte[] { 0 }, 0, 1);
 			Console.WriteLine("Done");
@@ -20,7 +20,7 @@ namespace SipDfaTester
 			var utf = new UTF8Encoding();
 
 			var message1 = utf.GetBytes(
-				"REGISTER sip:officesip.local;ms-received-cid=A123F SIP/2.0\r\n" +
+				"REGISTER sip:officesip.local;ms-received-cid=A123F;transport=tcp SIP/2.0\r\n" +
 				"Accept: media/submedis\r\n" +
 				"Via: SIP/2.0/TCP 127.0.0.1:1800\r\n" +
 				"Max-Forwards: 70\r\n" +
@@ -47,6 +47,7 @@ namespace SipDfaTester
 			Console.WriteLine("Method: {0}", dfa.Method);
 			Console.WriteLine("SipVersion: {0}", dfa.SipVersion);
 			Console.WriteLine("RequestUri.MsReceivedCid: {0}", dfa.RequestUri.MsReceivedCid.ToString());
+			Console.WriteLine("RequestUri.Transport: {0}", dfa.RequestUri.Transport.ToString());
 			Console.WriteLine("Header #0: {0}", dfa.Headers[0].HeaderName.ToString());
 			Console.WriteLine("Proxy Replace #0: |{0}|", dfa.Contact[0].ProxyReplace.ToString());
 			Console.WriteLine("Proxy Replace #1: |{0}|", dfa.Contact[1].ProxyReplace.ToString());
@@ -66,7 +67,7 @@ namespace SipDfaTester
 			Console.WriteLine("AddrSpec #3: |{0}| : {1}", dfa.Contact[3].AddrSpec2.Hostport.Host.ToString(), dfa.Contact[3].AddrSpec2.Hostport.Port);
 			Console.WriteLine("Expires 1: {0}", dfa.Contact[0].Expires);
 			Console.WriteLine("Expires 2: {0}", dfa.Contact[1].Expires);
-			Console.WriteLine("Star: {0}", dfa.IsContactStar);
+			Console.WriteLine("Star: {0}", dfa.Contact[0].IsStar);
 			Console.WriteLine("Via: {2} = {0} : {1}", dfa.Via[0].SentBy.Host.ToString(), dfa.Via[0].SentBy.Port, dfa.Via[0].Transport.ToString());
 			Console.WriteLine("CSeq: {0} {1}", dfa.CSeq.Value, dfa.CSeq.Method);
 			Console.WriteLine("MaxForwards: {0}", dfa.MaxForwards);
@@ -119,7 +120,7 @@ namespace SipDfaTester
 			for (int i = 0; i <= dfa.Count.ProxyRequireCount; i++)
 				Console.Write("{0}, ", dfa.ProxyRequire[i].ToString());
 			Console.WriteLine();
-			Console.WriteLine("Star: {0}", dfa.IsContactStar);
+			Console.WriteLine("Star: {0}", dfa.Contact[0].IsStar);
 
 			//Console.ReadKey();
 
