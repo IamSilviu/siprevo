@@ -24,7 +24,7 @@ namespace SipDfaTester
 				"Accept: media/submedis\r\n" +
 				"Via: SIP/2.0/TCP 127.0.0.1:1800\r\n" +
 				"Max-Forwards: 70\r\n" +
-				"From: <sip:a@officesip.local>;tag=566ec054f8;epid=aaa6ef05f4\r\n" +
+				"From: <sip:a@officesip.local;maddr=123.123.123.123>;tag=566ec054f8;epid=aaa6ef05f4\r\n" +
 				"To: <sip:b@officesip.local>\r\n" +
 				"Call-ID: 6743485a6e45407e903f75571a3a7af9\r\n" +
 				"CSeq: 2 REGISTER\r\n" +
@@ -46,6 +46,7 @@ namespace SipDfaTester
 			Console.WriteLine("Final: {0}", dfa.Final);
 			Console.WriteLine("Method: {0}", dfa.Method);
 			Console.WriteLine("SipVersion: {0}", dfa.SipVersion);
+			Console.WriteLine("RequestUri: {0}", dfa.RequestUri.Value.ToString());
 			Console.WriteLine("RequestUri.MsReceivedCid: {0}", dfa.RequestUri.MsReceivedCid.ToString());
 			Console.WriteLine("RequestUri.Transport: {0}", dfa.RequestUri.Transport.ToString());
 			Console.WriteLine("Header #0: {0}", dfa.Headers[0].HeaderName.ToString());
@@ -71,7 +72,7 @@ namespace SipDfaTester
 			Console.WriteLine("Via: {2} = {0} : {1}", dfa.Via[0].SentBy.Host.ToString(), dfa.Via[0].SentBy.Port, dfa.Via[0].Transport.ToString());
 			Console.WriteLine("CSeq: {0} {1}", dfa.CSeq.Value, dfa.CSeq.Method);
 			Console.WriteLine("MaxForwards: {0}", dfa.MaxForwards);
-			Console.WriteLine("From: {0} : {1} @ {2}", dfa.From.AddrSpec1.UriScheme.ToString(), dfa.From.AddrSpec1.User.ToString(), dfa.From.AddrSpec1.Hostport.Host.ToString());
+			Console.WriteLine("From: {0} : {1} @ {2} ; Maddr= {3}", dfa.From.AddrSpec1.UriScheme.ToString(), dfa.From.AddrSpec1.User.ToString(), dfa.From.AddrSpec1.Hostport.Host.ToString(), dfa.From.AddrSpec1.Maddr.ToString());
 			Console.WriteLine("To: {0}", dfa.To.AddrSpec1.Hostport.Host.ToString());
 			Console.WriteLine("CallId: {0}", dfa.CallId.ToString());
 

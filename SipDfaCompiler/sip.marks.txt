@@ -59,6 +59,8 @@
 .ADDRSPEC.SIPS-URI.uri-parameters.uri-parameter.transport-param.sctp -> Const = ?<Addrspec>.Transport;
 .ADDRSPEC.SIPS-URI.uri-parameters.uri-parameter.transport-param.tls -> Const = ?<Addrspec>.Transport;
 .ADDRSPEC.SIPS-URI.uri-parameters.uri-parameter.transport-param.other-transport -> Const = ?<Addrspec>.Transport, Other, 20;
+.ADDRSPEC.SIP-URI.uri-parameters.uri-parameter.maddr-param.host -> Range = ?<Addrspec>.Maddr;
+.ADDRSPEC.SIPS-URI.uri-parameters.uri-parameter.maddr-param.host -> Range = ?<Addrspec>.Maddr;
 .ADDRSPEC -> Range = ?<Addrspec>.Value;
 
 //

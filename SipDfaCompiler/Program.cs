@@ -176,11 +176,21 @@ namespace SipDfaCompiler
 				{
 					if (mark.StartsWith("."))
 					{
-						int point = mark.IndexOf(".", 1);
-						if (point < 0)
+						int arrow = mark.IndexOf("->", 1);
+
+						if (arrow < 0)
 						{
 							Console.WriteLine("Error: Failed to parse group {0}", mark);
 							throw new Exception();
+						}
+
+						int point = mark.IndexOf(".", 1, arrow);
+
+						if (point < 0)
+						{
+							point = arrow;
+							while (mark[point - 1] == ' ')
+								point--;
 						}
 
 						var groupName = mark.Substring(1, point - 1);
