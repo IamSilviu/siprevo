@@ -816,12 +816,13 @@ message-headerX =  (Accept
                 /  extension-header) CRLF;
 
 
-message-headerZ =  (Accept / CSeq / extension-header) CRLF;
+message-headerZ =  (Accept / CSeq / Call-ID / extension-header) CRLF;
 
 
 message-headerW =  (Via) CRLF;
 
 /*
+
 ViaX              =  ( "Via" / "v" ) HCOLON via-parm *(COMMA via-parm);
 
 test              =  {State.NoCloneRepeatBy, via-parm, COMMA};

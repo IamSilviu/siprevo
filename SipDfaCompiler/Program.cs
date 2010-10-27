@@ -12,9 +12,16 @@ namespace SipDfaCompiler
 	{
 		static int Main(string[] args)
 		{
+			_suppressWarning.Add("");
+
+			//var generator1 = new Generator();
+			//generator1.GenerateLoadTables("SipMessageReader", "Sip.Message", 19133);
+			//return 0;
+
 			string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\";
 			if (UpdateMarks(path + "sip.marks.txt", path + "sip.all-marks.txt") != 0)
 				return -1;
+			LoadSuppressWarngin(path + "suppress.warning.txt");
 
 			var generator = new Generator();
 			if (false)
@@ -31,7 +38,6 @@ namespace SipDfaCompiler
 			return 0;
 		}
 
-
 		static DfaState CompileDfa()
 		{
 			var xbnf = new SipXbnf();
@@ -46,8 +52,11 @@ namespace SipDfaCompiler
 			foreach (var pair in _marks)
 				if (pair.Value.IsEmpty == false && pair.Value.UseCount == 0)
 				{
-					Console.WriteLine("Warning: Rule was not used");
-					Console.WriteLine("{0}", pair.Key);
+					if (_suppressWarning.Contains(pair.Key) == false)
+					{
+						Console.WriteLine("Warning: Rule was not used");
+						Console.WriteLine("{0}", pair.Key);
+					}
 				}
 
 			int count;
@@ -276,6 +285,20 @@ namespace SipDfaCompiler
 			}
 
 			return result;
+		}
+
+		private static List<string> _suppressWarning = new List<string>();
+
+		private static void LoadSuppressWarngin(string path)
+		{
+			if (File.Exists(path))
+			{
+				var lines = File.ReadAllLines(path);
+
+				foreach (var line in lines)
+					if (string.IsNullOrEmpty(line) == false && line.Trim().StartsWith(@"//") == false)
+						_suppressWarning.Add(line.Trim());
+			}
 		}
 	}
 }

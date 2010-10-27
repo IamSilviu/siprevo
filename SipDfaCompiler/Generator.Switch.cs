@@ -11,6 +11,8 @@ namespace SipDfaCompiler
 	{
 		private void GenerateParseMethod(DfaState dfa, int errorState)
 		{
+			_main.WriteLine("#region int Parse(..)");
+
 			_main.WriteLine("public int Parse(byte[] bytes, int offset, int length)");
 			_main.WriteLine("{");
 
@@ -32,12 +34,14 @@ namespace SipDfaCompiler
 				GenerateSwitch(dfa, errorState, SwitchMode.ActionOnly);
 
 				_main.WriteLine("exit1: ;");
-				_main.WriteLine("return i;");
+				_main.WriteLine("return i - offset;");
 			}
 			else
 				_main.WriteLine("return 0;");
 
 			_main.WriteLine("}");
+
+			_main.WriteLine("#endregion");
 		}
 
 		enum SwitchMode
@@ -54,7 +58,7 @@ namespace SipDfaCompiler
 
 			dfa.ForEachNR((state) =>
 			{
-				_main.WriteLine("case States.State{0}:", state.Index);
+				_main.WriteLine("case State{0}:", state.Index);
 
 				foreach (var nfa1 in state.AllMarks)
 				{
@@ -163,7 +167,7 @@ namespace SipDfaCompiler
 				}
 			});
 
-			_main.WriteLine("case States.State{0}:", errorState);
+			_main.WriteLine("case State{0}:", errorState);
 			_main.WriteLine("Error = true;");
 			_main.WriteLine("goto exit1;");
 
@@ -178,7 +182,7 @@ namespace SipDfaCompiler
 
 				dfa.ForEachNR((state) =>
 					{
-						_main.WriteLine("private static States[] table{0};", state.Index);
+						_main.WriteLine("private static int[] table{0};", state.Index);
 
 						int next;
 						DfaState nextState;
@@ -198,8 +202,10 @@ namespace SipDfaCompiler
 				_main.WriteLine("// NO TABLES");
 		}
 
-		private void GenerateLoadFunction(int count, bool empty)
+		private void GenerateLoadFunction3(int count, bool empty)
 		{
+			_main.WriteLine("#region void LoadTables(..)");
+
 			_main.WriteLine("public void LoadTables(string path)");
 			_main.WriteLine("{");
 
@@ -211,38 +217,67 @@ namespace SipDfaCompiler
 				_main.WriteLine("using (var reader = new DeflateStream(File.OpenRead(path), CompressionMode.Decompress))");
 				_main.WriteLine("{");
 				_main.WriteLine("byte[] buffer = new byte[maxBytes];");
-				_main.WriteLine("Int32[] intBuffer = new Int32[maxItems];");
 
 				for (int i = 0; i < count; i++)
 				{
+					_main.WriteLine("table{0} = new int[maxItems];", i);
 					_main.WriteLine("reader.Read(buffer, 0, buffer.Length);");
-					_main.WriteLine("Buffer.BlockCopy(buffer, 0, intBuffer, 0, maxBytes);", i);
-
-					_main.WriteLine("table{0} = new States[maxItems];", i);
-					_main.WriteLine("for (int i = 0; i < maxItems; i++)");
-					_main.WriteLine("table{0}[i] = (States)intBuffer[i];", i);
+					_main.WriteLine("Buffer.BlockCopy(buffer, 0, table{0}, 0, maxBytes);", i);
 				}
 
 				_main.WriteLine("}");
-	
-				//_main.WriteLine("using (var reader = new DeflateStream(File.OpenRead(path), CompressionMode.Decompress))");
-				//_main.WriteLine("{");
-				//_main.WriteLine("byte[] buffer = new byte[sizeof(Int32)];");
-
-				//for (int i = 0; i < count; i++)
-				//{
-				//    _main.WriteLine("table{0} = new States[byte.MaxValue + 1];", i);
-				//    _main.WriteLine("for (int i = 0; i <= byte.MaxValue; i++)");
-				//    _main.WriteLine("{");
-				//    _main.WriteLine("reader.Read(buffer, 0, buffer.Length);");
-				//    _main.WriteLine("table{0}[i] = (States)BitConverter.ToInt32(buffer, 0);", i);
-				//    _main.WriteLine("}");
-				//}
-				//_main.WriteLine("}");
 			}
 
 			_main.WriteLine("}");
+
+			_main.WriteLine("#endregion");
 		}
+
+		//private void GenerateLoadFunction(int count, bool empty)
+		//{
+		//    _main.WriteLine("public void LoadTables(string path)");
+		//    _main.WriteLine("{");
+
+		//    if (empty == false)
+		//    {
+		//        _main.WriteLine("const int maxItems = byte.MaxValue + 1;");
+		//        _main.WriteLine("const int maxBytes = sizeof(Int32) * maxItems;");
+
+		//        _main.WriteLine("using (var reader = new DeflateStream(File.OpenRead(path), CompressionMode.Decompress))");
+		//        _main.WriteLine("{");
+		//        _main.WriteLine("byte[] buffer = new byte[maxBytes];");
+		//        _main.WriteLine("Int32[] intBuffer = new Int32[maxItems];");
+
+		//        for (int i = 0; i < count; i++)
+		//        {
+		//            _main.WriteLine("reader.Read(buffer, 0, buffer.Length);");
+		//            _main.WriteLine("Buffer.BlockCopy(buffer, 0, intBuffer, 0, maxBytes);", i);
+
+		//            _main.WriteLine("table{0} = new States[maxItems];", i);
+		//            _main.WriteLine("for (int i = 0; i < maxItems; i++)");
+		//            _main.WriteLine("table{0}[i] = (States)intBuffer[i];", i);
+		//        }
+
+		//        _main.WriteLine("}");
+	
+		//        //_main.WriteLine("using (var reader = new DeflateStream(File.OpenRead(path), CompressionMode.Decompress))");
+		//        //_main.WriteLine("{");
+		//        //_main.WriteLine("byte[] buffer = new byte[sizeof(Int32)];");
+
+		//        //for (int i = 0; i < count; i++)
+		//        //{
+		//        //    _main.WriteLine("table{0} = new States[byte.MaxValue + 1];", i);
+		//        //    _main.WriteLine("for (int i = 0; i <= byte.MaxValue; i++)");
+		//        //    _main.WriteLine("{");
+		//        //    _main.WriteLine("reader.Read(buffer, 0, buffer.Length);");
+		//        //    _main.WriteLine("table{0}[i] = (States)BitConverter.ToInt32(buffer, 0);", i);
+		//        //    _main.WriteLine("}");
+		//        //}
+		//        //_main.WriteLine("}");
+		//    }
+
+		//    _main.WriteLine("}");
+		//}
 
 		private void GenerateGetHexDigitFunction()
 		{

@@ -31,6 +31,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sip.Message.Test", "Sip.Message.Test\Sip.Message.Test.csproj", "{8BC5CCFC-D7C5-4281-B67E-68FFB91A2190}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SipDfaTester", "SipDfaTester\SipDfaTester.csproj", "{731BA125-29A5-49F3-A914-270775C1BB15}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5D6AD8A0-E6D7-4734-A8A8-AEA64FB90BEA} = {5D6AD8A0-E6D7-4734-A8A8-AEA64FB90BEA}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.Memory", "Server.Memory\Server.Memory.csproj", "{3830C8B5-6853-417F-B5A9-5C0B5A5A9163}"
 EndProject

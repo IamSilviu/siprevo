@@ -105,6 +105,7 @@
 .CREDENTIALS.digest-response.dig-resp.nonce.nonce-value.quoted-string.quoted-pair -> Range = ?<Credentials>.Nonce;
 .CREDENTIALS.digest-response.dig-resp.digest-uri.digest-uri-value -> Range = ?<Credentials>.DigestUri;
 .CREDENTIALS.digest-response.dig-resp.dresponse.request-digest.LHEX -> Range = ?<Credentials>.Response;
+.CREDENTIALS.digest-response.dig-resp.dresponse.EQUAL -> Bool = ?<Credentials>.HasResponse;
 .CREDENTIALS.digest-response.dig-resp.algorithm.MD5 -> Const = ?<Credentials>.AuthAlgorithm;
 .CREDENTIALS.digest-response.dig-resp.algorithm.MD5-sess -> Const = ?<Credentials>.AuthAlgorithm;
 .CREDENTIALS.digest-response.dig-resp.algorithm.token -> Const = ?<Credentials>.AuthAlgorithm, Other, 20;
@@ -112,7 +113,10 @@
 .CREDENTIALS.digest-response.dig-resp.cnonce.cnonce-value.nonce-value.quoted-string.quoted-pair -> Range = ?<Credentials>.Cnonce;
 .CREDENTIALS.digest-response.dig-resp.opaque.quoted-string.qdtext -> Range = ?<Credentials>.Opaque;
 .CREDENTIALS.digest-response.dig-resp.opaque.quoted-string.quoted-pair -> Range = ?<Credentials>.Opaque;
+.CREDENTIALS.msspi-response.msspi-resp.opaque.quoted-string.qdtext -> Range = ?<Credentials>.Opaque;
+.CREDENTIALS.msspi-response.msspi-resp.opaque.quoted-string.quoted-pair -> Range = ?<Credentials>.Opaque;
 .CREDENTIALS.digest-response.dig-resp.message-qop.qop-value -> Range = ?<Credentials>.MessageQop;
+.CREDENTIALS.msspi-response.msspi-resp.qop-options.qop-value -> Range = ?<Credentials>.MessageQop;
 .CREDENTIALS.digest-response.dig-resp.nonce-count.nc-value.LHEX -> Hex = ?<Credentials>.NonceCount;
 .CREDENTIALS.msspi-response.msspi-resp.targetname.target-value.ntlm-target-val -> Range = ?<Credentials>.Targetname;
 .CREDENTIALS.msspi-response.msspi-resp.targetname.target-value.kerberos-target-val -> Range = ?<Credentials>.Targetname;
@@ -120,8 +124,12 @@
 .CREDENTIALS.msspi-response.msspi-resp.version.version-value.DIGIT -> Decimal = ?<Credentials>.Version;
 .CREDENTIALS.msspi-response.msspi-resp.gssapi-data.gssapi-data-value.quoted-string.qdtext -> Range = ?<Credentials>.GssapiData;
 .CREDENTIALS.msspi-response.msspi-resp.gssapi-data.gssapi-data-value.quoted-string.quoted-pair -> Range = ?<Credentials>.GssapiData;
+.CREDENTIALS.msspi-response.msspi-resp.gssapi-data.gssapi-data-value.quoted-string -> Bool = ?<Credentials>.HasGssapiData;
 .CREDENTIALS.msspi-response.msspi-resp.crand.crand-val.LHEX -> Hex = ?<Credentials>.Crand;
 .CREDENTIALS.msspi-response.msspi-resp.cnum.cnum-value.DIGIT -> Decimal = ?<Credentials>.Cnum;
+.CREDENTIALS.msspi-response.msspi-resp.msspi-resp-data.msspi-resp-data-value.quoted-string.qdtext -> Range = ?<Credentials>.Response;
+.CREDENTIALS.msspi-response.msspi-resp.msspi-resp-data.msspi-resp-data-value.quoted-string.quoted-pair -> Range = ?<Credentials>.Response;
+.CREDENTIALS.msspi-response.msspi-resp.msspi-resp-data.msspi-resp-data-value.quoted-string -> Bool = ?<Credentials>.HasResponse;
 
 //
 // -------------------------------------------------------------------------------[ Authorization
@@ -249,9 +257,10 @@ SIP-messageX.message-headerX.CSeq.DIGIT -> Decimal = CSeq.Value;
 SIP-messageX.message-headerX.CSeq.Method -> Group = CSeq., METHOD;
 
 //
-// Call-ID
+// -------------------------------------------------------------------------------[ Call-ID
 //
 SIP-messageX.message-headerX.Call-ID.callid -> Range = CallId;
+SIP-messageX.message-headerX.Call-ID.HCOLON.SWS -> Reset = CallId;
 
 //
 // Expires

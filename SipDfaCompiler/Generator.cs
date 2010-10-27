@@ -120,6 +120,44 @@ namespace SipDfaCompiler
 			}
 		}
 
+		//public void GenerateLoadTables(string filename, string namespace1, int states)
+		//{
+		//    using (_main = File.CreateText(filename + ".LoadTable.cs"))
+		//    {
+		//        _main.WriteLine("using System;");
+		//        _main.WriteLine("using System.Text;");
+		//        _main.WriteLine("using System.IO;");
+		//        _main.WriteLine("using System.IO.Compression;");
+		//        _main.WriteLine("using Server.Memory;");
+		//        _main.WriteLine();
+
+		//        _main.WriteLine("namespace {0}", namespace1);
+		//        _main.WriteLine("{");
+
+		//        _main.WriteLine("public partial class {0}", filename);
+		//        _main.WriteLine(":IDefaultValue");
+		//        _main.WriteLine("{");
+
+		//        GenerateStateConsts(states+1);
+		//        GenerateLoadFunction3(states, false);
+
+		//        _main.WriteLine("}");
+		//        _main.WriteLine("}");
+
+		//        _main.Flush();
+		//    }
+		//}
+
+		protected void GenerateStateConsts(int count)
+		{
+			_main.WriteLine("#region enum States");
+
+			for (int i = 0; i < count; i++)
+				_main.WriteLine("const int State{0} = {0};", i);
+			
+			_main.WriteLine("#endregion");
+		}
+
 		public void Generate(string filename, string namespace1, DfaState dfa)
 		{
 			using(_main = File.CreateText(filename + ".cs"))
@@ -154,7 +192,7 @@ namespace SipDfaCompiler
 				_main.WriteLine("public bool Error;");
 				_main.WriteLine("public bool IsError { get { return Error; }}");
 
-				_main.WriteLine("private States state;");
+				_main.WriteLine("private int state;");
 
 				GenerateVariables(_varibalesTree);
 
@@ -164,9 +202,9 @@ namespace SipDfaCompiler
 				else
 					countStates = 1;
 
-				GenerateStatesEnum(countStates + 1);
+				GenerateStateConsts(countStates + 1);
 				GenerateTables(dfa, countStates);
-				GenerateLoadFunction(countStates, dfa == null);
+				GenerateLoadFunction3(countStates, dfa == null);
 				GenerateParseMethod(dfa, countStates);
 				GenerateGetHexDigitFunction();
 
@@ -330,7 +368,7 @@ namespace SipDfaCompiler
 			{
 				_main.WriteLine("Final = false;");
 				_main.WriteLine("Error = false;");
-				_main.WriteLine("state = States.State0;");
+				_main.WriteLine("state = State0;");
 			}
 
 			foreach (var pair in item.Enums)
@@ -352,18 +390,18 @@ namespace SipDfaCompiler
 			_main.WriteLine("}");
 		}
 
-		private void GenerateStatesEnum(int count)
-		{
-			_main.WriteLine("#region enum States");
-			_main.WriteLine("private enum States");
-			_main.WriteLine("{");
+		//private void GenerateStatesEnum(int count)
+		//{
+		//    _main.WriteLine("#region enum States");
+		//    _main.WriteLine("private enum States");
+		//    _main.WriteLine("{");
 
-			for (int i = 0; i < count; i++)
-				_main.WriteLine("State{0},", i);
+		//    for (int i = 0; i < count; i++)
+		//        _main.WriteLine("State{0},", i);
 
-			_main.WriteLine("}");
-			_main.WriteLine("#endregion");
-		}
+		//    _main.WriteLine("}");
+		//    _main.WriteLine("#endregion");
+		//}
 
 		private void GenerateEnums(VariableTreeItem item, List<string> enums)
 		{
