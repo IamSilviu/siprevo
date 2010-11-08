@@ -25,17 +25,20 @@ namespace SipDfaTester
 			var message0 = utf.GetBytes(
 				"REGISTER sip:officesip.local;ms-received-cid=A123F;transport=tcp SIP/2.0\r\n" +
 				"Accept: media/submedis\r\n" +
-				"Via: SIP/2.0/TCP 127.0.0.1:1800\r\n" +
+				"Via: SIP/2.0/TCP 127.0.0.1:1800, SIP/2.0/TCP 127.0.0.2:1800\r\n" +
 				"Max-Forwards: 70\r\n" +
 				"From: <sip:a@officesip.local;maddr=123.123.123.123>;tag=566ec054f8;epid=aaa6ef05f4\r\n" +
 				"To: <sip:b@officesip.local>\r\n" +
-				"Call-ID: 6743485a6e45407e903f75571a3a7af9\r\n" +
+				"Call-ID:    16743485a6e45407e903f75571a3a7af9\r\n" +
 				"CSeq: 2 REGISTER\r\n" +
 				"Contact: <sip:user@127.0.0.1:1801;transport=tcp;ms-opaque=0deb5c7e83>;methods=\"INVITE, MESSAGE, INFO, OPTIONS, BYE, CANCEL, NOTIFY, ACK, REFER, BENOTIFY\";proxy=replace  ; +sip.instance=\"<urn:uuid:92794BFE-F550-5AC1-89B4-F1E4E8BCB878>\";expires=123\r\n" +
 				"Contact: <sip:127.0.0.2:1802;transport=tcp;ms-opaque=0deb5c7e83>;methods=\"INVITE, MESSAGE, INFO, OPTIONS, BYE, CANCEL, NOTIFY, ACK, REFER, BENOTIFY\";proxy=replace;+sip.instance=\"<urn:uuid:92794BFE-F550-5AC1-89B4-F1E4E8BCB878>\",<sip:127.0.0.3:1803;transport=tcp;ms-opaque=0deb5c7e83>;methods=\"INVITE\"\r\n" +
 				"Contact: <sip:127.0.0.4:1804;transport=tcp;ms-opaque=0deb5c7e83>;methods=\"INVITE, MESSAGE, INFO, OPTIONS, BYE, CANCEL, NOTIFY, ACK, REFER, BENOTIFY\";proxy=replace;+sip.instance=\"<urn:uuid:92794BFE-F550-5AC1-89B4-F1E4E8BCB878>\"\r\n" +
 				"Custom: Value\r\n" +
 				"Authorization: Digest username=\"jdoe1\", realm=\"officesip.local\", qop=auth, algorithm=MD5, uri=\"sip:officesip.local\", nonce=\"50c148849f3d4e069105f8a80471b5d1\", nc=f1f, cnonce=\"53186537273641419345563711231350\", opaque=\"f2cb4f2013d74a73b9e86603fb56b969\", response=\"2bb45befa63ca772b840501502df102d\"\r\n" +
+				"Record-Route: <sip:127.0.0.1:5060;lr> , <sip:127.0.0.2:5060;lr>\r\n" +
+				"Route: <sip:127.0.0.1:5060;lr>, <sip:127.0.0.2:5060;lr>\r\n" +
+				"Route: <sip:127.0.0.3:5060;lr>\r\n" +
 				"\r\n");
 
 			var message1 = new byte[message0.Length + 16];
@@ -81,6 +84,17 @@ namespace SipDfaTester
 			//Console.WriteLine("From: {0} : {1} @ {2} ; Maddr= {3}", dfa.From.AddrSpec1.UriScheme.ToString(), dfa.From.AddrSpec1.User.ToString(), dfa.From.AddrSpec1.Hostport.Host.ToString(), dfa.From.AddrSpec1.Maddr.ToString());
 			//Console.WriteLine("To: {0}", dfa.To.AddrSpec1.Hostport.Host.ToString());
 			Console.WriteLine("CallId: |{0}|", dfa.CallId.ToString());
+			//Console.WriteLine("Record-Route.CommaAndValue: |{0}|", dfa.RecordRoute[0].CommaAndValue.ToString());
+			Console.WriteLine("Record-Route[0].CommaAndValue: |{0}|", dfa.RecordRoute[0].CommaAndValue.ToString());
+			Console.WriteLine("Record-Route[1].CommaAndValue: |{0}|", dfa.RecordRoute[1].CommaAndValue.ToString());
+			Console.WriteLine("Route[0].CommaAndValue: |{0}|", dfa.Route[0].CommaAndValue.ToString());
+			Console.WriteLine("Route[1].CommaAndValue: |{0}|", dfa.Route[1].CommaAndValue.ToString());
+			Console.WriteLine("Route[2].CommaAndValue: |{0}|", dfa.Route[2].CommaAndValue.ToString());
+			Console.WriteLine("Via[0].CommaAndValue: |{0}|", dfa.Via[0].CommaAndValue.ToString());
+			Console.WriteLine("Via[1].CommaAndValue: |{0}|", dfa.Via[1].CommaAndValue.ToString());
+			Console.WriteLine("HasLr: |{0}|", dfa.RequestUri.HasLr);
+			//Console.WriteLine("Record-Route.Comma: |{0}|", dfa.RecordRoute[0].Comma.ToString());
+			//Console.WriteLine("Record-Route.Comma: |{0}|", dfa.RecordRoute[1].Comma.ToString());
 
 			//Console.WriteLine();
 			//Console.WriteLine("AUTHORIZATION:");

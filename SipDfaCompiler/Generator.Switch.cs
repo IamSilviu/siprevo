@@ -101,7 +101,10 @@ namespace SipDfaCompiler
 						var extra = GetCountComparation(RemoveExtraInfo(nfa1.Name));
 						if (extra != "")
 							extra += " && ";
-						_main.WriteLine("if ({1}{0} < 0) {0} = i;", GetVarname(nfa1.Name, "") + ".Begin", extra);
+						_main.Write("if({1}{0} < 0) {0} = i", GetVarname(nfa1.Name, "") + ".Begin", extra);
+						if (nfa1.Offset != 0)
+							_main.Write("{0} {1}", (nfa1.Offset > 0) ? "+" : "-", Math.Abs(nfa1.Offset));
+						_main.WriteLine(";");
 					}
 
 					if (nfa1.Mark == Marks.EndRange)

@@ -1801,6 +1801,41 @@ namespace SipDfaCompiler
 			State rule = State.Repeat(1,-1,GetDIGIT(rulenames));
 			return rule;
 		}
+		public State GetProxy_Authentication_Info0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("Proxy-Authentication-Info",rulenames),GetHCOLON(rulenames),State.NoCloneRepeatBy(Getainfo(rulenames),GetCOMMA(rulenames))));
+			return rule;
+		}
+		public State Getainfo1(List<string> rulenames)
+		{
+			State rule = State.NoCloneAlternation(Getnextnonce(rulenames),Getmessage_qop(rulenames),Getresponse_auth(rulenames),Getcnonce(rulenames),Getnonce_count(rulenames),FromString("NTLM",rulenames),FromString("Kerberos",rulenames),Getsnum(rulenames),Getsrand(rulenames),Getrealm(rulenames),Gettargetname(rulenames),Getopaque(rulenames));
+			return rule;
+		}
+		public State Getsnum0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("snum",rulenames),GetEQUAL(rulenames),Getsnum_value(rulenames)));
+			return rule;
+		}
+		public State Getsnum_value0(List<string> rulenames)
+		{
+			State rule = State.Repeat(1,-1,GetDIGIT(rulenames));
+			return rule;
+		}
+		public State Getsrand0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("srand",rulenames),GetEQUAL(rulenames),Getsrand_value(rulenames)));
+			return rule;
+		}
+		public State Getsrand_value0(List<string> rulenames)
+		{
+			State rule = State.Repeat(8,-1,GetLHEX(rulenames));
+			return rule;
+		}
+		public State Getextension_header2(List<string> rulenames)
+		{
+			State rule = GetProxy_Authentication_Info(rulenames);
+			return rule;
+		}
 		public State Getmessage_headerX0(List<string> rulenames)
 		{
 			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(State.NoCloneAlternation(GetAccept(rulenames),GetAccept_Encoding(rulenames),GetAccept_Language(rulenames),GetAlert_Info(rulenames),GetAllow(rulenames),GetAuthentication_Info(rulenames),GetAuthorization(rulenames),GetCall_ID(rulenames),GetCall_Info(rulenames),GetContent_Disposition(rulenames),GetContent_Encoding(rulenames),GetContent_Language(rulenames),GetContent_Length(rulenames),GetContent_Type(rulenames),GetCSeq(rulenames),GetDate(rulenames),GetError_Info(rulenames),GetExpires(rulenames),GetIn_Reply_To(rulenames),GetMax_Forwards(rulenames),GetMIME_Version(rulenames),GetMin_Expires(rulenames),GetOrganization(rulenames),GetPriority(rulenames),GetProxy_Authenticate(rulenames),GetProxy_Authorization(rulenames),GetProxy_Require(rulenames),GetReply_To(rulenames),GetRequire(rulenames),GetRetry_After(rulenames),GetServer(rulenames),GetSubject(rulenames),GetSupported(rulenames),GetTimestamp(rulenames),GetUnsupported(rulenames),GetUser_Agent(rulenames),GetWarning(rulenames),GetWWW_Authenticate(rulenames),GetContact(rulenames),GetFrom(rulenames),GetRecord_Route(rulenames),GetRoute(rulenames),GetTo(rulenames),GetVia(rulenames),Getextension_header(rulenames))),GetCRLF(rulenames)));
@@ -1808,7 +1843,7 @@ namespace SipDfaCompiler
 		}
 		public State Getmessage_headerZ0(List<string> rulenames)
 		{
-			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(State.NoCloneAlternation(GetAccept(rulenames),GetCSeq(rulenames),GetCall_ID(rulenames),Getextension_header(rulenames))),GetCRLF(rulenames)));
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(State.NoCloneAlternation(GetRecord_Route(rulenames),GetRoute(rulenames),GetVia(rulenames),GetCall_ID(rulenames),Getextension_header(rulenames))),GetCRLF(rulenames)));
 			return rule;
 		}
 		public State Getmessage_headerW0(List<string> rulenames)
@@ -3144,7 +3179,7 @@ namespace SipDfaCompiler
 		public State Getainfo(List<string> rulenames)
 		{
 			rulenames.Insert(0, "ainfo");
-			State rule = State.NoCloneAlternation(Getainfo0(rulenames));
+			State rule = State.NoCloneAlternation(Getainfo0(rulenames), Getainfo1(rulenames));
 			rule = OnMarkRule(rule, rulenames);
 			rulenames.RemoveAt(0);
 			return rule;
@@ -4176,7 +4211,7 @@ namespace SipDfaCompiler
 		public State Getextension_header(List<string> rulenames)
 		{
 			rulenames.Insert(0, "extension-header");
-			State rule = State.NoCloneAlternation(Getextension_header0(rulenames), Getextension_header1(rulenames));
+			State rule = State.NoCloneAlternation(Getextension_header0(rulenames), Getextension_header1(rulenames), Getextension_header2(rulenames));
 			rule = OnMarkRule(rule, rulenames);
 			rulenames.RemoveAt(0);
 			return rule;
@@ -4537,6 +4572,46 @@ namespace SipDfaCompiler
 		{
 			rulenames.Insert(0, "version-value");
 			State rule = State.NoCloneAlternation(Getversion_value0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State GetProxy_Authentication_Info(List<string> rulenames)
+		{
+			rulenames.Insert(0, "Proxy-Authentication-Info");
+			State rule = State.NoCloneAlternation(GetProxy_Authentication_Info0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getsnum(List<string> rulenames)
+		{
+			rulenames.Insert(0, "snum");
+			State rule = State.NoCloneAlternation(Getsnum0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getsnum_value(List<string> rulenames)
+		{
+			rulenames.Insert(0, "snum-value");
+			State rule = State.NoCloneAlternation(Getsnum_value0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getsrand(List<string> rulenames)
+		{
+			rulenames.Insert(0, "srand");
+			State rule = State.NoCloneAlternation(Getsrand0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getsrand_value(List<string> rulenames)
+		{
+			rulenames.Insert(0, "srand-value");
+			State rule = State.NoCloneAlternation(Getsrand_value0(rulenames));
 			rule = OnMarkRule(rule, rulenames);
 			rulenames.RemoveAt(0);
 			return rule;

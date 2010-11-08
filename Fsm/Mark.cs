@@ -6,6 +6,7 @@ namespace Fsm
 	public enum Marks
 	{
 		None,
+		Range,
 		BeginRange,
 		EndRange,
 		ContinueRange,
@@ -29,6 +30,7 @@ namespace Fsm
 		string Value { get; }
 		int Max { get; }
 		int Default { get; }
+		int Offset { get; }
 		bool IsSame(IMark mark);
 	}
 
@@ -48,7 +50,8 @@ namespace Fsm
 				(string.IsNullOrEmpty(x.Value) ? 0 : x.Value.GetHashCode()) ^
 				x.Max ^
 				x.Default ^
-				x.Priority;
+				x.Priority ^
+				x.Offset;
 		}
 	}
 
@@ -61,6 +64,7 @@ namespace Fsm
 		private int _max;
 		private int _default;
 		private int _priority;
+		private int _offset;
 
 		public MarkImpl()
 		{
@@ -123,6 +127,12 @@ namespace Fsm
 			set { _priority = value; }
 		}
 
+		public int Offset
+		{
+			get { return _offset; }
+			set { _offset = value; }
+		}
+
 		public bool IsSame(IMark mark)
 		{
 			return
@@ -131,7 +141,8 @@ namespace Fsm
 				Value == mark.Value &&
 				Max == mark.Max &&
 				Default == mark.Default &&
-				Priority == mark.Priority;
+				Priority == mark.Priority &&
+				Offset == mark.Offset;
 		}
 
 		public void CopyFrom(IMark imark)
@@ -142,6 +153,7 @@ namespace Fsm
 			Value = imark.Value;
 			Max = imark.Max;
 			Default = imark.Default;
+			Offset = imark.Offset;
 		}
 	}
 }

@@ -747,6 +747,19 @@ gssapi-data-value   =  quoted-string;
 version             =  "version" EQUAL version-value;
 version-value       =  1*DIGIT;
 
+Proxy-Authentication-Info = "Proxy-Authentication-Info" HCOLON ainfo *(COMMA ainfo);
+ainfo               = nextnonce / message-qop / response-auth 
+                     / cnonce / nonce-count / "NTLM" / "Kerberos" 
+                     / snum / srand / realm / targetname / opaque;
+
+snum                = "snum" EQUAL snum-value;
+snum-value          = 1*DIGIT;
+
+srand               = "srand" EQUAL srand-value;
+srand-value         = 8 LHEX;
+
+extension-header    =/ Proxy-Authentication-Info; /* vf: link to rfc3261 */
+
 /**************************************************************************************************/
 
 /*
@@ -816,7 +829,7 @@ message-headerX =  (Accept
                 /  extension-header) CRLF;
 
 
-message-headerZ =  (Accept / CSeq / Call-ID / extension-header) CRLF;
+message-headerZ =  (Record-Route / Route / Via / Call-ID / extension-header) CRLF;
 
 
 message-headerW =  (Via) CRLF;

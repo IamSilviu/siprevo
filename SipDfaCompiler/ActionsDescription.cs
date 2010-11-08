@@ -8,7 +8,8 @@ namespace SipDfaCompiler
 	class ActionsDescription
 	{
 		private static Regex _regex =
-			new Regex(@"^(?<func>Const|Range|ContinueRange|Count|Decimal|Bool|Group|Hex|Reset|ResetIfInvalid)(\s*=(\s*(?<arg1>[\<\>\?\[\]\.A-Za-z0-9_\-]*)(\s*,\s*(?<arg2>[\<\>\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg3>[\?\[\]\.A-Za-z0-9_\-]*))?(\s*,\s*(?<arg4>[\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg5>[\?\[\]\.A-Za-z0-9_\-]+))?))?;",
+//			new Regex(@"^(?<func>Const|Range|BeginRange|EndRange|ContinueRange|Count|Decimal|Bool|Group|Hex|Reset|ResetIfInvalid)(\s*=(\s*(?<arg1>[\<\>\?\[\]\.A-Za-z0-9_\-]*)(\s*,\s*(?<arg2>[\<\>\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg3>[\?\[\]\.A-Za-z0-9_\-]*))?(\s*,\s*(?<arg4>[\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg5>[\?\[\]\.A-Za-z0-9_\-]+))?))?;",
+			new Regex(@"\s*(?<func>Const|Range|BeginRange|EndRange|ContinueRange|Count|Decimal|Bool|Group|Hex|Reset|ResetIfInvalid)(\s*=(\s*(?<arg1>[\<\>\?\[\]\.A-Za-z0-9_\-]*)(\s*,\s*(?<arg2>[\<\>\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg3>[\?\[\]\.A-Za-z0-9_\-]*))?(\s*,\s*(?<arg4>[\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg5>[\?\[\]\.A-Za-z0-9_\-]+))?))?;",
 				RegexOptions.IgnoreCase);
 
 		public static ActionsDescription TryParse(string description, string path)
@@ -34,8 +35,24 @@ namespace SipDfaCompiler
 							SetArg(action, 2, match, "10");
 							break;
 						case "Range":
-							action = new Action(Marks.BeginRange, 1);
+							action = new Action(Marks.Range, 3);
 							SetArg(action, 0, match, reservArgs, 1);
+							SetArg(action, 1, match, "0");
+							SetArg(action, 2, match, "0");
+							break;
+						case "BeginRange":
+							action = new Action(Marks.BeginRange, 3);
+							SetArg(action, 0, match, reservArgs, 1);
+							TestArg(1, match, "", "AtBegin", "AtEnd");
+							SetArg(action, 1, match, "AtBegin");
+							SetArg(action, 2, match, "0");
+							break;
+						case "EndRange":
+							action = new Action(Marks.EndRange, 3);
+							SetArg(action, 0, match, reservArgs, 1);
+							TestArg(1, match, "", "AtBegin", "AtEnd");
+							SetArg(action, 1, match, "AtEnd");
+							SetArg(action, 2, match, "0");
 							break;
 						case "ContinueRange":
 							action = new Action(Marks.ContinueRange, 1);
@@ -95,6 +112,15 @@ namespace SipDfaCompiler
 				return null;
 
 			return result;
+		}
+
+		private static void TestArg(int i, Match match, params string[] valids)
+		{
+			var value = match.Groups["arg" + (i + 1)].Value;
+			foreach (var valid in valids)
+				if (valid == value)
+					return;
+			throw new ArgumentOutOfRangeException("arg" + (i + 1), "Argument is ivalid");
 		}
 
 		private static void SetArg(Action action, int i, Match match, string[] reservArgs, int reservOver)

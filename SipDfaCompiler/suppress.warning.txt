@@ -1,0 +1,7 @@
+﻿//
+// Below warning occurs beacuse of universal structure used for From and To header.
+//
+SIP-messageX.message-headerX.From.from-spec.to-param.tag-param.token
+SIP-messageX.message-headerX.From.from-spec.to-param.epid-param.epid-param-value
+SIP-messageX.message-headerX.To.from-param.tag-param.token
+SIP-messageX.message-headerX.To.from-param.epid-param.epid-param-value

@@ -85,8 +85,14 @@ namespace SipDfaCompiler
 						case Marks.Const:
 							e.Start.MarkConst(action.Args[0], action.Args[1], int.Parse(action.Args[2]));
 							break;
+						case Marks.Range:
+							e.Start = State.MarkRange(e.Start, action.Args[0], int.Parse(action.Args[1]), int.Parse(action.Args[2]));
+							break;
 						case Marks.BeginRange:
-							e.Start = State.MarkRange(e.Start, action.Args[0]);
+							e.Start = State.MarkBeginRange(e.Start, action.Args[0], action.Args[1] == "AtBegin", int.Parse(action.Args[2]));
+							break;
+						case Marks.EndRange:
+							e.Start = State.MarkEndRange(e.Start, action.Args[0], action.Args[1] == "AtBegin", int.Parse(action.Args[2]));
 							break;
 						case Marks.ContinueRange:
 							e.Start.MarkContinueRange(action.Args[0]);
@@ -159,9 +165,9 @@ namespace SipDfaCompiler
 				}
 
 				Console.WriteLine("Loaded:	{0}", loaded);
-				Console.WriteLine("Empty:	{0}", empty);
-				Console.WriteLine("Used:	{0}", loaded - empty);
-				Console.WriteLine("Added:	{0}", total - loaded);
+				//Console.WriteLine("Empty:	{0}", empty);
+				//Console.WriteLine("Used:	{0}", loaded - empty);
+				//Console.WriteLine("Added:	{0}", total - loaded);
 				Console.WriteLine("Total:	{0}", total);
 			}
 			catch(Exception ex)

@@ -61,19 +61,19 @@ namespace Fsm
 		public bool IsBeginRange
 		{
 			get { return Mark == Marks.BeginRange; }
-			set { if(value) Mark = Marks.BeginRange; }
+		//	set { if (value) Mark = Marks.BeginRange; }
 		}
 
 		public bool IsEndRange
 		{
 			get { return Mark == Marks.EndRange; }
-			set { if (value) Mark = Marks.EndRange; }
+		//	set { if (value) Mark = Marks.EndRange; }
 		}
 
 		public string RangeName
 		{
 			get { return Name; }
-			set { Name = value; }
+		//	set { Name = value; }
 		}
 
 		public bool IsConst
@@ -114,20 +114,20 @@ namespace Fsm
 		public string CountName
 		{
 			get { if (IsCount) return Name; else return null; }
-			set
-			{
-				if (string.IsNullOrEmpty(value) == false)
-				{
-					Name = value;
-					Mark = Marks.Count;
-				}
-			}
+			//set
+			//{
+			//    if (string.IsNullOrEmpty(value) == false)
+			//    {
+			//        Name = value;
+			//        Mark = Marks.Count;
+			//    }
+			//}
 		}
 
 		public int CountMax
 		{
 			get { return Max; }
-			set { Max = value; }
+			//set { Max = value; }
 		}
 
 		public bool IsFinal
@@ -146,23 +146,92 @@ namespace Fsm
 
 		public static void MarkRange(ref State begin1, string name)
 		{
-			begin1 = MarkRange(begin1, name);
+			begin1 = MarkRange(begin1, name, 0, 0);
 		}
 
-		public static State MarkRange(State begin1, string name)
+		public static State MarkRange(State begin1, string name, int lookup, int beginOffset)
 		{
-			var begin2 = new State(Epsilon, begin1);
-			begin2.IsBeginRange = true;
-			begin2.RangeName = name;
+			State begin2;
+
+			if (lookup == 0)
+			{
+				begin2 = new State(Epsilon, begin1);
+				//begin2.IsBeginRange = true;
+				//begin2.RangeName = name;
+				begin2.Mark = Marks.BeginRange;
+				begin2.Name = name;
+				begin2.Offset = beginOffset;
+			}
+			else if (lookup == 1)
+			{
+				begin2 = begin1;
+				begin2.MarkNext(name, Marks.BeginRange, beginOffset);
+			}
+			else
+				throw new ArgumentOutOfRangeException("lookup", "Must be 0 or 1, other value is not supported.");
 
 			var end2 = new State();
-			end2.IsEndRange = true;
-			end2.RangeName = name;
+			//end2.IsEndRange = true;
+			//end2.RangeName = name;
+			end2.Mark = Marks.EndRange;
+			end2.Name = name;
 
 			var end1 = begin1.FindEnd();
 			end1.Transition.Add(Epsilon, end2);
 
 			return begin2;
+		}
+
+		public static State MarkBeginRange(State begin1, string name, bool atBegin, int offset)
+		{
+			if (atBegin)
+			{
+				return new State(Epsilon, begin1)
+				{
+					Mark = Marks.BeginRange,
+					Name = name,
+					Offset = offset,
+				};
+			}
+			else
+			{
+				var end2 = new State()
+				{
+					Mark = Marks.BeginRange,
+					Name = name,
+					Offset = offset,
+				};
+
+				begin1.FindEnd().Transition.Add(Epsilon, end2);
+
+				return begin1;
+			}
+		}
+
+		public static State MarkEndRange(State begin1, string name, bool atBegin, int offset)
+		{
+			if (atBegin)
+			{
+				return new State(Epsilon, begin1)
+				{
+					Mark = Marks.EndRange,
+					Name = name,
+					Offset = offset,
+				};
+			}
+			else
+			{
+				var end2 = new State()
+				{
+					Mark = Marks.EndRange,
+					Name = name,
+					Offset = offset,
+				};
+
+				begin1.FindEnd().Transition.Add(Epsilon, end2);
+
+				return begin1;
+			}
 		}
 
 		public void MarkConst(string name, string value, int priority)
@@ -224,11 +293,47 @@ namespace Fsm
 			end.Transition.Add(Epsilon, new State());
 		}
 
+		protected void MarkNext(string name, Marks markType, int offset)
+		{
+			var proccessed = new HashSet<State>();
+			var eclosure = Eclosure();
+			var end = FindEnd();
+
+			foreach (var first in eclosure)
+			{
+				foreach (var pair in first.Transition)
+				{
+					if (pair.Key != null)
+					{
+						var next = pair.Value;
+						if (proccessed.Contains(next) == false)
+						{
+							proccessed.Add(next);
+
+							var mark = new State(Epsilon, next)
+							{
+								Name = name,
+								Mark = markType,
+								Offset = offset,
+							};
+
+							next.Transition.Add(Epsilon, mark);
+						}
+					}
+				}
+			}
+
+			end.Transition.Add(Epsilon, new State());
+		}
+
 		public void MarkCount(string name, int max, int default1)
 		{
 			var end2 = new State();
-			end2.CountName = name;
-			end2.CountMax = max;
+			//end2.CountName = name;
+			//end2.CountMax = max;
+			end2.Mark = Marks.Count;
+			end2.Name = name;
+			end2.Max = max;
 			end2.Default = default1;
 
 			var end1 = FindEnd();
@@ -250,7 +355,7 @@ namespace Fsm
 			return new State(Epsilon, begin1)
 			{
 				Mark = Marks.Count,
-				RangeName = name,
+				Name = name,
 				Max = max,
 			};
 		}
