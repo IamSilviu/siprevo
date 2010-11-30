@@ -9,7 +9,7 @@ namespace SipDfaCompiler
 	{
 		private static Regex _regex =
 //			new Regex(@"^(?<func>Const|Range|BeginRange|EndRange|ContinueRange|Count|Decimal|Bool|Group|Hex|Reset|ResetIfInvalid)(\s*=(\s*(?<arg1>[\<\>\?\[\]\.A-Za-z0-9_\-]*)(\s*,\s*(?<arg2>[\<\>\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg3>[\?\[\]\.A-Za-z0-9_\-]*))?(\s*,\s*(?<arg4>[\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg5>[\?\[\]\.A-Za-z0-9_\-]+))?))?;",
-			new Regex(@"\s*(?<func>Const|Range|BeginRange|EndRange|ContinueRange|Count|Decimal|Bool|Group|Hex|Reset|ResetIfInvalid)(\s*=(\s*(?<arg1>[\<\>\?\[\]\.A-Za-z0-9_\-]*)(\s*,\s*(?<arg2>[\<\>\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg3>[\?\[\]\.A-Za-z0-9_\-]*))?(\s*,\s*(?<arg4>[\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg5>[\?\[\]\.A-Za-z0-9_\-]+))?))?;",
+			new Regex(@"\s*(?<func>Const|Range|LookupRange|BeginRange|EndRange|ContinueRange|Count|Decimal|Bool|Group|Hex|Reset|ResetIfInvalid)(\s*=(\s*(?<arg1>[\<\>\?\[\]\.A-Za-z0-9_\-]*)(\s*,\s*(?<arg2>[\<\>\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg3>[\?\[\]\.A-Za-z0-9_\-]*))?(\s*,\s*(?<arg4>[\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg5>[\?\[\]\.A-Za-z0-9_\-]+))?))?;",
 				RegexOptions.IgnoreCase);
 
 		public static ActionsDescription TryParse(string description, string path)
@@ -32,27 +32,33 @@ namespace SipDfaCompiler
 							action = new Action(Marks.Const, 3);
 							SetArg(action, 0, match, reservArgs, 2);
 							SetArg(action, 1, match, reservArgs, 2);
-							SetArg(action, 2, match, "10");
+							SetArg(action, 2, match, 10);
 							break;
 						case "Range":
 							action = new Action(Marks.Range, 3);
 							SetArg(action, 0, match, reservArgs, 1);
-							SetArg(action, 1, match, "0");
-							SetArg(action, 2, match, "0");
+							SetArg(action, 1, match, 0);
+							SetArg(action, 2, match, 0);
+							break;
+						case "LookupRange":
+							action = new Action(Marks.Range, 3);
+							SetArg(action, 0, match, reservArgs, 1);
+							SetArg(action, 1, match, 1);
+							SetArg(action, 2, match, -1);
 							break;
 						case "BeginRange":
 							action = new Action(Marks.BeginRange, 3);
 							SetArg(action, 0, match, reservArgs, 1);
 							TestArg(1, match, "", "AtBegin", "AtEnd");
 							SetArg(action, 1, match, "AtBegin");
-							SetArg(action, 2, match, "0");
+							SetArg(action, 2, match, 0);
 							break;
 						case "EndRange":
 							action = new Action(Marks.EndRange, 3);
 							SetArg(action, 0, match, reservArgs, 1);
 							TestArg(1, match, "", "AtBegin", "AtEnd");
 							SetArg(action, 1, match, "AtEnd");
-							SetArg(action, 2, match, "0");
+							SetArg(action, 2, match, 0);
 							break;
 						case "ContinueRange":
 							action = new Action(Marks.ContinueRange, 1);
@@ -69,8 +75,8 @@ namespace SipDfaCompiler
 						case "Count":
 							action = new Action(Marks.Count, 3);
 							SetArg(action, 0, match, reservArgs, 1);
-							SetArg(action, 1, match, "10");
-							SetArg(action, 2, match, "0");
+							SetArg(action, 1, match, 10);
+							SetArg(action, 2, match, 0);
 							break;
 						case "Decimal":
 							action = new Action(Marks.Decimal, 1);
@@ -132,11 +138,20 @@ namespace SipDfaCompiler
 			action.Args[i] = value;
 		}
 
-		private static void SetArg(Action action, int i, Match match, string defaultV)
+		private static void SetArg(Action action, int i, Match match, int defaultValue)
 		{
 			var value = match.Groups["arg" + (i + 1)].Value;
 			if (string.IsNullOrEmpty(value))
-				value = ToCsName(defaultV);
+				value = defaultValue.ToString();
+
+			action.Args[i] = value;
+		}
+
+		private static void SetArg(Action action, int i, Match match, string defaultValue)
+		{
+			var value = match.Groups["arg" + (i + 1)].Value;
+			if (string.IsNullOrEmpty(value))
+				value = ToCsName(defaultValue);
 
 			action.Args[i] = value;
 		}

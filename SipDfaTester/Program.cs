@@ -39,6 +39,8 @@ namespace SipDfaTester
 				"Record-Route: <sip:127.0.0.1:5060;lr> , <sip:127.0.0.2:5060;lr>\r\n" +
 				"Route: <sip:127.0.0.1:5060;lr>, <sip:127.0.0.2:5060;lr>\r\n" +
 				"Route: <sip:127.0.0.3:5060;lr>\r\n" +
+				"Event: presence\r\n" +
+				"Content-Type: application / msrtc-adrl-categorylist+xml\r\n" +
 				"\r\n");
 
 			var message1 = new byte[message0.Length + 16];
@@ -95,6 +97,9 @@ namespace SipDfaTester
 			Console.WriteLine("HasLr: |{0}|", dfa.RequestUri.HasLr);
 			//Console.WriteLine("Record-Route.Comma: |{0}|", dfa.RecordRoute[0].Comma.ToString());
 			//Console.WriteLine("Record-Route.Comma: |{0}|", dfa.RecordRoute[1].Comma.ToString());
+			Console.WriteLine("Event: |{0}|", dfa.Event.EventType.ToString());
+			Console.WriteLine("Content-Type.Type: |{0}|", dfa.ContentType.Type.ToString());
+			Console.WriteLine("Content-Type.Subtype: |{0}|", dfa.ContentType.Subtype.ToString());
 
 			//Console.WriteLine();
 			//Console.WriteLine("AUTHORIZATION:");
