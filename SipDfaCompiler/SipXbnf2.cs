@@ -1641,9 +1641,24 @@ namespace SipDfaCompiler
 			State rule = (State)(new byte[] {0x42,0x45,0x4E,0x4F,0x54,0x49,0x46,0x59,});
 			return rule;
 		}
+		public State GetMESSAGEm0(List<string> rulenames)
+		{
+			State rule = (State)(new byte[] {0x4D,0x45,0x53,0x53,0x41,0x47,0x45,});
+			return rule;
+		}
+		public State GetINFOm0(List<string> rulenames)
+		{
+			State rule = (State)(new byte[] {0x49,0x4E,0x46,0x4F,});
+			return rule;
+		}
+		public State GetREFERm0(List<string> rulenames)
+		{
+			State rule = (State)(new byte[] {0x52,0x45,0x46,0x45,0x52,});
+			return rule;
+		}
 		public State Getextension_method2(List<string> rulenames)
 		{
-			State rule = State.NoCloneAlternation(GetSERVICEm(rulenames),GetBENOTIFYm(rulenames));
+			State rule = State.NoCloneAlternation(GetSERVICEm(rulenames),GetBENOTIFYm(rulenames),GetMESSAGEm(rulenames),GetINFOm(rulenames),GetREFERm(rulenames));
 			return rule;
 		}
 		public State Getfrom_param1(List<string> rulenames)
@@ -4372,6 +4387,30 @@ namespace SipDfaCompiler
 		{
 			rulenames.Insert(0, "BENOTIFYm");
 			State rule = State.NoCloneAlternation(GetBENOTIFYm0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State GetMESSAGEm(List<string> rulenames)
+		{
+			rulenames.Insert(0, "MESSAGEm");
+			State rule = State.NoCloneAlternation(GetMESSAGEm0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State GetINFOm(List<string> rulenames)
+		{
+			rulenames.Insert(0, "INFOm");
+			State rule = State.NoCloneAlternation(GetINFOm0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State GetREFERm(List<string> rulenames)
+		{
+			rulenames.Insert(0, "REFERm");
+			State rule = State.NoCloneAlternation(GetREFERm0(rulenames));
 			rule = OnMarkRule(rule, rulenames);
 			rulenames.RemoveAt(0);
 			return rule;

@@ -208,13 +208,13 @@ namespace Fsm
 			}
 		}
 
-		public static State MarkEndRange(State begin1, string name, bool atBegin, int offset)
+		public static State MarkEndRange(State begin1, Marks mark, string name, bool atBegin, int offset)
 		{
 			if (atBegin)
 			{
 				return new State(Epsilon, begin1)
 				{
-					Mark = Marks.EndRange,
+					Mark = mark,
 					Name = name,
 					Offset = offset,
 				};
@@ -223,7 +223,7 @@ namespace Fsm
 			{
 				var end2 = new State()
 				{
-					Mark = Marks.EndRange,
+					Mark = mark,
 					Name = name,
 					Offset = offset,
 				};

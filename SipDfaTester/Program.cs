@@ -85,21 +85,21 @@ namespace SipDfaTester
 			//Console.WriteLine("MaxForwards: {0}", dfa.MaxForwards);
 			//Console.WriteLine("From: {0} : {1} @ {2} ; Maddr= {3}", dfa.From.AddrSpec1.UriScheme.ToString(), dfa.From.AddrSpec1.User.ToString(), dfa.From.AddrSpec1.Hostport.Host.ToString(), dfa.From.AddrSpec1.Maddr.ToString());
 			//Console.WriteLine("To: {0}", dfa.To.AddrSpec1.Hostport.Host.ToString());
-			Console.WriteLine("CallId: |{0}|", dfa.CallId.ToString());
+			//Console.WriteLine("CallId: |{0}|", dfa.CallId.ToString());
 			//Console.WriteLine("Record-Route.CommaAndValue: |{0}|", dfa.RecordRoute[0].CommaAndValue.ToString());
-			Console.WriteLine("Record-Route[0].CommaAndValue: |{0}|", dfa.RecordRoute[0].CommaAndValue.ToString());
-			Console.WriteLine("Record-Route[1].CommaAndValue: |{0}|", dfa.RecordRoute[1].CommaAndValue.ToString());
-			Console.WriteLine("Route[0].CommaAndValue: |{0}|", dfa.Route[0].CommaAndValue.ToString());
-			Console.WriteLine("Route[1].CommaAndValue: |{0}|", dfa.Route[1].CommaAndValue.ToString());
-			Console.WriteLine("Route[2].CommaAndValue: |{0}|", dfa.Route[2].CommaAndValue.ToString());
-			Console.WriteLine("Via[0].CommaAndValue: |{0}|", dfa.Via[0].CommaAndValue.ToString());
-			Console.WriteLine("Via[1].CommaAndValue: |{0}|", dfa.Via[1].CommaAndValue.ToString());
+			//Console.WriteLine("Record-Route[0].CommaAndValue: |{0}|", dfa.RecordRoute[0].CommaAndValue.ToString());
+			//Console.WriteLine("Record-Route[1].CommaAndValue: |{0}|", dfa.RecordRoute[1].CommaAndValue.ToString());
+			//Console.WriteLine("Route[0].CommaAndValue: |{0}|", dfa.Route[0].CommaAndValue.ToString());
+			//Console.WriteLine("Route[1].CommaAndValue: |{0}|", dfa.Route[1].CommaAndValue.ToString());
+			//Console.WriteLine("Route[2].CommaAndValue: |{0}|", dfa.Route[2].CommaAndValue.ToString());
+			//Console.WriteLine("Via[0].CommaAndValue: |{0}|", dfa.Via[0].CommaAndValue.ToString());
+			//Console.WriteLine("Via[1].CommaAndValue: |{0}|", dfa.Via[1].CommaAndValue.ToString());
 			Console.WriteLine("HasLr: |{0}|", dfa.RequestUri.HasLr);
 			//Console.WriteLine("Record-Route.Comma: |{0}|", dfa.RecordRoute[0].Comma.ToString());
 			//Console.WriteLine("Record-Route.Comma: |{0}|", dfa.RecordRoute[1].Comma.ToString());
 			Console.WriteLine("Event: |{0}|", dfa.Event.EventType.ToString());
-			Console.WriteLine("Content-Type.Type: |{0}|", dfa.ContentType.Type.ToString());
-			Console.WriteLine("Content-Type.Subtype: |{0}|", dfa.ContentType.Subtype.ToString());
+			//Console.WriteLine("Content-Type.Type: |{0}|", dfa.ContentType.Type.ToString());
+			//Console.WriteLine("Content-Type.Subtype: |{0}|", dfa.ContentType.Subtype.ToString());
 
 			//Console.WriteLine();
 			//Console.WriteLine("AUTHORIZATION:");
@@ -120,23 +120,23 @@ namespace SipDfaTester
 			////for (int i = 0; i < dfa.Count.HeaderCount; i++)
 			////    Console.WriteLine("{0}:\r\n|{1}|", dfa.Headers[i].Name.ToString(), dfa.Headers[i].Value.ToString());
 
-			//var message2 = utf.GetBytes(
-			//    "BENOTIFY sip:officesip.local SIP/2.0\r\n" +
-			//    "Contact: *\r\n" +
-			//    "Require: token1, token2, token3\r\n" +
-			//    "Require: token4\r\n" +
-			//    "Proxy-Require: token1, token2, token3\r\n" +
-			//    "\r\n");
+			var message2 = utf.GetBytes(
+				"BENOTIFY sip:user:password@officesip.local SIP/2.0\r\n" +
+				"Contact: *\r\n" +
+				"Require: token1, token2, token3\r\n" +
+				"Require: token4\r\n" +
+				"Proxy-Require: token1, token2, token3\r\n" +
+				"\r\n");
 
-			//dfa.SetDefaultValue();
-			//dfa.SetArray(message2);
-			//proccessed = dfa.Parse(message2, 0, message2.Length);
+			dfa.SetDefaultValue();
+			proccessed = dfa.Parse(message2, 0, message2.Length);
+			dfa.SetArray(message2);
 
-			//Console.WriteLine("--");
-			//Console.WriteLine("Total: {0}", message2.Length);
-			//Console.WriteLine("Proccessed: {0}", proccessed);
-			//Console.WriteLine("Final: {0}", dfa.Final);
-			//Console.WriteLine("Method: {0}", dfa.Method);
+			Console.WriteLine("--");
+			Console.WriteLine("Total: {0}", message2.Length);
+			Console.WriteLine("Proccessed: {0}", proccessed);
+			Console.WriteLine("Final: {0}", dfa.Final);
+			Console.WriteLine("Method: {0}", dfa.Method);
 			//Console.WriteLine("ContactCount: {0}", dfa.Count.ContactCount);
 			//Console.WriteLine("RequireCount: {0}", dfa.Count.RequireCount);
 			//Console.Write("Require: ");
@@ -146,8 +146,10 @@ namespace SipDfaTester
 			//Console.Write("Proxy-Require: ");
 			//for (int i = 0; i <= dfa.Count.ProxyRequireCount; i++)
 			//    Console.Write("{0}, ", dfa.ProxyRequire[i].ToString());
-			//Console.WriteLine();
+			Console.WriteLine();
 			//Console.WriteLine("Star: {0}", dfa.Contact[0].IsStar);
+			Console.WriteLine("RequestUri.User: |{0}|", dfa.RequestUri.User.ToString());
+			Console.WriteLine("RequestUri.Hostport.Host: |{0}|", dfa.RequestUri.Hostport.Host.ToString());
 
 			//var message3X = utf.GetBytes(
 			//    "REGISTER sip:officesip.local SIP/2.0\r\n" +

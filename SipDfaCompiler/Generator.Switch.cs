@@ -65,9 +65,9 @@ namespace SipDfaCompiler
 					if (nfa1.Mark == Marks.ResetRange)
 					{
 						var name = GetVarname(nfa1.Name, "");
+						// Do NOT use SetDefaultValue, it clears bytes too -> wrong!
+						// Should to create special method for this
 						_main.WriteLine("{0}.SetDefaultValue();", name);
-					//	_main.WriteLine("{0}.Begin = -1;", name);
-					//	_main.WriteLine("{0}.End = -1;", name);
 					}
 
 					if (nfa1.Mark == Marks.ResetRangeIfInvalid)
@@ -96,32 +96,62 @@ namespace SipDfaCompiler
 
 				foreach (var nfa1 in state.NfaStates)
 				{
-					if (nfa1.Mark == Marks.BeginRange)
+					switch (nfa1.Mark)
 					{
-						var extra = GetCountComparation(RemoveExtraInfo(nfa1.Name));
-						if (extra != "")
-							extra += " && ";
-						_main.Write("if({1}{0} < 0) {0} = i", GetVarname(nfa1.Name, "") + ".Begin", extra);
-						if (nfa1.Offset != 0)
-							_main.Write("{0} {1}", (nfa1.Offset > 0) ? "+" : "-", Math.Abs(nfa1.Offset));
-						_main.WriteLine(";");
+						case Marks.BeginRange:
+						case Marks.EndRange:
+						case Marks.EndRangeIfInvalid:
+
+							var varName = GetVarname(nfa1.Name, "") +
+								((nfa1.Mark == Marks.BeginRange) ? ".Begin" : ".End");
+
+							var condition = GetCountComparation(RemoveExtraInfo(nfa1.Name));
+							if (nfa1.Mark != Marks.EndRange)
+							{
+								if (condition != "")
+									condition += " && ";
+								condition = varName + " < 0";
+							}
+
+							if (condition != "")
+								_main.Write("if({0})", condition);
+
+							_main.Write("{0} = i", varName);
+
+							if (nfa1.Offset != 0)
+								_main.Write("{0} {1}", (nfa1.Offset > 0) ? "+" : "-", Math.Abs(nfa1.Offset));
+
+							_main.WriteLine(";");
+
+							break;
 					}
 
-					if (nfa1.Mark == Marks.EndRange)
-					{
-						var ifv = GetCountComparation(RemoveExtraInfo(nfa1.Name));
-						if (ifv != "")
-							_main.Write("if({0}) ", ifv);
-						_main.WriteLine("{0} = i;", GetVarname(nfa1.Name, "") + ".End");
-					}
+					//if (nfa1.Mark == Marks.BeginRange)
+					//{
+					//    var extra = GetCountComparation(RemoveExtraInfo(nfa1.Name));
+					//    if (extra != "")
+					//        extra += " && ";
+					//    _main.Write("if({1}{0} < 0) {0} = i", GetVarname(nfa1.Name, "") + ".Begin", extra);
+					//    if (nfa1.Offset != 0)
+					//        _main.Write("{0} {1}", (nfa1.Offset > 0) ? "+" : "-", Math.Abs(nfa1.Offset));
+					//    _main.WriteLine(";");
+					//}
 
-					//if (nfa1.Mark == Marks.ContinueRange)
+					//if (nfa1.Mark == Marks.EndRange)
 					//{
 					//    var ifv = GetCountComparation(RemoveExtraInfo(nfa1.Name));
 					//    if (ifv != "")
-					//        ifv += " && ";
-					//    _main.WriteLine("if({1}{0}.End == i-1) {0}.End = i;", GetVarname(nfa1.Name, ""), ifv);
+					//        _main.Write("if({0}) ", ifv);
+					//    _main.WriteLine("{0} = i;", GetVarname(nfa1.Name, "") + ".End");
 					//}
+
+					////if (nfa1.Mark == Marks.ContinueRange)
+					////{
+					////    var ifv = GetCountComparation(RemoveExtraInfo(nfa1.Name));
+					////    if (ifv != "")
+					////        ifv += " && ";
+					////    _main.WriteLine("if({1}{0}.End == i-1) {0}.End = i;", GetVarname(nfa1.Name, ""), ifv);
+					////}
 
 					if (nfa1.Mark == Marks.Bool)
 						_main.WriteLine("{0} = true;", GetVarname(nfa1.Name, ""));
@@ -152,8 +182,8 @@ namespace SipDfaCompiler
 							_main.Write("if(" + ifv + ") ");
 
 						_main.WriteLine("{0} = {1}s.{2};",
-							AddCountPrefix(RemoveExtraInfo(pair.Key)), 
-							RemoveBrackets(VariableInfo.GetShortName(pair.Key)), 
+							AddCountPrefix(RemoveExtraInfo(pair.Key)),
+							RemoveBrackets(VariableInfo.GetShortName(pair.Key)),
 							pair.Value);
 					}
 				}
@@ -262,7 +292,7 @@ namespace SipDfaCompiler
 		//        }
 
 		//        _main.WriteLine("}");
-	
+
 		//        //_main.WriteLine("using (var reader = new DeflateStream(File.OpenRead(path), CompressionMode.Decompress))");
 		//        //_main.WriteLine("{");
 		//        //_main.WriteLine("byte[] buffer = new byte[sizeof(Int32)];");

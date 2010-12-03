@@ -72,7 +72,7 @@ namespace SipDfaCompiler
 		static void xbnf_MarkRule2(object sender, MarkRuleEventArgs e)
 		{
 			var path = ToPath(e.Rulenames);
-			
+
 			var mark = _marks[path];
 			if (mark.IsEmpty == false)
 			{
@@ -92,7 +92,8 @@ namespace SipDfaCompiler
 							e.Start = State.MarkBeginRange(e.Start, action.Args[0], action.Args[1] == "AtBegin", int.Parse(action.Args[2]));
 							break;
 						case Marks.EndRange:
-							e.Start = State.MarkEndRange(e.Start, action.Args[0], action.Args[1] == "AtBegin", int.Parse(action.Args[2]));
+						case Marks.EndRangeIfInvalid:
+							e.Start = State.MarkEndRange(e.Start, action.Mark, action.Args[0], action.Args[1] == "AtBegin", int.Parse(action.Args[2]));
 							break;
 						case Marks.ContinueRange:
 							e.Start.MarkContinueRange(action.Args[0]);
@@ -170,7 +171,7 @@ namespace SipDfaCompiler
 				//Console.WriteLine("Added:	{0}", total - loaded);
 				Console.WriteLine("Total:	{0}", total);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				Console.WriteLine("Failed to update marks\r\n{0}", ex.Message);
 				return -1;

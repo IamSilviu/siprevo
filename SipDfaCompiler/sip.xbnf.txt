@@ -624,11 +624,15 @@ event-reason-extension = token;
 extension-header  =/ Event / Allow-Events / Subscription-State; /* vf: link to rfc3261 */
 
 /**************************************************************************************************/
-/* SERVICEm, BENOTIFYm */
+/* SERVICEm, BENOTIFYm, MESSAGEm, INFOm, REFERm */
 
 SERVICEm          = %x53.45.52.56.49.43.45; /* SERVICE in caps */
 BENOTIFYm         = %x42.45.4E.4F.54.49.46.59; /* BENOTIFY in caps */
-extension-method  = SERVICEm / BENOTIFYm;
+MESSAGEm          = %x4D.45.53.53.41.47.45; /* MESSAGE in caps */
+INFOm             = %x49.4E.46.4F; /* INFO in caps */
+REFERm            = %x52.45.46.45.52; /* REFER in caps */
+
+extension-method  = SERVICEm / BENOTIFYm / MESSAGEm / INFOm / REFERm;
 
 /**************************************************************************************************/
 /* [MS-SIPRE] */

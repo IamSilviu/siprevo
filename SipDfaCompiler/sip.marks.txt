@@ -2,7 +2,18 @@
 // Marks description rules:
 //
 // PATH -> Range [= VARNAME [, LOOKUP=0 [, BEGINOFFSET=0]]];
-// PATH -> LookupRange [= VARNAME]; // Syntax sugar ==>> Range VARNAME, 1, -1;
+//
+// PATH -> LookupRange [= VARNAME];                     // Syntax sugar ==>> Range VARNAME, 1, -1;
+//
+// PATH -> ContinueRange = VARNAME;
+//
+// PATH -> BeginRange = VARNAME, MARKNFASTATE=AtBegin, OFFSET=0;
+// PATH -> EndRange = VARNAME, MARKNFASTATE=AtEnd, OFFSET=0;
+// PATH -> EndRangeIfInvalid = VARNAME, MARKNFASTATE=AtEnd, OFFSET=0;
+//
+// PATH -> Reset [= VARNAME]           // this mark will reset range or struct to empty value
+// PATH -> ResetIfInvalid [= VARNAME]  // this reset range begin if end is invalid
+//
 //
 // PATH -> Decimal [= VARNAME];
 // PATH -> Hex [= VARNAME];
@@ -14,10 +25,6 @@
 // PATH -> Count = COUNTNAME [, MAXVALUE=10 [, INITIALVALUE=0]];
 //
 // PATH -> Group = SUBSTITION, GROUPNAME
-//
-// PATH -> Reset [= VARNAME]           // this mark will reset range to empty value
-//
-// PATH -> ResetIfInvalid [= VARNAME]  // this reset range begin if end is invalid
 //
 //   VARNAME is pathname to variable, e.g. SomeStruct.NestedStruct.NestedStruct2.VarName
 //   VARNAME may include global struct description, e.g. StructVarName<GlobalStructType>.VarName
@@ -46,14 +53,14 @@
 .ADDRSPEC.SIP-URI.sip: -> Const = ?<Addrspec>.UriScheme, Sip;
 .ADDRSPEC.SIPS-URI.sips: -> Const = ?<Addrspec>.UriScheme, Sips;
 .ADDRSPEC.absoluteURI.: -> Const = ?<Addrspec>.UriScheme, Absolute, 20;
-.ADDRSPEC.SIP-URI.userinfo.user -> Range = ?<Addrspec>.User;
-.ADDRSPEC.SIPS-URI.userinfo.user -> Range = ?<Addrspec>.User;
+.ADDRSPEC.SIP-URI.userinfo.user -> BeginRange = ?<Addrspec>.User, AtBegin, 0;
+.ADDRSPEC.SIP-URI.userinfo.: -> EndRange = ?<Addrspec>.User, AtEnd, -1;
 .ADDRSPEC.SIP-URI.uri-parameters.uri-parameter.ms-received-cid-param.pvalue -> Range = ?<Addrspec>.MsReceivedCid;
 .ADDRSPEC.SIPS-URI.uri-parameters.uri-parameter.ms-received-cid-param.pvalue -> Range = ?<Addrspec>.MsReceivedCid;
 .ADDRSPEC.SIP-URI.hostport -> Group = ?<Addrspec>.Hostport, HOSTPORT;
 .ADDRSPEC.SIPS-URI.hostport -> Group = ?<Addrspec>.Hostport, HOSTPORT;
-.ADDRSPEC.SIP-URI.userinfo.@ -> Reset = ?<Addrspec>.Hostport;
-.ADDRSPEC.SIPS-URI.userinfo.@ -> Reset = ?<Addrspec>.Hostport;
+.ADDRSPEC.SIP-URI.userinfo.@ -> Reset = ?<Addrspec>.Hostport; EndRangeIfInvalid = ?<Addrspec>.User, AtEnd, -1;
+.ADDRSPEC.SIPS-URI.userinfo.@ -> Reset = ?<Addrspec>.Hostport; EndRangeIfInvalid = ?<Addrspec>.User, AtEnd, -1;
 .ADDRSPEC.SIP-URI.uri-parameters.uri-parameter.transport-param.udp -> Const = ?<Addrspec>.Transport;
 .ADDRSPEC.SIP-URI.uri-parameters.uri-parameter.transport-param.tcp -> Const = ?<Addrspec>.Transport;
 .ADDRSPEC.SIP-URI.uri-parameters.uri-parameter.transport-param.sctp -> Const = ?<Addrspec>.Transport;
@@ -93,6 +100,9 @@
 .METHOD.extension-method.NOTIFYm -> Const = ?Method;
 .METHOD.extension-method.SERVICEm -> Const = ?Method;
 .METHOD.extension-method.BENOTIFYm -> Const = ?Method;
+.METHOD.extension-method.MESSAGEm -> Const = ?Method;
+.METHOD.extension-method.INFOm -> Const = ?Method;
+.METHOD.extension-method.REFERm -> Const = ?Method;
 .METHOD.extension-method -> Const = ?Method, Extension, 20;
 
 //
@@ -223,6 +233,7 @@ SIP-messageX.message-headerX.extension-header.Event.HCOLON -> Const = Headers<He
 SIP-messageX.message-headerX.extension-header.Allow-Events.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, AllowEvents;
 SIP-messageX.message-headerX.extension-header.Subscription-State.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, SubscriptionState;
 SIP-messageX.message-headerX.extension-header.Proxy-Authentication-Info.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, ProxyAuthenticationInfo;
+SIP-messageX.message-headerX.extension-header.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, Extension, 20;
 SIP-messageX.message-headerX.CRLF -> Count = HeaderCount, 200;
 
 //

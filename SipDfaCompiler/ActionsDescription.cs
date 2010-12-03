@@ -9,7 +9,7 @@ namespace SipDfaCompiler
 	{
 		private static Regex _regex =
 //			new Regex(@"^(?<func>Const|Range|BeginRange|EndRange|ContinueRange|Count|Decimal|Bool|Group|Hex|Reset|ResetIfInvalid)(\s*=(\s*(?<arg1>[\<\>\?\[\]\.A-Za-z0-9_\-]*)(\s*,\s*(?<arg2>[\<\>\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg3>[\?\[\]\.A-Za-z0-9_\-]*))?(\s*,\s*(?<arg4>[\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg5>[\?\[\]\.A-Za-z0-9_\-]+))?))?;",
-			new Regex(@"\s*(?<func>Const|Range|LookupRange|BeginRange|EndRange|ContinueRange|Count|Decimal|Bool|Group|Hex|Reset|ResetIfInvalid)(\s*=(\s*(?<arg1>[\<\>\?\[\]\.A-Za-z0-9_\-]*)(\s*,\s*(?<arg2>[\<\>\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg3>[\?\[\]\.A-Za-z0-9_\-]*))?(\s*,\s*(?<arg4>[\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg5>[\?\[\]\.A-Za-z0-9_\-]+))?))?;",
+			new Regex(@"\s*(?<func>Const|Range|LookupRange|BeginRange|EndRange|EndRangeIfInvalid|ContinueRange|Count|Decimal|Bool|Group|Hex|Reset|ResetIfInvalid)(\s*=(\s*(?<arg1>[\<\>\?\[\]\.A-Za-z0-9_\-]*)(\s*,\s*(?<arg2>[\<\>\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg3>[\?\[\]\.A-Za-z0-9_\-]*))?(\s*,\s*(?<arg4>[\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg5>[\?\[\]\.A-Za-z0-9_\-]+))?))?;",
 				RegexOptions.IgnoreCase);
 
 		public static ActionsDescription TryParse(string description, string path)
@@ -55,6 +55,13 @@ namespace SipDfaCompiler
 							break;
 						case "EndRange":
 							action = new Action(Marks.EndRange, 3);
+							SetArg(action, 0, match, reservArgs, 1);
+							TestArg(1, match, "", "AtBegin", "AtEnd");
+							SetArg(action, 1, match, "AtEnd");
+							SetArg(action, 2, match, 0);
+							break;
+						case "EndRangeIfInvalid":
+							action = new Action(Marks.EndRangeIfInvalid, 3);
 							SetArg(action, 0, match, reservArgs, 1);
 							TestArg(1, match, "", "AtBegin", "AtEnd");
 							SetArg(action, 1, match, "AtEnd");

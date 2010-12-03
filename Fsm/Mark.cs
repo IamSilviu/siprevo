@@ -12,6 +12,7 @@ namespace Fsm
 		ContinueRange,
 		ResetRangeIfInvalid,
 		ResetRange,
+		EndRangeIfInvalid,
 		Const,
 		Count,
 		Decimal,
