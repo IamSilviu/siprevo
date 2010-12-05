@@ -61,19 +61,19 @@ namespace Fsm
 		public bool IsBeginRange
 		{
 			get { return Mark == Marks.BeginRange; }
-		//	set { if (value) Mark = Marks.BeginRange; }
+			//	set { if (value) Mark = Marks.BeginRange; }
 		}
 
 		public bool IsEndRange
 		{
 			get { return Mark == Marks.EndRange; }
-		//	set { if (value) Mark = Marks.EndRange; }
+			//	set { if (value) Mark = Marks.EndRange; }
 		}
 
 		public string RangeName
 		{
 			get { return Name; }
-		//	set { Name = value; }
+			//	set { Name = value; }
 		}
 
 		public bool IsConst
@@ -142,6 +142,36 @@ namespace Fsm
 		{
 			get;
 			set;
+		}
+
+		public static State MarkCustom(State begin1, string name, string select, string custom, string type)
+		{
+			switch (select)
+			{
+				case "Begin":
+					return new State(Epsilon, begin1)
+					{
+						Mark = Marks.Custom,
+						Name = name,
+						Value = custom,
+						Type = type,
+					};
+
+				case "End":
+					var end2 = new State()
+					{
+						Mark = Marks.Custom,
+						Name = name,
+						Value = custom,
+						Type = type,
+					};
+
+					begin1.FindEnd().Transition.Add(Epsilon, end2);
+
+					return begin1;
+			}
+
+			throw new Exception("Not implemented");
 		}
 
 		public static void MarkRange(ref State begin1, string name)
@@ -255,14 +285,20 @@ namespace Fsm
 			MarkEach(name, Marks.Hex);
 		}
 
+		//public void MarkResetIfInvalid(string name)
+		//{
+		//    MarkEach(name, Marks.ResetRangeIfInvalid);
+		//}
+
 		public void MarkResetIfInvalid(string name)
 		{
-			MarkEach(name, Marks.ResetRangeIfInvalid);
+			FindEnd().Transition.Add(Epsilon,
+				new State() { Name = name, Mark = Marks.ResetRangeIfInvalid, });
 		}
 
 		public void MarkReset(string name)
 		{
-			FindEnd().Transition.Add(Epsilon, 
+			FindEnd().Transition.Add(Epsilon,
 				new State() { Name = name, Mark = Marks.ResetRange, });
 		}
 
@@ -340,11 +376,13 @@ namespace Fsm
 			end1.Transition.Add(Epsilon, end2);
 		}
 
-		public void MarkBool(string name)
+		public void MarkBool(Marks mark, string name)
 		{
-			var end2 = new State();
-			end2.Mark = Marks.Bool;
-			end2.Name = name;
+			var end2 = new State()
+			{
+				Mark = mark,
+				Name = name,
+			};
 
 			var end1 = FindEnd();
 			end1.Transition.Add(Epsilon, end2);

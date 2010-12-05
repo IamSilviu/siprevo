@@ -82,6 +82,9 @@ namespace SipDfaCompiler
 				{
 					switch (action.Mark)
 					{
+						case Marks.Custom:
+							e.Start = State.MarkCustom(e.Start, action.Args[0], action.Args[1], action.Args[2], action.Args[3]);
+							break;
 						case Marks.Const:
 							e.Start.MarkConst(action.Args[0], action.Args[1], int.Parse(action.Args[2]));
 							break;
@@ -108,7 +111,9 @@ namespace SipDfaCompiler
 							e.Start.MarkCount(action.Args[0], int.Parse(action.Args[1]), int.Parse(action.Args[2]));
 							break;
 						case Marks.Bool:
-							e.Start.MarkBool(action.Args[0]);
+						case Marks.BoolEx:
+						case Marks.BoolExNot:
+							e.Start.MarkBool(action.Mark, action.Args[0]);
 							break;
 						case Marks.ResetRange:
 							e.Start.MarkReset(action.Args[0]);

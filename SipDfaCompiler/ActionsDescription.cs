@@ -8,8 +8,7 @@ namespace SipDfaCompiler
 	class ActionsDescription
 	{
 		private static Regex _regex =
-//			new Regex(@"^(?<func>Const|Range|BeginRange|EndRange|ContinueRange|Count|Decimal|Bool|Group|Hex|Reset|ResetIfInvalid)(\s*=(\s*(?<arg1>[\<\>\?\[\]\.A-Za-z0-9_\-]*)(\s*,\s*(?<arg2>[\<\>\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg3>[\?\[\]\.A-Za-z0-9_\-]*))?(\s*,\s*(?<arg4>[\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg5>[\?\[\]\.A-Za-z0-9_\-]+))?))?;",
-			new Regex(@"\s*(?<func>Const|Range|LookupRange|BeginRange|EndRange|EndRangeIfInvalid|ContinueRange|Count|Decimal|Bool|Group|Hex|Reset|ResetIfInvalid)(\s*=(\s*(?<arg1>[\<\>\?\[\]\.A-Za-z0-9_\-]*)(\s*,\s*(?<arg2>[\<\>\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg3>[\?\[\]\.A-Za-z0-9_\-]*))?(\s*,\s*(?<arg4>[\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg5>[\?\[\]\.A-Za-z0-9_\-]+))?))?;",
+			new Regex(@"\s*(?<func>Custom|Const|Range|LookupRange|BeginRange|EndRange|EndRangeIfInvalid|ContinueRange|Count|Decimal|Bool|BoolEx|BoolExNot|Group|Hex|Reset|ResetIfInvalid)(\s*=(\s*(?<arg1>[\<\>\?\[\]\.A-Za-z0-9_\-]*)(\s*,\s*(?<arg2>[\<\>\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg3>([\?\[\]\.A-Za-z0-9_\-]*)|" + "(\"[^\"]+\")" + @"))?(\s*,\s*(?<arg4>[\?\[\]\.A-Za-z0-9_\-]+))?(\s*,\s*(?<arg5>[\?\[\]\.A-Za-z0-9_\-]+))?))?;",
 				RegexOptions.IgnoreCase);
 
 		public static ActionsDescription TryParse(string description, string path)
@@ -28,6 +27,14 @@ namespace SipDfaCompiler
 				{
 					switch (match.Groups["func"].Value)
 					{
+						case "Custom":
+							action = new Action(Marks.Custom, 4);
+							SetArg(action, 0, match, reservArgs, 1);
+							TestArg(1, match, "Begin", "End", "Each", "AfterBegin");
+							action.Args[1] = match.Groups["arg2"].Value;
+							action.Args[2] = match.Groups["arg3"].Value.Trim('"');
+							action.Args[3] = match.Groups["arg4"].Value;
+							break;
 						case "Const":
 							action = new Action(Marks.Const, 3);
 							SetArg(action, 0, match, reservArgs, 2);
@@ -95,6 +102,14 @@ namespace SipDfaCompiler
 							break;
 						case "Bool":
 							action = new Action(Marks.Bool, 1);
+							SetArg(action, 0, match, reservArgs, 1);
+							break;
+						case "BoolEx":
+							action = new Action(Marks.BoolEx, 1);
+							SetArg(action, 0, match, reservArgs, 1);
+							break;
+						case "BoolExNot":
+							action = new Action(Marks.BoolExNot, 1);
 							SetArg(action, 0, match, reservArgs, 1);
 							break;
 						case "Group":

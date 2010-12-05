@@ -707,6 +707,16 @@ phone-context-param            = "phone-context=" descriptor;
 location-name                  = domainname / global-number-digits;
 */
 
+via-params                    =/ via-branched
+                               / via-ms-internal-info 
+                               / via-ms-received-port 
+                               / via-ms-received-cid;
+
+via-branched                   = "branched=" ("TRUE" / "FALSE");
+via-ms-internal-info           = "ms-internal-info=" quoted-string;
+via-ms-received-port           = "ms-received-port=" port;
+via-ms-received-cid            = "ms-received-cid=" token;
+
 /**************************************************************************************************/
 /* [MS-SIPAE] */
 
@@ -833,7 +843,7 @@ message-headerX =  (Accept
                 /  extension-header) CRLF;
 
 
-message-headerZ =  (Record-Route / Route / Via / Call-ID / extension-header) CRLF;
+message-headerZ =  (Contact) CRLF;
 
 
 message-headerW =  (Via) CRLF;

@@ -1716,6 +1716,31 @@ namespace SipDfaCompiler
 			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("ms-received-cid=",rulenames),Getpvalue(rulenames)));
 			return rule;
 		}
+		public State Getvia_params1(List<string> rulenames)
+		{
+			State rule = State.NoCloneAlternation(Getvia_branched(rulenames),Getvia_ms_internal_info(rulenames),Getvia_ms_received_port(rulenames),Getvia_ms_received_cid(rulenames));
+			return rule;
+		}
+		public State Getvia_branched0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("branched=",rulenames),(State.NoCloneAlternation(FromString("TRUE",rulenames),FromString("FALSE",rulenames)))));
+			return rule;
+		}
+		public State Getvia_ms_internal_info0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("ms-internal-info=",rulenames),Getquoted_string(rulenames)));
+			return rule;
+		}
+		public State Getvia_ms_received_port0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("ms-received-port=",rulenames),Getport(rulenames)));
+			return rule;
+		}
+		public State Getvia_ms_received_cid0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("ms-received-cid=",rulenames),Gettoken(rulenames)));
+			return rule;
+		}
 		public State Getcredentials1(List<string> rulenames)
 		{
 			State rule = State.NoCloneAlternation((State.NoCloneConcatanation(FromString("NTLM",rulenames),GetLWS(rulenames),Getmsspi_response(rulenames))),(State.NoCloneConcatanation(FromString("Kerberos",rulenames),GetLWS(rulenames),Getmsspi_response(rulenames))),(State.NoCloneConcatanation(FromString("TLS-DSK",rulenames),GetLWS(rulenames),Getmsspi_response(rulenames))));
@@ -1858,7 +1883,7 @@ namespace SipDfaCompiler
 		}
 		public State Getmessage_headerZ0(List<string> rulenames)
 		{
-			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(State.NoCloneAlternation(GetRecord_Route(rulenames),GetRoute(rulenames),GetVia(rulenames),GetCall_ID(rulenames),Getextension_header(rulenames))),GetCRLF(rulenames)));
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(GetContact(rulenames)),GetCRLF(rulenames)));
 			return rule;
 		}
 		public State Getmessage_headerW0(List<string> rulenames)
@@ -4074,7 +4099,7 @@ namespace SipDfaCompiler
 		public State Getvia_params(List<string> rulenames)
 		{
 			rulenames.Insert(0, "via-params");
-			State rule = State.NoCloneAlternation(Getvia_params0(rulenames));
+			State rule = State.NoCloneAlternation(Getvia_params0(rulenames), Getvia_params1(rulenames));
 			rule = OnMarkRule(rule, rulenames);
 			rulenames.RemoveAt(0);
 			return rule;
@@ -4467,6 +4492,38 @@ namespace SipDfaCompiler
 		{
 			rulenames.Insert(0, "ms-received-cid-param");
 			State rule = State.NoCloneAlternation(Getms_received_cid_param0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getvia_branched(List<string> rulenames)
+		{
+			rulenames.Insert(0, "via-branched");
+			State rule = State.NoCloneAlternation(Getvia_branched0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getvia_ms_internal_info(List<string> rulenames)
+		{
+			rulenames.Insert(0, "via-ms-internal-info");
+			State rule = State.NoCloneAlternation(Getvia_ms_internal_info0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getvia_ms_received_port(List<string> rulenames)
+		{
+			rulenames.Insert(0, "via-ms-received-port");
+			State rule = State.NoCloneAlternation(Getvia_ms_received_port0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getvia_ms_received_cid(List<string> rulenames)
+		{
+			rulenames.Insert(0, "via-ms-received-cid");
+			State rule = State.NoCloneAlternation(Getvia_ms_received_cid0(rulenames));
 			rule = OnMarkRule(rule, rulenames);
 			rulenames.RemoveAt(0);
 			return rule;

@@ -40,6 +40,7 @@ namespace SipDfaCompiler
 		private Dictionary<string, int> _counts;
 		private List<string> _decimals;
 
+		private Dictionary<string, VariableInfo> _customs;
 		private Dictionary<string, VariableInfo> _begins1;
 		private Dictionary<string, VariableInfo> _ends1;
 		private Dictionary<string, VariableInfo> _counts1;
@@ -61,6 +62,7 @@ namespace SipDfaCompiler
 			_counts1 = new Dictionary<string, VariableInfo>();
 			_bools = new Dictionary<string, VariableInfo>();
 			_decimals1 = new Dictionary<string, VariableInfo>();
+			_customs = new Dictionary<string, VariableInfo>();
 		}
 
 		public string Name
@@ -81,6 +83,11 @@ namespace SipDfaCompiler
 		public Dictionary<string, List<string>> Enums
 		{
 			get { return _enums; }
+		}
+
+		public Dictionary<string, VariableInfo> Customs
+		{
+			get { return _customs; }
 		}
 
 		public Dictionary<string, VariableInfo> Begins1
@@ -193,8 +200,25 @@ namespace SipDfaCompiler
 			var shortname = VariableInfo.GetShortName(mark.Name);
 
 			Dictionary<string, VariableInfo> dictionary = null;
-			switch (mark.Mark)
+
+			var mark1 = mark.Mark;
+
+			if (mark1 == Marks.Custom)
 			{
+				if (mark.Type == "ByteArrayPartRef")
+					mark1 = Marks.BeginRange;
+				if (mark.Type == "bool")
+					mark1 = Marks.Bool;
+				if (mark.Type == "int")
+					mark1 = Marks.Decimal;
+			}
+
+			switch (mark1)
+			{
+				case Marks.Custom:
+					if (string.IsNullOrEmpty(mark.Type) == false)
+						dictionary = _customs;
+					break;
 				case Marks.Const:
 					AddEnum(mark.Name, mark.Value);
 					break;
@@ -208,6 +232,7 @@ namespace SipDfaCompiler
 					dictionary = _counts1;
 					break;
 				case Marks.Bool:
+				case Marks.BoolEx:
 					dictionary = _bools;
 					break;
 				case Marks.Decimal:

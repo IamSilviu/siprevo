@@ -70,8 +70,8 @@ namespace Sip.Message
 		public void SetDefaultValue()
 		{
 			Bytes = null;
-			Begin = -1;
-			End = -1;
+			Begin = int.MinValue;
+			End = int.MinValue;
 		}
 
 		#endregion

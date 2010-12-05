@@ -12,12 +12,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fsm", "Fsm\Fsm.csproj", "{E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fsm.Tests", "Fsm.Tests\Fsm.Tests.csproj", "{616B529A-EA40-437D-98C7-120146BDAE6C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E8F9AC44-C1CB-4B65-99D9-53B7B7A29DE4}"
-	ProjectSection(SolutionItems) = preProject
-		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
-		Sip.vsmdi = Sip.vsmdi
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SipDfaCompiler", "SipDfaCompiler\SipDfaCompiler.csproj", "{5D6AD8A0-E6D7-4734-A8A8-AEA64FB90BEA}"
 	ProjectSection(ProjectDependencies) = postProject
 		{692A724E-DF1F-4873-986A-6E3C4FD9719A} = {692A724E-DF1F-4873-986A-6E3C4FD9719A}
@@ -38,9 +32,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server.Memory", "Server.Memory\Server.Memory.csproj", "{3830C8B5-6853-417F-B5A9-5C0B5A5A9163}"
 EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = Sip.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

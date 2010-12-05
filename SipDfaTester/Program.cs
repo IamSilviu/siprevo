@@ -23,7 +23,7 @@ namespace SipDfaTester
 			var utf = new UTF8Encoding();
 
 			var message0 = utf.GetBytes(
-				"REGISTER sip:officesip.local;ms-received-cid=A123F;transport=tcp SIP/2.0\r\n" +
+				"REGISTER sip:officesip.local;ms-received-cid=A123F;lrwrong;transport=tcp SIP/2.0\r\n" +
 				"Accept: media/submedis\r\n" +
 				"Via: SIP/2.0/TCP 127.0.0.1:1800, SIP/2.0/TCP 127.0.0.2:1800\r\n" +
 				"Max-Forwards: 70\r\n" +
@@ -94,10 +94,10 @@ namespace SipDfaTester
 			//Console.WriteLine("Route[2].CommaAndValue: |{0}|", dfa.Route[2].CommaAndValue.ToString());
 			//Console.WriteLine("Via[0].CommaAndValue: |{0}|", dfa.Via[0].CommaAndValue.ToString());
 			//Console.WriteLine("Via[1].CommaAndValue: |{0}|", dfa.Via[1].CommaAndValue.ToString());
-			Console.WriteLine("HasLr: |{0}|", dfa.RequestUri.HasLr);
+			//Console.WriteLine("HasLr: |{0}|", dfa.RequestUri.HasLr);
 			//Console.WriteLine("Record-Route.Comma: |{0}|", dfa.RecordRoute[0].Comma.ToString());
 			//Console.WriteLine("Record-Route.Comma: |{0}|", dfa.RecordRoute[1].Comma.ToString());
-			Console.WriteLine("Event: |{0}|", dfa.Event.EventType.ToString());
+			//Console.WriteLine("Event: |{0}|", dfa.Event.EventType.ToString());
 			//Console.WriteLine("Content-Type.Type: |{0}|", dfa.ContentType.Type.ToString());
 			//Console.WriteLine("Content-Type.Subtype: |{0}|", dfa.ContentType.Subtype.ToString());
 
@@ -121,11 +121,16 @@ namespace SipDfaTester
 			////    Console.WriteLine("{0}:\r\n|{1}|", dfa.Headers[i].Name.ToString(), dfa.Headers[i].Value.ToString());
 
 			var message2 = utf.GetBytes(
-				"BENOTIFY sip:user:password@officesip.local SIP/2.0\r\n" +
-				"Contact: *\r\n" +
-				"Require: token1, token2, token3\r\n" +
-				"Require: token4\r\n" +
-				"Proxy-Require: token1, token2, token3\r\n" +
+				"BENOTIFY sip:user:password@officesip.local:5060 SIP/2.0\r\n" +
+				"Contact: <sip:domain>;proxy=replace  ; next=param;next=param\r\n"+
+				"Contact: <sip:domain>;  proxy=replace,<sip:domain>;proxy=replace\r\n"+
+				"Contact: <sip:domain>;proxy=replace\r\n"+
+				"Contact: <sip:domain>;proxy=replacewrong\r\n" +
+	 //		"Via: SIP/2.0/TCP 127.0.0.1:1800;ms-received-cid=ABC0  ;ms-received-port=12345 \r\n" +
+		//		"Contact: *\r\n" +
+		//		"Require: token1, token2, token3\r\n" +
+		//		"Require: token4\r\n" +
+		//		"Proxy-Require: token1, token2, token3\r\n" +
 				"\r\n");
 
 			dfa.SetDefaultValue();
@@ -148,8 +153,17 @@ namespace SipDfaTester
 			//    Console.Write("{0}, ", dfa.ProxyRequire[i].ToString());
 			Console.WriteLine();
 			//Console.WriteLine("Star: {0}", dfa.Contact[0].IsStar);
-			Console.WriteLine("RequestUri.User: |{0}|", dfa.RequestUri.User.ToString());
-			Console.WriteLine("RequestUri.Hostport.Host: |{0}|", dfa.RequestUri.Hostport.Host.ToString());
+			//Console.WriteLine("RequestUri.User: |{0}|", dfa.RequestUri.User.ToString());
+			//Console.WriteLine("RequestUri.Hostport.Host: |{0}|", dfa.RequestUri.Hostport.Host.ToString());
+			//Console.WriteLine("Via[0].MsReceived.Port: |{0}|", dfa.Via[0].MsReceived.Port);
+			//Console.WriteLine("Via[0].MsReceived.Cid: |{0}|", dfa.Via[0].MsReceived.Cid.ToString());
+
+			Console.WriteLine("ContactCount: {0}", dfa.Count.ContactCount);
+			Console.WriteLine("Proxy Replace #0: |{0}|", dfa.Contact[0].ProxyReplace.ToString());
+			Console.WriteLine("Proxy Replace #1: |{0}|", dfa.Contact[1].ProxyReplace.ToString());
+			Console.WriteLine("Proxy Replace #2: |{0}|", dfa.Contact[2].ProxyReplace.ToString());
+			Console.WriteLine("Proxy Replace #3: |{0}|", dfa.Contact[3].ProxyReplace.ToString());
+			Console.WriteLine("Proxy Replace #4: |{0}|", dfa.Contact[4].ProxyReplace.ToString());
 
 			//var message3X = utf.GetBytes(
 			//    "REGISTER sip:officesip.local SIP/2.0\r\n" +

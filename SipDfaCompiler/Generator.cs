@@ -85,6 +85,12 @@ namespace SipDfaCompiler
 				GenerateVaribale(var1.Value.ShortName, type1);
 		}
 
+		private void GenerateCustomVaribales(Dictionary<string, VariableInfo> vars)
+		{
+			foreach (var var1 in vars)
+				GenerateVaribale(var1.Value.ShortName, var1.Value.Type);
+		}
+
 		private void GenerateVaribale(string shortName, string type1)
 		{
 			_main.Write("public ");
@@ -154,13 +160,13 @@ namespace SipDfaCompiler
 
 			for (int i = 0; i < count; i++)
 				_main.WriteLine("const int State{0} = {0};", i);
-			
+
 			_main.WriteLine("#endregion");
 		}
 
 		public void Generate(string filename, string namespace1, DfaState dfa)
 		{
-			using(_main = File.CreateText(filename + ".cs"))
+			using (_main = File.CreateText(filename + ".cs"))
 			using (_table = new BinaryWriter(
 				new DeflateStream(
 					new BufferedStream(File.Create(filename + ".dfa"), 65536), CompressionMode.Compress)))
@@ -193,6 +199,7 @@ namespace SipDfaCompiler
 				_main.WriteLine("public bool IsError { get { return Error; }}");
 
 				_main.WriteLine("private int state;");
+				_main.WriteLine("private int boolExPosition;");
 
 				GenerateVariables(_varibalesTree);
 
@@ -221,6 +228,7 @@ namespace SipDfaCompiler
 			GenerateConstsMax(item.Counts, "const int");
 
 			GenerateVaribales(item.Counts, "int", "Count");
+			GenerateCustomVaribales(item.Customs);
 			GenerateVaribales(item.Begins1, "ByteArrayPartRef");
 			GenerateVaribales(item.Decimals1, "int");
 			GenerateVaribales(item.Bools, "bool");
@@ -312,7 +320,7 @@ namespace SipDfaCompiler
 		{
 			if (value.StartsWith(".") == false)
 				value = " = " + value;
-				
+
 			if (HasBrackets(shortName))
 			{
 				var name = RemoveExtraInfo(RemoveBrackets(shortName));
@@ -369,6 +377,7 @@ namespace SipDfaCompiler
 				_main.WriteLine("Final = false;");
 				_main.WriteLine("Error = false;");
 				_main.WriteLine("state = State0;");
+				_main.WriteLine("boolExPosition = int.MinValue;");
 			}
 
 			foreach (var pair in item.Enums)
@@ -382,7 +391,7 @@ namespace SipDfaCompiler
 			GenerateInitializers(item.Begins1, "ByteArrayPartRef", "", ".SetDefaultValue()");
 
 			GenerateInitializers(item.Counts, "int", "Count.");
-			GenerateInitializers(item.Decimals1, "int", "" , "int.MinValue");
+			GenerateInitializers(item.Decimals1, "int", "", "int.MinValue");
 			GenerateInitializers(item.Bools, "bool", "", "false");
 
 			_main.WriteLine("SetDefaultValueEx();");

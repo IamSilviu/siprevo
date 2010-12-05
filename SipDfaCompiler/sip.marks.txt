@@ -21,6 +21,8 @@
 // PATH -> Const [= VARNAME [, CONSTVALUE [, PRIORITY=10]]];
 //
 // PATH -> Bool [= VARNAME];
+// PATH -> BoolEx [= VARNAME];
+// PATH -> BoolExNot [= VARNAME];
 //
 // PATH -> Count = COUNTNAME [, MAXVALUE=10 [, INITIALVALUE=0]];
 //
@@ -54,13 +56,15 @@
 .ADDRSPEC.SIPS-URI.sips: -> Const = ?<Addrspec>.UriScheme, Sips;
 .ADDRSPEC.absoluteURI.: -> Const = ?<Addrspec>.UriScheme, Absolute, 20;
 .ADDRSPEC.SIP-URI.userinfo.user -> BeginRange = ?<Addrspec>.User, AtBegin, 0;
-.ADDRSPEC.SIP-URI.userinfo.: -> EndRange = ?<Addrspec>.User, AtEnd, -1;
+.ADDRSPEC.SIP-URI.userinfo.: -> Custom = ?<Addrspec>.User, End, "if(Var.End<0) Var.End=-i+1;";
+.ADDRSPEC.SIPS-URI.userinfo.user -> BeginRange = ?<Addrspec>.User, AtBegin, 0;
+.ADDRSPEC.SIPS-URI.userinfo.: -> Custom = ?<Addrspec>.User, End, "if(Var.End<0) Var.End=-i+1;";
 .ADDRSPEC.SIP-URI.uri-parameters.uri-parameter.ms-received-cid-param.pvalue -> Range = ?<Addrspec>.MsReceivedCid;
 .ADDRSPEC.SIPS-URI.uri-parameters.uri-parameter.ms-received-cid-param.pvalue -> Range = ?<Addrspec>.MsReceivedCid;
 .ADDRSPEC.SIP-URI.hostport -> Group = ?<Addrspec>.Hostport, HOSTPORT;
 .ADDRSPEC.SIPS-URI.hostport -> Group = ?<Addrspec>.Hostport, HOSTPORT;
-.ADDRSPEC.SIP-URI.userinfo.@ -> Reset = ?<Addrspec>.Hostport; EndRangeIfInvalid = ?<Addrspec>.User, AtEnd, -1;
-.ADDRSPEC.SIPS-URI.userinfo.@ -> Reset = ?<Addrspec>.Hostport; EndRangeIfInvalid = ?<Addrspec>.User, AtEnd, -1;
+.ADDRSPEC.SIP-URI.userinfo.@ -> Reset = ?<Addrspec>.Hostport; Custom = ?<Addrspec>.User, End, "if(Var.End>int.MinValue && Var.End<0) Var.End=-Var.End; else Var.End=i-1;";
+.ADDRSPEC.SIPS-URI.userinfo.@ -> Reset = ?<Addrspec>.Hostport; Custom = ?<Addrspec>.User, End, "if(Var.End>int.MinValue && Var.End<0) Var.End=-Var.End; else Var.End=i-1;";
 .ADDRSPEC.SIP-URI.uri-parameters.uri-parameter.transport-param.udp -> Const = ?<Addrspec>.Transport;
 .ADDRSPEC.SIP-URI.uri-parameters.uri-parameter.transport-param.tcp -> Const = ?<Addrspec>.Transport;
 .ADDRSPEC.SIP-URI.uri-parameters.uri-parameter.transport-param.sctp -> Const = ?<Addrspec>.Transport;
@@ -73,8 +77,10 @@
 .ADDRSPEC.SIPS-URI.uri-parameters.uri-parameter.transport-param.other-transport -> Const = ?<Addrspec>.Transport, Other, 20;
 .ADDRSPEC.SIP-URI.uri-parameters.uri-parameter.maddr-param.host -> Range = ?<Addrspec>.Maddr;
 .ADDRSPEC.SIPS-URI.uri-parameters.uri-parameter.maddr-param.host -> Range = ?<Addrspec>.Maddr;
-.ADDRSPEC.SIP-URI.uri-parameters.uri-parameter.lr-param.lr -> Bool = ?<Addrspec>.HasLr;
-.ADDRSPEC.SIPS-URI.uri-parameters.uri-parameter.lr-param.lr -> Bool = ?<Addrspec>.HasLr;
+.ADDRSPEC.SIP-URI.uri-parameters.uri-parameter.lr-param.lr -> BoolEx = ?<Addrspec>.HasLr;
+.ADDRSPEC.SIPS-URI.uri-parameters.uri-parameter.lr-param.lr -> BoolEx = ?<Addrspec>.HasLr;
+.ADDRSPEC.SIP-URI.uri-parameters.uri-parameter.other-param.pname -> BoolExNot = ?<Addrspec>.HasLr;
+.ADDRSPEC.SIPS-URI.uri-parameters.uri-parameter.other-param.pname -> BoolExNot = ?<Addrspec>.HasLr;
 .ADDRSPEC -> Range = ?<Addrspec>.Value;
 
 //
@@ -253,10 +259,11 @@ SIP-messageX.message-headerX.Contact.contact-param.addr-spec -> Group = Contact[
 SIP-messageX.message-headerX.Contact.contact-param.contact-params.c-p-expires.delta-seconds.DIGIT -> Decimal = Contact[ContactCount].Expires;
 SIP-messageX.message-headerX.Contact.contact-param.contact-params.c-p-instance.instance-val -> Range = Contact[ContactCount].SipInstance;
 SIP-messageX.message-headerX.Contact.contact-param.contact-params.c-p-q.qvalue -> Range = Contact[ContactCount].Q;
-SIP-messageX.message-headerX.Contact.contact-param.contact-params.c-p-proxy -> Range = Contact[ContactCount].ProxyReplace;
-SIP-messageX.message-headerX.Contact.contact-param.SEMI -> ContinueRange = Contact[ContactCount].ProxyReplace;
-SIP-messageX.message-headerX.Contact.contact-param.SEMI.; -> ResetIfInvalid = Contact[ContactCount].ProxyReplace;
 SIP-messageX.message-headerX.Contact.contact-param -> Range = Contact[ContactCount].Value;
+
+SIP-messageX.message-headerX.Contact.contact-param.SEMI.; -> Custom = Contact[ContactCount].ProxyReplace, End, "if(Var.End<0) Var.Begin=i-1;", ByteArrayPartRef;
+SIP-messageX.message-headerX.Contact.contact-param.contact-params.c-p-proxy.replace -> Custom = Contact[ContactCount].ProxyReplace, End, "Var.End=i;";
+SIP-messageX.message-headerX.Contact.contact-param.contact-params.contact-extension.generic-param.gen-value.token -> Custom = Contact[ContactCount].ProxyReplace, End, "if(Var.End==i-1) Var.End=int.MinValue;";
 
 //
 // -------------------------------------------------------------------------------[ Require
@@ -342,6 +349,8 @@ SIP-messageX.message-headerX.Via.via-parm.sent-protocol.transport.TCP -> Const =
 SIP-messageX.message-headerX.Via.via-parm.sent-protocol.transport.TLS -> Const = Via[ViaCount].Transport;
 SIP-messageX.message-headerX.Via.via-parm.sent-protocol.transport.SCTP -> Const = Via[ViaCount].Transport;
 SIP-messageX.message-headerX.Via.via-parm.sent-protocol.transport.other-transport -> Const = Via[ViaCount].Transport, Other, 20;
+SIP-messageX.message-headerX.Via.via-parm.via-params.via-ms-received-port.port.DIGIT -> Decimal = Via[ViaCount].MsReceived.Port;
+SIP-messageX.message-headerX.Via.via-parm.via-params.via-ms-received-cid.token -> Range = Via[ViaCount].MsReceived.Cid;
 
 //
 // Content-Type

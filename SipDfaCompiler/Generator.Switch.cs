@@ -73,7 +73,13 @@ namespace SipDfaCompiler
 					if (nfa1.Mark == Marks.ResetRangeIfInvalid)
 					{
 						var name = GetVarname(nfa1.Name, "");
-						_main.WriteLine("if({0}.End <0) {0}.Begin = -1;", name);
+						_main.WriteLine("if({0}.End <0) {0}.Begin = int.MinValue;", name);
+					}
+
+					if (nfa1.Mark == Marks.Custom)
+					{
+						var name = GetVarname(nfa1.Name, "");
+						_main.WriteLine(nfa1.Value.Replace("Var", name));
 					}
 				}
 
@@ -124,6 +130,23 @@ namespace SipDfaCompiler
 							_main.WriteLine(";");
 
 							break;
+
+
+						case Marks.BoolEx:
+							_main.WriteLine("boolExPosition = i;");
+							goto case Marks.Bool;
+						case Marks.Bool:
+							_main.WriteLine("{0} = true;", GetVarname(nfa1.Name, ""));
+							break;
+
+						case Marks.BoolExNot:
+							_main.WriteLine("if(boolExPosition == i-1) {0} = false;", GetVarname(nfa1.Name, ""));
+							break;
+
+
+						case Marks.Final:
+							_main.WriteLine("Final = true;");
+							break;
 					}
 
 					//if (nfa1.Mark == Marks.BeginRange)
@@ -153,11 +176,11 @@ namespace SipDfaCompiler
 					////    _main.WriteLine("if({1}{0}.End == i-1) {0}.End = i;", GetVarname(nfa1.Name, ""), ifv);
 					////}
 
-					if (nfa1.Mark == Marks.Bool)
-						_main.WriteLine("{0} = true;", GetVarname(nfa1.Name, ""));
+					//if (nfa1.Mark == Marks.Bool)
+					//    _main.WriteLine("{0} = true;", GetVarname(nfa1.Name, ""));
 
-					if (nfa1.Mark == Marks.Final)
-						_main.WriteLine("Final = true;");
+					//if (nfa1.Mark == Marks.Final)
+					//    _main.WriteLine("Final = true;");
 				}
 
 				if (mode == SwitchMode.ActionJump || mode == SwitchMode.ActionOnly)

@@ -18,9 +18,12 @@ namespace Fsm
 		Decimal,
 		Hex,
 		Bool,
+		BoolEx,
+		BoolExNot,
 		Chars,
 		Group,
 		Final,
+		Custom,
 	}
 
 	public interface IMark
@@ -33,6 +36,8 @@ namespace Fsm
 		int Default { get; }
 		int Offset { get; }
 		bool IsSame(IMark mark);
+
+		string Type { get; } // non compared
 	}
 
 	public class MarkEqualityComparer
@@ -66,6 +71,7 @@ namespace Fsm
 		private int _default;
 		private int _priority;
 		private int _offset;
+		private string _type;
 
 		public MarkImpl()
 		{
@@ -134,6 +140,12 @@ namespace Fsm
 			set { _offset = value; }
 		}
 
+		public string Type
+		{
+			get { return _type; }
+			set { _type = value; }
+		}
+
 		public bool IsSame(IMark mark)
 		{
 			return
@@ -155,6 +167,7 @@ namespace Fsm
 			Max = imark.Max;
 			Default = imark.Default;
 			Offset = imark.Offset;
+			Type = imark.Type;
 		}
 	}
 }
