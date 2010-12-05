@@ -164,6 +164,76 @@ namespace SipMessageTest
 		}
 
 		[Test]
+		public void It_should_parse_Contact_expires_param()
+		{
+			var dfa = ParseHeaders(
+				"Contact: <sip:domain>;expires=123",
+				"Contact: <sip:domain>;expires=0",
+				"Contact: <sip:domain>");
+
+			Assert.AreEqual(2, dfa.Count.ContactCount);
+			Assert.AreEqual(123, dfa.Contact[0].Expires);
+			Assert.AreEqual(0, dfa.Contact[1].Expires);
+			Assert.IsTrue(dfa.Contact[2].Expires < 0);
+		}
+
+		[Test]
+		public void It_should_parse_Contact_addrspec1_and_addrspec2()
+		{
+			var dfa = ParseHeaders(
+				"Contact: <sip:domain1>",
+				"Contact: sip:domain2");
+
+			Assert.AreEqual(1, dfa.Count.ContactCount);
+			Assert.AreEqual("domain1", dfa.Contact[0].AddrSpec.Hostport.Host.ToString());
+			Assert.AreEqual("domain2", dfa.Contact[1].AddrSpec.Hostport.Host.ToString());
+		}
+
+		[Test]
+		public void It_should_parse_Route_comma_plus_value_range()
+		{
+			var dfa = ParseHeaders(
+				"Route: <sip:domain1>, <sip:domain2>  ,<sip:domain3>",
+				"Route: <sip:domain4>");
+
+			Assert.AreEqual(3, dfa.Count.RouteCount);
+			Assert.AreEqual(" <sip:domain1>", dfa.Route[0].CommaAndValue.ToString());
+			Assert.AreEqual(", <sip:domain2>  ", dfa.Route[1].CommaAndValue.ToString());
+			Assert.AreEqual(",<sip:domain3>", dfa.Route[2].CommaAndValue.ToString());
+			Assert.AreEqual(" <sip:domain4>", dfa.Route[3].CommaAndValue.ToString());
+		}
+
+		[Test]
+		public void It_should_parse_Record_Route_comma_plus_value_range()
+		{
+			var dfa = ParseHeaders(
+				"Record-Route: <sip:domain1>, <sip:domain2>  ,<sip:domain3>",
+				"Record-Route: <sip:domain4>");
+
+			Assert.AreEqual(3, dfa.Count.RecordRouteCount);
+			Assert.AreEqual(" <sip:domain1>", dfa.RecordRoute[0].CommaAndValue.ToString());
+			Assert.AreEqual(", <sip:domain2>  ", dfa.RecordRoute[1].CommaAndValue.ToString());
+			Assert.AreEqual(",<sip:domain3>", dfa.RecordRoute[2].CommaAndValue.ToString());
+			Assert.AreEqual(" <sip:domain4>", dfa.RecordRoute[3].CommaAndValue.ToString());
+		}
+
+		[Test]
+		public void It_should_parse_Via_comma_plus_value_range()
+		{
+			var dfa = ParseHeaders(
+				"Via:SIP/2.0/TCP 127.0.0.1:1801,SIP/2.0/TCP 127.0.0.2:1802,SIP/2.0/TCP 127.0.0.3:1803",
+				"Via:  SIP/2.0/TCP 127.0.0.4:1804  ,  SIP/2.0/TCP 127.0.0.5:1805  ,  SIP/2.0/TCP 127.0.0.6:1806");
+
+			Assert.AreEqual(5, dfa.Count.ViaCount);
+			Assert.AreEqual("SIP/2.0/TCP 127.0.0.1:1801", dfa.Via[0].CommaAndValue.ToString());
+			Assert.AreEqual(",SIP/2.0/TCP 127.0.0.2:1802", dfa.Via[1].CommaAndValue.ToString());
+			Assert.AreEqual(",SIP/2.0/TCP 127.0.0.3:1803", dfa.Via[2].CommaAndValue.ToString());
+			Assert.AreEqual("  SIP/2.0/TCP 127.0.0.4:1804", dfa.Via[3].CommaAndValue.ToString());
+			Assert.AreEqual(",  SIP/2.0/TCP 127.0.0.5:1805", dfa.Via[4].CommaAndValue.ToString());
+			Assert.AreEqual(",  SIP/2.0/TCP 127.0.0.6:1806", dfa.Via[5].CommaAndValue.ToString());
+		}
+
+		[Test]
 		public void It_should_parse_Content_Type_header()
 		{
 			{
