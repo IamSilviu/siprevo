@@ -1,26 +1,42 @@
 ﻿using System;
 using System.Text;
-using Server.Memory;
+using System.Net;
 
 namespace Sip.Message
 {
-	public interface IByteArrayPart
-		: IDefaultValue
+	public struct ByteArrayPart
 	{
-		byte[] Items { get; }
-		int Offset { get; }
-		int Length { get; }
-		bool IsEmpty { get; }
-	}
-
-	public struct ByteArrayPartRef
-		: IByteArrayPart
-	{
-		private static UTF8Encoding utf = new UTF8Encoding();
-
 		public byte[] Bytes;
 		public int Begin;
 		public int End;
+
+		public ByteArrayPart(byte[] array, int offset, int length)
+		{
+			Bytes = new byte[length];
+			Begin = 0;
+			End = length;
+
+			Buffer.BlockCopy(array, offset, Bytes, 0, length);
+		}
+
+		public ByteArrayPart(ByteArrayPart part)
+			: this(part.Items, part.Offset, part.Length)
+		{
+		}
+
+		public ByteArrayPart(string text)
+		{
+			Bytes = Encoding.UTF8.GetBytes(text);
+			Begin = 0;
+			End = Bytes.Length;
+		}
+
+		public ByteArrayPart(char simbol)
+		{
+			Bytes = Encoding.UTF8.GetBytes(new char[] { simbol, });
+			Begin = 0;
+			End = Bytes.Length;
+		}
 
 		public bool IsValid
 		{
@@ -31,17 +47,6 @@ namespace Sip.Message
 		{
 			get { return Bytes == null || Begin < 0 || End < 0; }
 		}
-
-		public new string ToString()
-		{
-			if (Bytes == null || Begin < 0 || End < 0)
-				return null;
-
-			lock (utf)
-				return utf.GetString(Bytes, Offset, Length);
-		}
-
-		#region IByteArrayPart
 
 		public byte[] Items
 		{
@@ -58,14 +63,10 @@ namespace Sip.Message
 			get { return End - Begin; }
 		}
 
-		public bool IsEmpty 
+		public bool IsEmpty
 		{
 			get { return Begin < 0 || End < 0; }
 		}
-
-		#endregion
-
-		#region IDefaultValue
 
 		public void SetDefaultValue()
 		{
@@ -74,68 +75,22 @@ namespace Sip.Message
 			End = int.MinValue;
 		}
 
-		#endregion
-	}
-
-	class ByteArrayPart
-		: IByteArrayPart
-	{
-		private static UTF8Encoding _utf = new UTF8Encoding();
-		private byte[] _array;
-
-		public ByteArrayPart(byte[] array, int offset, int length)
+		public IPAddress ToIpAddress()
 		{
-			_array = new byte[length];
-			Array.Copy(array, offset, _array, 0, length);
+			IPAddress ip = IPAddress.None;
+
+			if (IsValid == true)
+				IPAddress.TryParse(ToString(), out ip);
+
+			return ip;
 		}
 
-		public ByteArrayPart(IByteArrayPart part)
-			: this(part.Items, part.Offset, part.Length)
+		public new string ToString()
 		{
+			if (Bytes == null || Begin < 0 || End < 0)
+				return null;
+
+			return Encoding.UTF8.GetString(Bytes, Offset, Length);
 		}
-
-		public ByteArrayPart(string text)
-		{
-			lock (_utf)
-				_array = _utf.GetBytes(text);
-		}
-
-		public ByteArrayPart(char simbol)
-		{
-			lock (_utf)
-				_array = _utf.GetBytes(new char[] { simbol,});
-		}
-
-		#region IByteArrayPart
-
-		public byte[] Items
-		{
-			get { return _array; }
-		}
-
-		public int Offset
-		{
-			get { return 0; }
-		}
-
-		public int Length
-		{
-			get { return _array.Length; }
-		}
-
-		public bool IsEmpty
-		{
-			get { return false; }
-		}
-
-		#endregion
-
-		#region IDefaultValue
-
-		public void SetDefaultValue()
-		{
-		}
-		
-		#endregion
 	}
 }
