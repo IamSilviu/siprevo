@@ -1886,9 +1886,9 @@ namespace SipDfaCompiler
 			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(GetContact(rulenames)),GetCRLF(rulenames)));
 			return rule;
 		}
-		public State Getmessage_headerW0(List<string> rulenames)
+		public State Getmessage_headerZ1(List<string> rulenames)
 		{
-			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(GetVia(rulenames)),GetCRLF(rulenames)));
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(Getextension_header(rulenames)),GetCRLF(rulenames)));
 			return rule;
 		}
 		public State GetSIP_messageX0(List<string> rulenames)
@@ -4723,15 +4723,7 @@ namespace SipDfaCompiler
 		public State Getmessage_headerZ(List<string> rulenames)
 		{
 			rulenames.Insert(0, "message-headerZ");
-			State rule = State.NoCloneAlternation(Getmessage_headerZ0(rulenames));
-			rule = OnMarkRule(rule, rulenames);
-			rulenames.RemoveAt(0);
-			return rule;
-		}
-		public State Getmessage_headerW(List<string> rulenames)
-		{
-			rulenames.Insert(0, "message-headerW");
-			State rule = State.NoCloneAlternation(Getmessage_headerW0(rulenames));
+			State rule = State.NoCloneAlternation(Getmessage_headerZ0(rulenames), Getmessage_headerZ1(rulenames));
 			rule = OnMarkRule(rule, rulenames);
 			rulenames.RemoveAt(0);
 			return rule;

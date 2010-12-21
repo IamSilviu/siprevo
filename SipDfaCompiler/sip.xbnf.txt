@@ -846,7 +846,7 @@ message-headerX =  (Accept
 message-headerZ =  (Contact) CRLF;
 
 
-message-headerW =  (Via) CRLF;
+message-headerZ =  (extension-header) CRLF;
 
 /*
 

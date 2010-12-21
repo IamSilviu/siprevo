@@ -40,8 +40,17 @@ namespace SipMessageTest
 		[Test]
 		public void It_should_parse_status_code_in_response()
 		{
-			Assert.IsTrue(ParseAll("REGISTER sip:domain SIP/2.0\r\n\r\n").StatusCode < 0);
-			Assert.AreEqual(401, ParseAll("SIP/2.0 401 Unauthorized\r\n\r\n").StatusCode);
+			Assert.IsTrue(ParseAll("REGISTER sip:domain SIP/2.0\r\n\r\n").StatusCode.Value < 0);
+			Assert.AreEqual(401, ParseAll("SIP/2.0 401 Unauthorized\r\n\r\n").StatusCode.Value);
+		}
+
+		[Test]
+		public void It_should_convert_parsed_status_code_to_enum_value()
+		{
+			Assert.IsTrue(ParseAll("REGISTER sip:domain SIP/2.0\r\n\r\n").StatusCode.Code == StatusCodes.None);
+			Assert.IsTrue(ParseAll("SIP/2.0 401 Unauthorized\r\n\r\n").StatusCode.Code == StatusCodes.Unauthorized);
+			Assert.IsTrue(ParseAll("SIP/2.0 199 NotDefined\r\n\r\n").StatusCode.Code == StatusCodes.Trying);
+			Assert.IsTrue(ParseAll("SIP/2.0 999 NotDefined\r\n\r\n").StatusCode.Code == StatusCodes.None);
 		}
 
 		[Test]

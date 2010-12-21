@@ -229,7 +229,7 @@ namespace SipDfaCompiler
 
 			GenerateVaribales(item.Counts, "int", "Count");
 			GenerateCustomVaribales(item.Customs);
-			GenerateVaribales(item.Begins1, "ByteArrayPartRef");
+			GenerateVaribales(item.Begins1, "ByteArrayPart");
 			GenerateVaribales(item.Decimals1, "int");
 			GenerateVaribales(item.Bools, "bool");
 
@@ -388,7 +388,7 @@ namespace SipDfaCompiler
 
 			//foreach(var begin in item.Begins1)
 			//    _main.WriteLine("{0}.SetDefaultValue();", begin.Value.ShortName);
-			GenerateInitializers(item.Begins1, "ByteArrayPartRef", "", ".SetDefaultValue()");
+			GenerateInitializers(item.Begins1, "ByteArrayPart", "", ".SetDefaultValue()");
 
 			GenerateInitializers(item.Counts, "int", "Count.");
 			GenerateInitializers(item.Decimals1, "int", "", "int.MinValue");

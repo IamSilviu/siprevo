@@ -205,7 +205,7 @@ namespace SipDfaCompiler
 
 			if (mark1 == Marks.Custom)
 			{
-				if (mark.Type == "ByteArrayPartRef")
+				if (mark.Type == "ByteArrayPart")
 					mark1 = Marks.BeginRange;
 				if (mark.Type == "bool")
 					mark1 = Marks.Bool;
