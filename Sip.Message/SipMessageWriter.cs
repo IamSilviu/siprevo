@@ -291,7 +291,7 @@ namespace Sip.Message
 
 		public void WriteDate(DateTime date)
 		{
-			Write(C.Date, C.HCOLON, C.SP, date.ToString(@"R").ToByteArrayPartRef(), C.CRLF);
+			Write(C.Date, C.HCOLON, C.SP, date.ToString(@"R").ToByteArrayPart(), C.CRLF);
 		}
 
 		public void WriteMaxForwards(int hop)

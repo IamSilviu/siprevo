@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Text;
-using System.IO;
-using System.IO.Compression;
 using System.Net;
 using Server.Memory;
+using System.Collections.Generic;
 
 namespace Sip.Message
 {
@@ -105,6 +104,11 @@ namespace Sip.Message
 			}
 		}
 
+		public bool HasPort
+		{
+			get { return Port != int.MinValue; }
+		}
+
 		public int xPort
 		{
 			get
@@ -182,6 +186,11 @@ namespace Sip.Message
 						return AddrSpec1;
 					return AddrSpec2;
 				}
+			}
+
+			public bool HasProxyReplace
+			{
+				get { return ProxyReplace.IsValid; }
 			}
 
 			public void PostParsing()
@@ -320,6 +329,21 @@ namespace Sip.Message
 				IsRemoved = false;
 			}
 		}
+	}
+
+	#region class SipMessageReader {...}
+
+	public partial class SipMessageReader : IDefaultValue
+	{
+		public int CompileParseMethod()
+		{
+			int start = Environment.TickCount;
+			
+			SetDefaultValue();
+			Parse(new byte[] { 0 }, 0, 1);
+
+			return Environment.TickCount - start;
+		}
 
 		public bool IsRequest
 		{
@@ -351,6 +375,76 @@ namespace Sip.Message
 			get { return Method == Methods.Cancelm; }
 		}
 
+		public bool HasContact
+		{
+			get { return Contact[0].Value.IsValid; }
+		}
+
+		public bool HasContentType
+		{
+			get { return ContentType.Type.IsValid; }
+		}
+
+		public void CorrectCounts()
+		{
+			Count.ContactCount++;
+			Count.RequireCount++;
+			Count.ProxyRequireCount++;
+			Count.ViaCount++;
+			Count.RouteCount++;
+			Count.RecordRouteCount++;
+			Count.SupportedCount++;
+		}
+
+		public int CountHeaders(HeaderNames name)
+		{
+			int count = 0;
+
+			for (int i = 0; i < Count.HeaderCount; i++)
+				if (Headers[i].HeaderName == name)
+					count++;
+
+			return count;
+		}
+
+		public int FindHeaderIndex(HeaderNames name, int skipCount)
+		{
+			for (int i = 0; i < Count.HeaderCount; i++)
+			{
+				if (Headers[i].HeaderName == name)
+				{
+					if (skipCount == 0)
+						return i;
+					skipCount--;
+				}
+			}
+
+			return -1;
+		}
+
+		public IEnumerable<int> FindHeaderIndexes(HeaderNames name)
+		{
+			for (int i = 0; i < Count.HeaderCount; i++)
+				if (Headers[i].HeaderName == name)
+					yield return i;
+		}
+
+		public Header FindHeader(HeaderNames name)
+		{
+			for (int i = 0; i < Count.HeaderCount; i++)
+				if (Headers[i].HeaderName == name)
+					return Headers[i];
+
+			throw new Exception(string.Format(@"Header {0} not found", name.ToString()));
+		}
+	}
+
+	#endregion
+
+	#region struct SipMessageReader.StatusCodeStruct {...}
+
+	public partial class SipMessageReader : IDefaultValue
+	{
 		public partial struct StatusCodeStruct
 		{
 			private StatusCodes code;
@@ -393,6 +487,11 @@ namespace Sip.Message
 
 					return code;
 				}
+				set
+				{
+					code = value;
+					Value = (int)code;
+				}
 			}
 
 			partial void SetDefaultValueEx()
@@ -416,12 +515,19 @@ namespace Sip.Message
 				return (value1 == value2) ? 0 : 1;
 			}
 
+			public new string ToString()
+			{
+				return Value.ToString();
+			}
+
 			public static implicit operator StatusCodes(StatusCodeStruct statusCodeStruct)
 			{
 				return statusCodeStruct.Code;
 			}
 		}
 	}
+
+	#endregion
 
 	/// <summary>
 	/// this class should be removed

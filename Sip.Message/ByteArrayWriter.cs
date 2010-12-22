@@ -30,7 +30,7 @@ namespace Sip.Message
 			get { return _count; }
 		}
 
-		public ByteArrayPart ToByteArrayPartRef()
+		public ByteArrayPart ToByteArrayPart()
 		{
 			return new ByteArrayPart()
 			{

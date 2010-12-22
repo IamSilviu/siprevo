@@ -85,7 +85,7 @@ namespace Sip.Message
 			}
 		}
 
-		public static ByteArrayPart ToByteArrayPartRef(this string text)
+		public static ByteArrayPart ToByteArrayPart(this string text)
 		{
 			return new ByteArrayPart(text);
 		}

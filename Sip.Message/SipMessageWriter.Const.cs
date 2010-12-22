@@ -5,7 +5,7 @@ namespace Sip.Message
 {
 	public partial class SipMessageWriter
 	{
-		internal static class C
+		public static class C
 		{
 			public readonly static ByteArrayPart From = new ByteArrayPart(@"From");
 			public readonly static ByteArrayPart To = new ByteArrayPart(@"To");
@@ -98,6 +98,9 @@ namespace Sip.Message
 
 			public readonly static ByteArrayPart sip = new ByteArrayPart(@"sip");
 			public readonly static ByteArrayPart sips = new ByteArrayPart(@"sips");
+
+			public readonly static ByteArrayPart eventlist = new ByteArrayPart(@"eventlist");
+			public readonly static ByteArrayPart ms_benotify = new ByteArrayPart(@"ms-benotify");
 		}
 	}
 }
