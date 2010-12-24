@@ -48,6 +48,7 @@
     <Compile Include="Converters.cs" />
     <Compile Include="SipMessageWriter.Const.cs" />
     <Compile Include="SipMessageWriter.cs" />
+    <Compile Include="SipResponseWriter.cs" />
     <Compile Include="StatusCodes.cs" />
   </ItemGroup>
   <ItemGroup>

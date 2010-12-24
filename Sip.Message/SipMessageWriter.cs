@@ -7,11 +7,12 @@ namespace Sip.Message
 		: ByteArrayWriter
 	{
 		public SipMessageWriter()
+			: base(128, 2048)
 		{
 		}
 
 		public SipMessageWriter(int size)
-			:base(size)
+			: base(128, size)
 		{
 		}
 
@@ -346,6 +347,24 @@ namespace Sip.Message
 			Write(C.Subscription_State, C.HCOLON, C.SP, substate, C.SEMI, C.expires, C.EQUAL);
 			Write(expires);
 			Write(C.CRLF);
+		}
+
+
+		// vf:...
+
+		public void WriteStatusLine(StatusCodes statusCode, ByteArrayPart reason)
+		{
+			Write(C.SIP_2_0, C.SP, (int)statusCode, C.SP, reason, C.CRLF);
+		}
+
+		public void WriteHeaderWithTag(Header header, ByteArrayPart tag)
+		{
+			Write(header.Name, C.HCOLON, header.Value, C.SEMI, C.tag, C.EQUAL, tag, C.CRLF);
+		}
+
+		public ByteArrayPart GenerateTag()
+		{
+			return new ByteArrayPart(Guid.NewGuid().ToString().Replace(@"-", @"").ToLower());
 		}
 	}
 }

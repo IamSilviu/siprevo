@@ -94,7 +94,7 @@ namespace SipMessageTest
 		{
 			var expeted = Encoding.UTF8.GetBytes("0123255");
 
-			var writer = new ByteArrayWriter();
+			var writer = new ByteArrayWriter(1024);
 
 			writer.Write((byte)byte.MinValue);
 			writer.Write((byte)123);

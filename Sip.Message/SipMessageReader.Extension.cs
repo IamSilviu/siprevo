@@ -3,6 +3,9 @@ using System.Text;
 using System.Net;
 using Server.Memory;
 using System.Collections.Generic;
+using System.Threading;
+using System.IO;
+using System.Reflection;
 
 namespace Sip.Message
 {
@@ -335,14 +338,28 @@ namespace Sip.Message
 
 	public partial class SipMessageReader : IDefaultValue
 	{
+		public static void InitializeAsync(Action<int> callback)
+		{
+			var reader = new SipMessageReader();
+
+			reader.LoadTables();
+			ThreadPool.QueueUserWorkItem((stateInfo) => { callback(reader.CompileParseMethod()); });
+		}
+
 		public int CompileParseMethod()
 		{
 			int start = Environment.TickCount;
-			
+
 			SetDefaultValue();
 			Parse(new byte[] { 0 }, 0, 1);
 
 			return Environment.TickCount - start;
+		}
+
+		public void LoadTables()
+		{
+			LoadTables(
+				Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\SipMessageReader.dfa");
 		}
 
 		public bool IsRequest

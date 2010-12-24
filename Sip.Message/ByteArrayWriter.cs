@@ -7,16 +7,18 @@ namespace Sip.Message
 {
 	public class ByteArrayWriter
 	{
-		protected int _count;
-		protected ArraySegment<byte> segment;
-
-		public ByteArrayWriter()
-		{
-			segment = SipMessage.BufferManager.Allocate(2048);
-		}
+		private int count;
+		private int offsetOffset;
+		private ArraySegment<byte> segment;
 
 		public ByteArrayWriter(int size)
 		{
+			segment = SipMessage.BufferManager.Allocate(size);
+		}
+
+		public ByteArrayWriter(int reservAtBegin, int size)
+		{
+			count = offsetOffset = reservAtBegin;
 			segment = SipMessage.BufferManager.Allocate(size);
 		}
 
@@ -27,7 +29,7 @@ namespace Sip.Message
 
 		public int Count
 		{
-			get { return _count; }
+			get { return count - offsetOffset; }
 		}
 
 		public ByteArrayPart ToByteArrayPart()
@@ -35,8 +37,8 @@ namespace Sip.Message
 			return new ByteArrayPart()
 			{
 				Bytes = segment.Array,
-				Begin = segment.Offset,
-				End = segment.Offset + _count
+				Begin = segment.Offset + offsetOffset,
+				End = segment.Offset + count
 			};
 		}
 
@@ -44,8 +46,8 @@ namespace Sip.Message
 		{
 			ValidateCapacity(part.Length);
 
-			Buffer.BlockCopy(part.Bytes, part.Offset, segment.Array, segment.Offset + _count, part.Length);
-			_count += part.Length;
+			Buffer.BlockCopy(part.Bytes, part.Offset, segment.Array, segment.Offset + count, part.Length);
+			count += part.Length;
 		}
 
 		public void Write(Int32 value)
@@ -54,7 +56,7 @@ namespace Sip.Message
 
 			if (value < 0)
 			{
-				segment.Array[segment.Offset + _count++] = (byte)0x2D;
+				segment.Array[segment.Offset + count++] = (byte)0x2D;
 				Write((UInt32)(-value));
 			}
 			else
@@ -74,12 +76,12 @@ namespace Sip.Message
 				byte digit = (byte)(value / denominator);
 
 				if (print = print || digit > 0)
-					segment.Array[segment.Offset + _count++] = (byte)(0x30 + digit);
+					segment.Array[segment.Offset + count++] = (byte)(0x30 + digit);
 
 				value %= denominator;
 			}
 
-			segment.Array[segment.Offset + _count++] = (byte)(0x30 + value);
+			segment.Array[segment.Offset + count++] = (byte)(0x30 + value);
 		}
 
 		public void Write(byte value)
@@ -93,20 +95,20 @@ namespace Sip.Message
 				byte digit = (byte)(value / denominator);
 
 				if (print = print || digit > 0)
-					segment.Array[segment.Offset + _count++] = (byte)(0x30 + digit);
+					segment.Array[segment.Offset + count++] = (byte)(0x30 + digit);
 
 				value %= denominator;
 			}
 
-			segment.Array[segment.Offset + _count++] = (byte)(0x30 + value);
+			segment.Array[segment.Offset + count++] = (byte)(0x30 + value);
 		}
 
 		public void Write(byte[] bytes)
 		{
 			ValidateCapacity(bytes.Length);
 
-			Buffer.BlockCopy(bytes, 0, segment.Array, segment.Offset + _count, bytes.Length);
-			_count += bytes.Length;
+			Buffer.BlockCopy(bytes, 0, segment.Array, segment.Offset + count, bytes.Length);
+			count += bytes.Length;
 		}
 
 		public void Write(IPAddress address)
@@ -116,11 +118,11 @@ namespace Sip.Message
 				var bytes = address.GetAddressBytes();
 
 				Write(bytes[0]);
-				segment.Array[segment.Offset + _count++] = (byte)0x2E;
+				segment.Array[segment.Offset + count++] = (byte)0x2E;
 				Write(bytes[1]);
-				segment.Array[segment.Offset + _count++] = (byte)0x2E;
+				segment.Array[segment.Offset + count++] = (byte)0x2E;
 				Write(bytes[2]);
-				segment.Array[segment.Offset + _count++] = (byte)0x2E;
+				segment.Array[segment.Offset + count++] = (byte)0x2E;
 				Write(bytes[3]);
 			}
 			else
@@ -131,8 +133,60 @@ namespace Sip.Message
 
 		public void ValidateCapacity(int extraSize)
 		{
-			if ((_count + extraSize) > segment.Count)
+			if ((count + extraSize) > segment.Count)
 				SipMessage.BufferManager.Reallocate(ref segment, extraSize);
+		}
+
+		public void WriteToTop(ByteArrayPart part)
+		{
+			WriteToTop(part, -1);
+		}
+
+		public void WriteToTop(ByteArrayPart part, int ignoreAfter)
+		{
+			int length = (ignoreAfter > 0 && ignoreAfter < part.Length) ? ignoreAfter : part.Length;
+
+			ValidateCapacityToTop(length);
+
+			offsetOffset -= length;
+			Buffer.BlockCopy(part.Bytes, part.Offset, segment.Array, segment.Offset + offsetOffset, length);
+		}
+
+		public void WriteToTop(Int32 value)
+		{
+			ValidateCapacityToTop(11);
+
+			if (value < 0)
+			{
+				WriteToTop((UInt32)(-value));
+
+				segment.Array[segment.Offset + --offsetOffset] = (byte)0x2D;
+			}
+			else
+			{
+				WriteToTop((UInt32)value);
+			}
+		}
+
+		public void WriteToTop(UInt32 value)
+		{
+			ValidateCapacityToTop(10);
+
+			do
+			{
+				byte digit = (byte)(value % 10);
+
+				segment.Array[segment.Offset + --offsetOffset] = (byte)(0x30 + digit);
+
+				value /= 10;
+			}
+			while (value > 0);
+		}
+
+		public void ValidateCapacityToTop(int extraSize)
+		{
+			if (offsetOffset < extraSize)
+				throw new ArgumentOutOfRangeException(@"Not enougth space was reserved at begin");
 		}
 
 		#region public void Write(params object[] parts) {...}
@@ -201,6 +255,16 @@ namespace Sip.Message
 		}
 
 		public void Write(ByteArrayPart part1, ByteArrayPart part2, ByteArrayPart part3, ByteArrayPart part4, ByteArrayPart part5, ByteArrayPart part6)
+		{
+			Write(part1);
+			Write(part2);
+			Write(part3);
+			Write(part4);
+			Write(part5);
+			Write(part6);
+		}
+
+		public void Write(ByteArrayPart part1, ByteArrayPart part2, int part3, ByteArrayPart part4, ByteArrayPart part5, ByteArrayPart part6)
 		{
 			Write(part1);
 			Write(part2);
