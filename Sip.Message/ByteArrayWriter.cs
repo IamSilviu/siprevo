@@ -7,8 +7,8 @@ namespace Sip.Message
 {
 	public class ByteArrayWriter
 	{
-		private int count;
-		private int offsetOffset;
+		protected int count;
+		protected int offsetOffset;
 		private ArraySegment<byte> segment;
 
 		public ByteArrayWriter(int size)
@@ -159,7 +159,6 @@ namespace Sip.Message
 			if (value < 0)
 			{
 				WriteToTop((UInt32)(-value));
-
 				segment.Array[segment.Offset + --offsetOffset] = (byte)0x2D;
 			}
 			else
@@ -171,12 +170,16 @@ namespace Sip.Message
 		public void WriteToTop(UInt32 value)
 		{
 			ValidateCapacityToTop(10);
+			ReversWrite(value, ref offsetOffset);
+		}
 
+		protected void ReversWrite(UInt32 value, ref int position)
+		{
 			do
 			{
 				byte digit = (byte)(value % 10);
 
-				segment.Array[segment.Offset + --offsetOffset] = (byte)(0x30 + digit);
+				segment.Array[segment.Offset + --position] = (byte)(0x30 + digit);
 
 				value /= 10;
 			}

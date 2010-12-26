@@ -29,6 +29,7 @@ namespace Sip.Message
 			public readonly static ByteArrayPart Supported = new ByteArrayPart(@"Supported");
 			public readonly static ByteArrayPart Require = new ByteArrayPart(@"Require");
 			public readonly static ByteArrayPart Subscription_State = new ByteArrayPart(@"Subscription-State");
+			public readonly static ByteArrayPart Content_Transfer_Encoding = new ByteArrayPart(@"Content-Transfer-Encoding");
 
 			public readonly static ByteArrayPart ACK = new ByteArrayPart(@"ACK");
 			public readonly static ByteArrayPart BENOTIFY = new ByteArrayPart(@"BENOTIFY");
@@ -101,6 +102,8 @@ namespace Sip.Message
 
 			public readonly static ByteArrayPart eventlist = new ByteArrayPart(@"eventlist");
 			public readonly static ByteArrayPart ms_benotify = new ByteArrayPart(@"ms-benotify");
+
+			public readonly static ByteArrayPart _________0 = new ByteArrayPart("         0");
 		}
 	}
 }

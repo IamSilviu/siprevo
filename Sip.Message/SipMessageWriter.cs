@@ -366,5 +366,23 @@ namespace Sip.Message
 		{
 			return new ByteArrayPart(Guid.NewGuid().ToString().Replace(@"-", @"").ToLower());
 		}
+
+		private int contentLengthEnd = -1;
+
+		public void WriteContentLength()
+		{
+			Write(C.Content_Length, C.HCOLON, C._________0);
+			contentLengthEnd = count;
+			Write(C.CRLF);
+		}
+
+		public void RewriteContentLength(int value)
+		{
+			if (contentLengthEnd < 0)
+				throw new InvalidOperationException(@"WriteContentLength must be called before RewriteContentLength");
+
+			ReversWrite((uint)value, ref contentLengthEnd);
+			contentLengthEnd = -1;
+		}
 	}
 }
