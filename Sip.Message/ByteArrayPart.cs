@@ -75,6 +75,54 @@ namespace Sip.Message
 			End = int.MinValue;
 		}
 
+		#region Trim methods
+
+		const byte Cl = 0x0a;
+		const byte Cr = 0x0d;
+		const byte Space = 0x20;
+		const byte Comma = 0x2c;
+
+		public void TrimStartSws()
+		{
+			while (Begin < End && Bytes[Begin] == Space)
+				Begin++;
+
+			if (Begin + 2 < End && Bytes[Begin] == Cr && Bytes[Begin + 1] == Cl && Bytes[Begin + 2] == Space)
+				Begin += 3;
+
+			while (Begin < End && Bytes[Begin] == Space)
+				Begin++;
+		}
+
+		public void TrimEndSws()
+		{
+			if (Begin < End && Bytes[End - 1] == Space)
+			{
+				while (Begin < End && Bytes[End - 1] == Space)
+					End--;
+
+				if (Begin <= End - 2 && Bytes[End - 2] == Cr && Bytes[End - 1] == Cl)
+					End -= 2;
+
+				while (Begin < End && Bytes[End - 1] == Space)
+					End--;
+			}
+		}
+
+		public void TrimSws()
+		{
+			TrimStartSws();
+			TrimEndSws();
+		}
+
+		public void TrimStartComma()
+		{
+			if (Begin < End && Bytes[Begin] == Comma)
+				Begin++;
+		}
+
+		#endregion
+
 		public IPAddress ToIpAddress()
 		{
 			IPAddress ip = IPAddress.None;

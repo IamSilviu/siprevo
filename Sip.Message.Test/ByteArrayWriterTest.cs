@@ -64,6 +64,22 @@ namespace SipMessageTest
 		}
 
 		[Test]
+		public void It_should_write_to_top_Int32()
+		{
+			var expeted = Encoding.UTF8.GetBytes("-214748364802147483647-1234567890");
+
+			var writer = new ByteArrayWriter(256, 1024);
+
+			writer.WriteToTop(-1234567890);
+			writer.WriteToTop(Int32.MaxValue);
+			writer.WriteToTop(0);
+			writer.WriteToTop(Int32.MinValue);
+
+			var actual = GetWritedArrayPart(writer);
+			Assert.AreEqual(expeted, actual);
+		}
+
+		[Test]
 		public void It_should_write_IPAddressV4()
 		{
 			var expeted = Encoding.UTF8.GetBytes("192.168.1.2");
@@ -108,7 +124,7 @@ namespace SipMessageTest
 		{
 			var bytes = new byte[writer.Count];
 
-			Buffer.BlockCopy(writer.Segment.Array, writer.Segment.Offset, bytes, 0, bytes.Length);
+			Buffer.BlockCopy(writer.Segment.Array, writer.Offset, bytes, 0, bytes.Length);
 
 			return bytes;
 		}

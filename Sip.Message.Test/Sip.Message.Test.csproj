@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ByteArrayPartTest.cs" />
     <Compile Include="ByteArrayWriterTest.cs" />
     <Compile Include="LoadTables.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

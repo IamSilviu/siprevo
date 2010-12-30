@@ -32,6 +32,11 @@ namespace Sip.Message
 			get { return count - offsetOffset; }
 		}
 
+		public int Offset
+		{
+			get { return segment.Offset + offsetOffset; }
+		}
+
 		public ByteArrayPart ToByteArrayPart()
 		{
 			return new ByteArrayPart()
@@ -335,5 +340,10 @@ namespace Sip.Message
 		}
 
 		#endregion
+
+		public override string ToString()
+		{
+			return Encoding.UTF8.GetString(segment.Array, segment.Offset + offsetOffset, Count);
+		}
 	}
 }

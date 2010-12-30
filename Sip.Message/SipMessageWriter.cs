@@ -47,6 +47,11 @@ namespace Sip.Message
 		{
 			Write(C.CRLF);
 		}
+		public void WriteContacts(SipMessageReader reader)
+		{
+			for (int i = 0; i < reader.Count.ContactCount; i++)
+				WriteContact(reader.Contact[i]);
+		}
 
 		public void WriteContact(SipMessageReader.ContactStruct contact)
 		{
@@ -341,7 +346,7 @@ namespace Sip.Message
 		{
 			Write(C.Require, C.HCOLON, C.SP, requires, C.CRLF);
 		}
-
+		
 		public void WriteSubscriptionState(ByteArrayPart substate, int expires)
 		{
 			Write(C.Subscription_State, C.HCOLON, C.SP, substate, C.SEMI, C.expires, C.EQUAL);

@@ -40,6 +40,7 @@
     <Compile Include="BufferManager.cs" />
     <Compile Include="ByteArrayPart.cs" />
     <Compile Include="ByteArrayWriter.cs" />
+    <Compile Include="HeaderMasks.cs" />
     <Compile Include="IBufferManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SipMessage.cs" />
