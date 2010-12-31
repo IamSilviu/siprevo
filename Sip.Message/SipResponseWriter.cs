@@ -38,6 +38,7 @@ namespace Sip.Message
 		{
 			WriteStatusLine(statusCode, reasonPhrase);
 
+			int viaCount = 0;
 			for (int i = 0; i < request.Count.HeaderCount; i++)
 			{
 				switch (request.Headers[i].HeaderName)
@@ -58,7 +59,7 @@ namespace Sip.Message
 
 					case HeaderNames.Via:
 						// здесь ошибка!!!
-						WriteVia(request.Headers[i], request.Via[i]);
+						WriteVia(request.Headers[i], request.Via[viaCount++]);
 						break;
 				}
 			}
@@ -74,6 +75,7 @@ namespace Sip.Message
 
 		public void WriteResponseHeaders(SipMessageReader request, StatusCodes statusCode, ByteArrayPart totag)
 		{
+			int viaCount = 0;
 			for (int i = 0; i < request.Count.HeaderCount; i++)
 			{
 				switch (request.Headers[i].HeaderName)
@@ -94,7 +96,7 @@ namespace Sip.Message
 
 					case HeaderNames.Via:
 						// здесь ошибка!!!
-						WriteVia(request.Headers[i], request.Via[i]);
+						WriteVia(request.Headers[i], request.Via[viaCount++]);
 						break;
 				}
 			}

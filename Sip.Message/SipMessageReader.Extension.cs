@@ -424,6 +424,48 @@ namespace Sip.Message
 			return count;
 		}
 
+		public HeaderNames ValidateMandatoryHeaders()
+		{
+			if (CallId.IsInvalid)
+				return HeaderNames.CallId;
+
+			if (CSeq.Method == Methods.None)
+				return HeaderNames.CSeq;
+
+			if (From.AddrSpec.Value.IsInvalid)
+				return HeaderNames.From;
+
+			if (To.AddrSpec.Value.IsInvalid)
+				return HeaderNames.To;
+
+			if (Via[0].CommaAndValue.IsInvalid)
+				return HeaderNames.Via;
+
+			return HeaderNames.None;
+		}
+
+		public HeaderNames ValidateHeadersDuplication()
+		{
+			ulong masks = 0;
+			ulong validate = HeaderMasks.CallId | HeaderMasks.CSeq | HeaderMasks.From | 
+				HeaderMasks.To | HeaderMasks.ContentLength | HeaderMasks.MaxForwards;
+
+			for (int i = 0; i < Count.HeaderCount; i++)
+			{
+				ulong mask = Headers[i].HeaderName.ToMask();
+
+				if ((mask & validate) > 0)
+				{
+					if ((mask & masks) > 0)
+						return Headers[i].HeaderName;
+
+					masks |= mask;
+				}
+			}
+
+			return HeaderNames.None;
+		}
+
 		public int FindHeaderIndex(HeaderNames name, int skipCount)
 		{
 			for (int i = 0; i < Count.HeaderCount; i++)

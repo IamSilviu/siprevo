@@ -56,6 +56,19 @@ namespace Sip.Message
 
 	static class HeaderMasksHelper
 	{
+		static HeaderMasksHelper()
+		{
+			try
+			{
+				foreach (HeaderNames name in Enum.GetValues(typeof(HeaderNames)))
+					name.ToMask();
+			}
+			catch (ArgumentOutOfRangeException)
+			{
+				throw new InvalidProgramException(@"ToMask is not specify all vlues of HeaderNames");
+			}
+		}
+
 		public static bool IsMasked(this HeaderNames name, ulong mask)
 		{
 			return (mask & name.ToMask()) > 0;
@@ -65,6 +78,7 @@ namespace Sip.Message
 		{
 			switch (name)
 			{
+				case HeaderNames.None: return 0;
 				case HeaderNames.Extension: return HeaderMasks.Extension;
 				case HeaderNames.ContentType: return HeaderMasks.ContentType;
 				case HeaderNames.ContentEncoding: return HeaderMasks.ContentEncoding;
