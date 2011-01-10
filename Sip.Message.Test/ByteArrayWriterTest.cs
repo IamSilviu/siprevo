@@ -64,6 +64,24 @@ namespace SipMessageTest
 		}
 
 		[Test]
+		public void It_should_write_Int32_as_Hex8()
+		{
+			var expeted = Encoding.UTF8.GetBytes("80000000ffffffff000000007fffffff1234567800abcdef");
+
+			var writer = new ByteArrayWriter(expeted.Length);
+
+			writer.WriteAsHex8(Int32.MinValue);
+			writer.WriteAsHex8(-1);
+			writer.WriteAsHex8(0);
+			writer.WriteAsHex8(Int32.MaxValue);
+			writer.WriteAsHex8(0x12345678);
+			writer.WriteAsHex8(0x00abcdef);
+
+			var actual = GetWritedArrayPart(writer);
+			Assert.AreEqual(expeted, actual);
+		}
+
+		[Test]
 		public void It_should_write_to_top_Int32()
 		{
 			var expeted = Encoding.UTF8.GetBytes("-214748364802147483647-1234567890");

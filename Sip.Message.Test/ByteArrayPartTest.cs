@@ -69,5 +69,30 @@ namespace SipMessageTest
 			Assert.AreEqual("X", part6.ToString());
 			Assert.AreEqual("", part7.ToString());
 		}
+
+		[Test]
+		public void It_should_test_equality_by_value()
+		{
+			var part1 = new ByteArrayPart(@"1234567890");
+			var part2 = new ByteArrayPart(@"1234567890");
+			var part3 = new ByteArrayPart(@"123456789-");
+			var part4 = new ByteArrayPart(@"123456789");
+			var part5 = new ByteArrayPart(@"12345678901");
+
+			Assert.IsTrue(part1.IsEqualValue(part2));
+			Assert.IsFalse(part1.IsEqualValue(part3));
+			Assert.IsFalse(part1.IsEqualValue(part4));
+			Assert.IsFalse(part1.IsEqualValue(part5));
+
+			var bytes2 = Encoding.UTF8.GetBytes(@"1234567890");
+			var bytes3 = Encoding.UTF8.GetBytes(@"123456789-");
+			var bytes4 = Encoding.UTF8.GetBytes(@"123456789");
+			var bytes5 = Encoding.UTF8.GetBytes(@"12345678901");
+
+			Assert.IsTrue(part1.IsEqualValue(bytes2));
+			Assert.IsFalse(part1.IsEqualValue(bytes3));
+			Assert.IsFalse(part1.IsEqualValue(bytes4));
+			Assert.IsFalse(part1.IsEqualValue(bytes5));
+		}
 	}
 }

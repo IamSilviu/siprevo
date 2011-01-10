@@ -38,6 +38,30 @@ namespace Sip.Message
 			End = Bytes.Length;
 		}
 
+		public bool IsEqualValue(ByteArrayPart y)
+		{
+			if (Length != y.Length)
+				return false;
+
+			for (int i = 0; i < Length; i++)
+				if (Bytes[Begin + i] != y.Bytes[y.Begin + i])
+					return false;
+
+			return true;
+		}
+
+		public bool IsEqualValue(byte[] bytes)
+		{
+			if (Length != bytes.Length)
+				return false;
+
+			for (int i = 0; i < Length; i++)
+				if (Bytes[Begin + i] != bytes[i])
+					return false;
+
+			return true;
+		}
+
 		public bool IsValid
 		{
 			get { return Begin >= 0 && End >= 0; }

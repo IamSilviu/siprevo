@@ -220,21 +220,43 @@ namespace Sip.Message
 			Write(C.SEMI, C.branch, C.EQUAL, branch, C.CRLF);
 		}
 
-		public void WriteAuthenticateDigest(bool www, ByteArrayPart realm, ByteArrayPart nonce, bool authint, bool stale, ByteArrayPart opaque)
+		public void WriteAuthenticateDigest(bool wwwOrProxy, ByteArrayPart realm, ByteArrayPart nonce, bool authint, bool stale, ByteArrayPart opaque)
 		{
-			Write(www == true ? C.WWW_Authenticate : C.Proxy_Authenticate, C.HCOLON, C.SP, C.Digest, C.SP);
+			Write(wwwOrProxy ? C.WWW_Authenticate : C.Proxy_Authenticate, C.HCOLON, C.SP, C.Digest, C.SP);
 
 			Write(C.realm, C.EQUAL, C.DQUOTE, realm, C.DQUOTE, C.COMMA);
 			Write(C.nonce, C.EQUAL, C.DQUOTE, nonce, C.DQUOTE, C.COMMA);
 			Write(C.qop, C.EQUAL, C.DQUOTE, C.auth);
-			if (authint == true)
-			{
+			if (authint)
 				Write(C.COMMA, C.auth_int);
-			}
 			Write(C.DQUOTE, C.COMMA);
 			Write(C.algorithm, C.EQUAL, C.MD5, C.COMMA);
-			Write(C.stale, C.EQUAL, stale == true ? C._true : C._false, C.COMMA);
+			Write(C.stale, C.EQUAL, stale ? C._true : C._false, C.COMMA);
 			Write(C.opaque, C.EQUAL, C.DQUOTE, opaque, C.DQUOTE);
+
+			Write(C.CRLF);
+		}
+
+		public void WriteAuthenticateDigest(bool wwwOrProxy, ByteArrayPart realm, int nonce1, int nonce2, int nonce3, int nonce4, bool authint, bool stale, int opaque)
+		{
+			Write(wwwOrProxy ? C.WWW_Authenticate : C.Proxy_Authenticate, C.HCOLON, C.SP, C.Digest, C.SP);
+
+			Write(C.realm, C.EQUAL, C.DQUOTE, realm, C.DQUOTE, C.COMMA);
+			Write(C.nonce, C.EQUAL, C.DQUOTE);
+			WriteAsHex8(nonce1);
+			WriteAsHex8(nonce2);
+			WriteAsHex8(nonce3);
+			WriteAsHex8(nonce4);
+			Write(C.DQUOTE, C.COMMA);
+			Write(C.qop, C.EQUAL, C.DQUOTE, C.auth);
+			if (authint)
+				Write(C.COMMA, C.auth_int);
+			Write(C.DQUOTE, C.COMMA);
+			Write(C.algorithm, C.EQUAL, C.MD5, C.COMMA);
+			Write(C.stale, C.EQUAL, stale ? C._true : C._false, C.COMMA);
+			Write(C.opaque, C.EQUAL, C.DQUOTE);
+			WriteAsHex8(opaque);
+			Write(C.DQUOTE);
 
 			Write(C.CRLF);
 		}
@@ -377,7 +399,7 @@ namespace Sip.Message
 		public void WriteContentLength()
 		{
 			Write(C.Content_Length, C.HCOLON, C._________0);
-			contentLengthEnd = count;
+			contentLengthEnd = end;
 			Write(C.CRLF);
 		}
 
@@ -389,5 +411,15 @@ namespace Sip.Message
 			ReversWrite((uint)value, ref contentLengthEnd);
 			contentLengthEnd = -1;
 		}
+
+		public void WriteXErrorDetails(ByteArrayPart details)
+		{
+			Write(C.x_Error_Details, C.HCOLON, C.SP, details, C.CRLF);
+		}
+
+		//public void WriteXErrorDetailsAbsentParameter(HeaderNames header, )
+		//{
+		//    Write(C.x_Error_Details, C.HCOLON, C.SP, details, C.CRLF);
+		//}
 	}
 }
