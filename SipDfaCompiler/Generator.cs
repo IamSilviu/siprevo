@@ -341,7 +341,7 @@ namespace SipDfaCompiler
 
 		private void GenerateInitializers(VariableTreeItem item)
 		{
-			_main.WriteLine("partial void SetDefaultValueEx();");
+			_main.WriteLine("partial void OnSetDefaultValue();");
 
 			_main.WriteLine("public void SetDefaultValue()");
 			_main.WriteLine("{");
@@ -394,7 +394,7 @@ namespace SipDfaCompiler
 			GenerateInitializers(item.Decimals1, "int", "", "int.MinValue");
 			GenerateInitializers(item.Bools, "bool", "", "false");
 
-			_main.WriteLine("SetDefaultValueEx();");
+			_main.WriteLine("OnSetDefaultValue();");
 
 			_main.WriteLine("}");
 		}

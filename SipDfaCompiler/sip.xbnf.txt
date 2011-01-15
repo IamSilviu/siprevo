@@ -843,7 +843,7 @@ message-headerX =  (Accept
                 /  extension-header) CRLF;
 
 
-message-headerZ =  (Contact) CRLF;
+message-headerZ =  (Authorization / Proxy-Authorization) CRLF;
 
 
 message-headerZ =  (extension-header) CRLF;

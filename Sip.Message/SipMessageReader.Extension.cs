@@ -78,7 +78,7 @@ namespace Sip.Message
 			}
 		}
 
-		partial void SetDefaultValueEx()
+		partial void OnSetDefaultValue()
 		{
 			xMaddrIP = IPAddress.None;
 			_MsReceivedCid.SetDefaultValue();
@@ -136,7 +136,7 @@ namespace Sip.Message
 			}
 		}
 
-		partial void SetDefaultValueEx()
+		partial void OnSetDefaultValue()
 		{
 			ip = IPAddress.None;
 			xPort = int.MinValue;
@@ -169,7 +169,7 @@ namespace Sip.Message
 
 		#endregion
 
-		partial void SetDefaultValueEx()
+		partial void OnSetDefaultValue()
 		{
 			IsRemoved = false;
 		}
@@ -206,7 +206,7 @@ namespace Sip.Message
 				_RemoveProxy = true;
 			}
 
-			partial void SetDefaultValueEx()
+			partial void OnSetDefaultValue()
 			{
 				_RemoveProxy = false;
 			}
@@ -250,7 +250,7 @@ namespace Sip.Message
 				set;
 			}
 
-			partial void SetDefaultValueEx()
+			partial void OnSetDefaultValue()
 			{
 				IsRemoved = false;
 				ReceivedIP = IPAddress.None;
@@ -275,7 +275,7 @@ namespace Sip.Message
 				}
 			}
 
-			partial void SetDefaultValueEx()
+			partial void OnSetDefaultValue()
 			{
 				_Method = Methods.None;
 			}
@@ -301,7 +301,7 @@ namespace Sip.Message
 
 			#endregion
 
-			partial void SetDefaultValueEx()
+			partial void OnSetDefaultValue()
 			{
 				IsRemoved = false;
 			}
@@ -327,7 +327,7 @@ namespace Sip.Message
 
 			#endregion
 
-			partial void SetDefaultValueEx()
+			partial void OnSetDefaultValue()
 			{
 				IsRemoved = false;
 			}
@@ -553,7 +553,7 @@ namespace Sip.Message
 				}
 			}
 
-			partial void SetDefaultValueEx()
+			partial void OnSetDefaultValue()
 			{
 				code = StatusCodes.None;
 			}

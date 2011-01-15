@@ -140,7 +140,7 @@
 .CREDENTIALS.msspi-response.msspi-resp.opaque.quoted-string.quoted-pair -> Range = ?<Credentials>.Opaque;
 .CREDENTIALS.digest-response.dig-resp.message-qop.qop-value -> Range = ?<Credentials>.MessageQop;
 .CREDENTIALS.msspi-response.msspi-resp.qop-options.qop-value -> Range = ?<Credentials>.MessageQop;
-.CREDENTIALS.digest-response.dig-resp.nonce-count.nc-value.LHEX -> Hex = ?<Credentials>.NonceCount;
+.CREDENTIALS.digest-response.dig-resp.nonce-count.nc-value.LHEX -> Hex = ?<Credentials>.NonceCount; Range = ?<Credentials>.NonceCountBytes;
 .CREDENTIALS.msspi-response.msspi-resp.targetname.target-value.ntlm-target-val -> Range = ?<Credentials>.Targetname;
 .CREDENTIALS.msspi-response.msspi-resp.targetname.target-value.kerberos-target-val -> Range = ?<Credentials>.Targetname;
 .CREDENTIALS.msspi-response.msspi-resp.targetname.target-value.tls-dsk-target-val.token -> Range = ?<Credentials>.Targetname;
@@ -157,12 +157,14 @@
 //
 // -------------------------------------------------------------------------------[ Authorization
 //
-SIP-messageX.message-headerX.Authorization.credentials -> Group = Authorization, CREDENTIALS;
+SIP-messageX.message-headerX.Authorization.HCOLON.: -> Count = AuthorizationCount, 10, -1;
+SIP-messageX.message-headerX.Authorization.credentials -> Group = Authorization[AuthorizationCount], CREDENTIALS;
 
 //
 // -------------------------------------------------------------------------------[ Proxy-Authorization
 //
-SIP-messageX.message-headerX.Proxy-Authorization.credentials -> Group = ProxyAuthorization, CREDENTIALS;
+SIP-messageX.message-headerX.Proxy-Authorization.HCOLON.: -> Count = ProxyAuthorizationCount, 10, -1;
+SIP-messageX.message-headerX.Proxy-Authorization.credentials -> Group = ProxyAuthorization[ProxyAuthorizationCount], CREDENTIALS;
 
 //
 // -------------------------------------------------------------------------------[ From

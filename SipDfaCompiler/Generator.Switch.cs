@@ -11,10 +11,14 @@ namespace SipDfaCompiler
 	{
 		private void GenerateParseMethod(DfaState dfa, int errorState)
 		{
+			_main.WriteLine("partial void OnBeforeParse();");
+			_main.WriteLine("partial void OnAfterParse();");
+
 			_main.WriteLine("#region int Parse(..)");
 
 			_main.WriteLine("public int Parse(byte[] bytes, int offset, int length)");
 			_main.WriteLine("{");
+			_main.WriteLine("OnBeforeParse();");
 
 			if (dfa != null)
 			{
@@ -39,6 +43,7 @@ namespace SipDfaCompiler
 			else
 				_main.WriteLine("return 0;");
 
+			_main.WriteLine("OnAfterParse();");
 			_main.WriteLine("}");
 
 			_main.WriteLine("#endregion");

@@ -22,25 +22,37 @@ namespace SipDfaTester
 			int proccessed = -1;
 			var utf = new UTF8Encoding();
 
+			//var message0 = utf.GetBytes(
+			//    "REGISTER sip:officesip.local;ms-received-cid=A123F;lrwrong;transport=tcp SIP/2.0\r\n" +
+			//    "Accept: media/submedis\r\n" +
+			//    "Via: SIP/2.0/TCP 127.0.0.1:1800, SIP/2.0/TCP 127.0.0.2:1800\r\n" +
+			//    "Max-Forwards: 70\r\n" +
+			//    "From: <sip:a@officesip.local;maddr=123.123.123.123>;tag=566ec054f8;epid=aaa6ef05f4\r\n" +
+			//    "To: <sip:b@officesip.local>\r\n" +
+			//    "Call-ID:    16743485a6e45407e903f75571a3a7af9\r\n" +
+			//    "CSeq: 2 REGISTER\r\n" +
+			//    "Contact: <sip:user@127.0.0.1:1801;transport=tcp;ms-opaque=0deb5c7e83>;methods=\"INVITE, MESSAGE, INFO, OPTIONS, BYE, CANCEL, NOTIFY, ACK, REFER, BENOTIFY\";proxy=replace  ; +sip.instance=\"<urn:uuid:92794BFE-F550-5AC1-89B4-F1E4E8BCB878>\";expires=123\r\n" +
+			//    "Contact: <sip:127.0.0.2:1802;transport=tcp;ms-opaque=0deb5c7e83>;methods=\"INVITE, MESSAGE, INFO, OPTIONS, BYE, CANCEL, NOTIFY, ACK, REFER, BENOTIFY\";proxy=replace;+sip.instance=\"<urn:uuid:92794BFE-F550-5AC1-89B4-F1E4E8BCB878>\",<sip:127.0.0.3:1803;transport=tcp;ms-opaque=0deb5c7e83>;methods=\"INVITE\"\r\n" +
+			//    "Contact: <sip:127.0.0.4:1804;transport=tcp;ms-opaque=0deb5c7e83>;methods=\"INVITE, MESSAGE, INFO, OPTIONS, BYE, CANCEL, NOTIFY, ACK, REFER, BENOTIFY\";proxy=replace;+sip.instance=\"<urn:uuid:92794BFE-F550-5AC1-89B4-F1E4E8BCB878>\"\r\n" +
+			//    "Custom: Value\r\n" +
+			//    "Authorization: Digest username=\"jdoe1\", realm=\"officesip.local\", qop=auth, algorithm=MD5, uri=\"sip:officesip.local\", nonce=\"50c148849f3d4e069105f8a80471b5d1\", nc=f1f, cnonce=\"53186537273641419345563711231350\", opaque=\"f2cb4f2013d74a73b9e86603fb56b969\", response=\"2bb45befa63ca772b840501502df102d\"\r\n" +
+			//    "Authorization: Digest username=\"jdoe2\", realm=\"officesip.local\", qop=auth, algorithm=MD5, uri=\"sip:officesip.local\", nonce=\"50c148849f3d4e069105f8a80471b5d1\", nc=f2f, cnonce=\"53186537273641419345563711231350\", opaque=\"f2cb4f2013d74a73b9e86603fb56b969\", response=\"2bb45befa63ca772b840501502df102d\"\r\n" +
+			//    "Authorization: Digest username=\"jdoe3\", realm=\"officesip.local\", qop=auth, algorithm=MD5, uri=\"sip:officesip.local\", nonce=\"50c148849f3d4e069105f8a80471b5d1\", nc=f3f, cnonce=\"53186537273641419345563711231350\", opaque=\"f2cb4f2013d74a73b9e86603fb56b969\", response=\"2bb45befa63ca772b840501502df102d\"\r\n" +
+			//    "Record-Route: <sip:127.0.0.1:5060;lr> , <sip:127.0.0.2:5060;lr>\r\n" +
+			//    "Route: <sip:127.0.0.1:5060;lr>, <sip:127.0.0.2:5060;lr>\r\n" +
+			//    "Route: <sip:127.0.0.3:5060;lr>\r\n" +
+			//    "Event: presence\r\n" +
+			//    "Content-Type: application / msrtc-adrl-categorylist+xml\r\n" +
+			//    "\r\n");
+
 			var message0 = utf.GetBytes(
 				"REGISTER sip:officesip.local;ms-received-cid=A123F;lrwrong;transport=tcp SIP/2.0\r\n" +
-				"Accept: media/submedis\r\n" +
-				"Via: SIP/2.0/TCP 127.0.0.1:1800, SIP/2.0/TCP 127.0.0.2:1800\r\n" +
-				"Max-Forwards: 70\r\n" +
-				"From: <sip:a@officesip.local;maddr=123.123.123.123>;tag=566ec054f8;epid=aaa6ef05f4\r\n" +
-				"To: <sip:b@officesip.local>\r\n" +
-				"Call-ID:    16743485a6e45407e903f75571a3a7af9\r\n" +
-				"CSeq: 2 REGISTER\r\n" +
-				"Contact: <sip:user@127.0.0.1:1801;transport=tcp;ms-opaque=0deb5c7e83>;methods=\"INVITE, MESSAGE, INFO, OPTIONS, BYE, CANCEL, NOTIFY, ACK, REFER, BENOTIFY\";proxy=replace  ; +sip.instance=\"<urn:uuid:92794BFE-F550-5AC1-89B4-F1E4E8BCB878>\";expires=123\r\n" +
-				"Contact: <sip:127.0.0.2:1802;transport=tcp;ms-opaque=0deb5c7e83>;methods=\"INVITE, MESSAGE, INFO, OPTIONS, BYE, CANCEL, NOTIFY, ACK, REFER, BENOTIFY\";proxy=replace;+sip.instance=\"<urn:uuid:92794BFE-F550-5AC1-89B4-F1E4E8BCB878>\",<sip:127.0.0.3:1803;transport=tcp;ms-opaque=0deb5c7e83>;methods=\"INVITE\"\r\n" +
-				"Contact: <sip:127.0.0.4:1804;transport=tcp;ms-opaque=0deb5c7e83>;methods=\"INVITE, MESSAGE, INFO, OPTIONS, BYE, CANCEL, NOTIFY, ACK, REFER, BENOTIFY\";proxy=replace;+sip.instance=\"<urn:uuid:92794BFE-F550-5AC1-89B4-F1E4E8BCB878>\"\r\n" +
-				"Custom: Value\r\n" +
 				"Authorization: Digest username=\"jdoe1\", realm=\"officesip.local\", qop=auth, algorithm=MD5, uri=\"sip:officesip.local\", nonce=\"50c148849f3d4e069105f8a80471b5d1\", nc=f1f, cnonce=\"53186537273641419345563711231350\", opaque=\"f2cb4f2013d74a73b9e86603fb56b969\", response=\"2bb45befa63ca772b840501502df102d\"\r\n" +
-				"Record-Route: <sip:127.0.0.1:5060;lr> , <sip:127.0.0.2:5060;lr>\r\n" +
-				"Route: <sip:127.0.0.1:5060;lr>, <sip:127.0.0.2:5060;lr>\r\n" +
-				"Route: <sip:127.0.0.3:5060;lr>\r\n" +
-				"Event: presence\r\n" +
-				"Content-Type: application / msrtc-adrl-categorylist+xml\r\n" +
+				"Authorization: Digest username=\"jdoe2\", realm=\"officesip.local\", qop=auth, algorithm=MD5, uri=\"sip:officesip.local\", nonce=\"50c148849f3d4e069105f8a80471b5d1\", nc=00000f2f, cnonce=\"53186537273641419345563711231350\", opaque=\"f2cb4f2013d74a73b9e86603fb56b969\", response=\"2bb45befa63ca772b840501502df102d\"\r\n" +
+				"Authorization: Digest username=\"jdoe3\", realm=\"officesip.local\", qop=auth, algorithm=MD5, uri=\"sip:officesip.local\", nonce=\"50c148849f3d4e069105f8a80471b5d1\", nc=0000f3f, cnonce=\"53186537273641419345563711231350\", opaque=\"f2cb4f2013d74a73b9e86603fb56b969\", response=\"2bb45befa63ca772b840501502df102d\"\r\n" +
+				"Proxy-Authorization: Digest username=\"jdoe4\", realm=\"officesip.local\", qop=auth, algorithm=MD5, uri=\"sip:officesip.local\", nonce=\"50c148849f3d4e069105f8a80471b5d1\", nc=f4f, cnonce=\"53186537273641419345563711231350\", opaque=\"f2cb4f2013d74a73b9e86603fb56b969\", response=\"2bb45befa63ca772b840501502df102d\"\r\n" +
+				"Proxy-Authorization: Digest username=\"jdoe5\", realm=\"officesip.local\", qop=auth, algorithm=MD5, uri=\"sip:officesip.local\", nonce=\"50c148849f3d4e069105f8a80471b5d1\", nc=00000f5f, cnonce=\"53186537273641419345563711231350\", opaque=\"f2cb4f2013d74a73b9e86603fb56b969\", response=\"2bb45befa63ca772b840501502df102d\"\r\n" +
+				"Proxy-Authorization: Digest username=\"jdoe6\", realm=\"officesip.local\", qop=auth, algorithm=MD5, uri=\"sip:officesip.local\", nonce=\"50c148849f3d4e069105f8a80471b5d1\", nc=0000f6f, cnonce=\"53186537273641419345563711231350\", opaque=\"f2cb4f2013d74a73b9e86603fb56b969\", response=\"2bb45befa63ca772b840501502df102d\"\r\n" +
 				"\r\n");
 
 			var message1 = new byte[message0.Length + 16];
@@ -57,6 +69,19 @@ namespace SipDfaTester
 			Console.WriteLine("Final: {0}", dfa.Final);
 			Console.WriteLine("Method: {0}", dfa.Method);
 			Console.WriteLine("SipVersion: {0}", dfa.SipVersion);
+
+			Console.WriteLine("AuthCount: {0}", dfa.Count.AuthorizationCount);
+
+			Console.WriteLine("Auth #0: {0}, {1}", dfa.Authorization[0].Username.ToString(), dfa.Authorization[0].NonceCountBytes.ToString());
+			Console.WriteLine("Auth #1: {0}, {1}", dfa.Authorization[1].Username.ToString(), dfa.Authorization[1].NonceCountBytes.ToString());
+			Console.WriteLine("Auth #2: {0}, {1}", dfa.Authorization[2].Username.ToString(), dfa.Authorization[2].NonceCountBytes.ToString());
+
+			Console.WriteLine("ProxyAuthCount: {0}", dfa.Count.ProxyAuthorizationCount);
+
+			Console.WriteLine("ProxyAuth #0: {0}, {1}", dfa.ProxyAuthorization[0].Username.ToString(), dfa.ProxyAuthorization[0].NonceCountBytes.ToString());
+			Console.WriteLine("ProxyAuth #1: {0}, {1}", dfa.ProxyAuthorization[1].Username.ToString(), dfa.ProxyAuthorization[1].NonceCountBytes.ToString());
+			Console.WriteLine("ProxyAuth #2: {0}, {1}", dfa.ProxyAuthorization[2].Username.ToString(), dfa.ProxyAuthorization[2].NonceCountBytes.ToString());
+
 			//Console.WriteLine("RequestUri: {0}", dfa.RequestUri.Value.ToString());
 			////Console.WriteLine("RequestUri.MsReceivedCid: {0}", dfa.RequestUri.MsReceivedCid.ToString());
 			////Console.WriteLine("RequestUri.Transport: {0}", dfa.RequestUri.Transport.ToString());

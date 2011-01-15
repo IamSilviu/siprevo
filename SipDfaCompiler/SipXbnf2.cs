@@ -1883,7 +1883,7 @@ namespace SipDfaCompiler
 		}
 		public State Getmessage_headerZ0(List<string> rulenames)
 		{
-			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(GetContact(rulenames)),GetCRLF(rulenames)));
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(State.NoCloneAlternation(GetAuthorization(rulenames),GetProxy_Authorization(rulenames))),GetCRLF(rulenames)));
 			return rule;
 		}
 		public State Getmessage_headerZ1(List<string> rulenames)

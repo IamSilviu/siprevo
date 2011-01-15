@@ -7,7 +7,8 @@ namespace SipDfaCompiler
 	{
 		private static Regex _brackets = new Regex(@"\[([a-zA-Z0-9]+)\]");
 		private static Regex _brackets2 = new Regex(@"\[(?<count>[a-zA-Z0-9]+)\]");
-		private static Regex _global = new Regex(@"(?<name>[a-zA-Z0-9]+)\<(?<type>[a-zA-Z0-9]+)\>");
+		//private static Regex _global = new Regex(@"(?<name>[a-zA-Z0-9]+)\<(?<type>[a-zA-Z0-9]+)\>");//|\<(?<type>[a-zA-Z0-9]+)\>(?<name>[a-zA-Z0-9]+)
+		private static Regex _global = new Regex(@"\<(?<type>[a-zA-Z0-9]+)\>");
 
 		private bool HasBrackets(string name)
 		{

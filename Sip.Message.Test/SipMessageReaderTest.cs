@@ -265,19 +265,22 @@ namespace SipMessageTest
 		[Test]
 		public void It_should_parse_Authorization_header_for_Digest()
 		{
-			var dfa = ParseHeader("Authorization: Digest username=\"jdoe1\", realm=\"officesip.local\", qop=auth, algorithm=MD5, uri=\"sip:officesip.local\", nonce=\"50c148849f3d4e069105f8a80471b5d1\", nc=f1f, cnonce=\"53186537273641419345563711231350\", opaque=\"f2cb4f2013d74a73b9e86603fb56b969\", response=\"2bb45befa63ca772b840501502df102d\"");
+			var dfa = ParseHeader("Authorization: Digest username=\"jdoe1\", realm=\"officesip.local\", qop=auth, algorithm=MD5, uri=\"sip:officesip.local\", nonce=\"50c148849f3d4e069105f8a80471b5d1\", nc=00000f1f, cnonce=\"53186537273641419345563711231350\", opaque=\"f2cb4f2013d74a73b9e86603fb56b969\", response=\"2bb45befa63ca772b840501502df102d\"");
 
-			Assert.AreEqual(AuthSchemes.Digest, dfa.Authorization.AuthScheme);
-			Assert.AreEqual(AuthAlgorithms.Md5, dfa.Authorization.AuthAlgorithm);
-			Assert.AreEqual("50c148849f3d4e069105f8a80471b5d1", dfa.Authorization.Nonce.ToString());
-			Assert.AreEqual("jdoe1", dfa.Authorization.Username.ToString());
-			Assert.AreEqual("officesip.local", dfa.Authorization.Realm.ToString());
-			Assert.AreEqual("auth", dfa.Authorization.MessageQop.ToString());
-			Assert.AreEqual("53186537273641419345563711231350", dfa.Authorization.Cnonce.ToString());
-			Assert.AreEqual(0xf1f, dfa.Authorization.NonceCount);
-			Assert.AreEqual("f2cb4f2013d74a73b9e86603fb56b969", dfa.Authorization.Opaque.ToString());
-			Assert.AreEqual("auth", dfa.Authorization.MessageQop.ToString());
-			Assert.AreEqual("2bb45befa63ca772b840501502df102d", dfa.Authorization.Response.ToString());
+			var auth = dfa.Authorization[0];
+
+			Assert.AreEqual(AuthSchemes.Digest, auth.AuthScheme);
+			Assert.AreEqual(AuthAlgorithms.Md5, auth.AuthAlgorithm);
+			Assert.AreEqual("50c148849f3d4e069105f8a80471b5d1", auth.Nonce.ToString());
+			Assert.AreEqual("jdoe1", auth.Username.ToString());
+			Assert.AreEqual("officesip.local", auth.Realm.ToString());
+			Assert.AreEqual("auth", auth.MessageQop.ToString());
+			Assert.AreEqual("53186537273641419345563711231350", auth.Cnonce.ToString());
+			Assert.AreEqual(0xf1f, auth.NonceCount);
+			Assert.AreEqual("00000f1f", auth.NonceCountBytes.ToString());
+			Assert.AreEqual("f2cb4f2013d74a73b9e86603fb56b969", auth.Opaque.ToString());
+			Assert.AreEqual("auth", auth.MessageQop.ToString());
+			Assert.AreEqual("2bb45befa63ca772b840501502df102d", auth.Response.ToString());
 		}
 
 		[Test]
@@ -285,20 +288,22 @@ namespace SipMessageTest
 		{
 			var dfa = ParseHeader("Authorization: NTLM qop=\"auth\", realm=\"OfficeSIP Server\", targetname=\"officesip.local\", gssapi-data=\"12345\", version=3");
 
-			Assert.AreEqual(AuthSchemes.Ntlm, dfa.Authorization.AuthScheme);
-			Assert.AreEqual("auth", dfa.Authorization.MessageQop.ToString());
-			Assert.AreEqual("OfficeSIP Server", dfa.Authorization.Realm.ToString());
-			Assert.AreEqual("auth", dfa.Authorization.MessageQop.ToString());
-			Assert.AreEqual("12345", dfa.Authorization.GssapiData.ToString());
-			Assert.AreEqual(3, dfa.Authorization.Version);
-			Assert.AreEqual("officesip.local", dfa.Authorization.Targetname.ToString());
+			var auth = dfa.Authorization[0];
+
+			Assert.AreEqual(AuthSchemes.Ntlm, auth.AuthScheme);
+			Assert.AreEqual("auth", auth.MessageQop.ToString());
+			Assert.AreEqual("OfficeSIP Server", auth.Realm.ToString());
+			Assert.AreEqual("auth", auth.MessageQop.ToString());
+			Assert.AreEqual("12345", auth.GssapiData.ToString());
+			Assert.AreEqual(3, auth.Version);
+			Assert.AreEqual("officesip.local", auth.Targetname.ToString());
 		}
 
 		[Test]
 		public void It_should_parse_Authorization_header_with_empty_gssapi_data()
 		{
 			Assert.IsTrue(ParseHeader("Authorization: NTLM gssapi-data=\"\"")
-				.Authorization.GssapiData.IsEmpty);
+				.Authorization[0].GssapiData.IsEmpty);
 		}
 
 		[Test]
