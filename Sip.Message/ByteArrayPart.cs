@@ -5,6 +5,7 @@ using System.Net;
 namespace Sip.Message
 {
 	public struct ByteArrayPart
+		: IEquatable<ByteArrayPart>
 	{
 		public byte[] Bytes;
 		public int Begin;
@@ -52,14 +53,41 @@ namespace Sip.Message
 
 		public bool IsEqualValue(byte[] bytes)
 		{
-			if (Length != bytes.Length)
+			int lenght = Length;
+
+			if (lenght != bytes.Length)
 				return false;
 
-			for (int i = 0; i < Length; i++)
+			for (int i = 0; i < lenght; i++)
 				if (Bytes[Begin + i] != bytes[i])
 					return false;
 
 			return true;
+		}
+
+		public bool Equals(ByteArrayPart other)
+		{
+			return IsEqualValue(other);
+		}
+
+		public static bool operator ==(ByteArrayPart x, ByteArrayPart y)
+		{
+			return x.IsEqualValue(y);
+		}
+
+		public static bool operator !=(ByteArrayPart x, ByteArrayPart y)
+		{
+			return !x.IsEqualValue(y);
+		}
+
+		public override bool Equals(Object obj)
+		{
+			return obj is ByteArrayPart && IsEqualValue((ByteArrayPart)obj);
+		}
+
+		public override int GetHashCode()
+		{
+			return Bytes.GetHashCode() ^ Begin ^ End;
 		}
 
 		public bool IsValid

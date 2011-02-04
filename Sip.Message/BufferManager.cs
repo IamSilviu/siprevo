@@ -19,8 +19,9 @@ namespace Sip.Message
 			segment = newSegment;
 		}
 
-		public void Free(ArraySegment<byte> segment)
+		public void Free(ref ArraySegment<byte> segment)
 		{
+			segment = new ArraySegment<byte>();
 		}
 	}
 }

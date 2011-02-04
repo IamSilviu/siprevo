@@ -35,13 +35,15 @@ namespace Sip.Message
 					return SipMessageWriter.C.SERVICE;
 				case Methods.Subscribem:
 					return SipMessageWriter.C.SUBSCRIBE;
+				case Methods.Publishm:
+					return SipMessageWriter.C.PUBLISH;
 
 				case Methods.Extension:
 				case Methods.None:
 					throw new ArgumentException();
 
 				default:
-					throw new NotImplementedException();
+					throw new NotImplementedException(method.ToString());
 			}
 		}
 

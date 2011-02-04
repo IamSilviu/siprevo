@@ -1,7 +1,7 @@
 ﻿
 namespace Sip.Message
 {
-	static class SipMessage
+	public static class SipMessage
 	{
 		static SipMessage()
 		{

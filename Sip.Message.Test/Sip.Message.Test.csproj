@@ -41,15 +41,12 @@
   <ItemGroup>
     <Compile Include="ByteArrayPartTest.cs" />
     <Compile Include="ByteArrayWriterTest.cs" />
+    <Compile Include="ConverterTest.cs" />
     <Compile Include="LoadTables.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SipMessageReaderTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Server.Memory\Server.Memory.csproj">
-      <Project>{3830C8B5-6853-417F-B5A9-5C0B5A5A9163}</Project>
-      <Name>Server.Memory</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Sip.Message\Sip.Message.csproj">
       <Project>{33B6452A-AEFF-4DA5-84EE-B0652E09C0DB}</Project>
       <Name>Sip.Message</Name>

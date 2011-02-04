@@ -624,6 +624,18 @@ event-reason-extension = token;
 extension-header  =/ Event / Allow-Events / Subscription-State; /* vf: link to rfc3261 */
 
 /**************************************************************************************************/
+/* RFC 3903 */
+
+PUBLISHm           = %x50.55.42.4C.49.53.48; /* PUBLISH in caps. */
+extension-method   = PUBLISHm / token;
+
+SIP-ETag           = "SIP-ETag" HCOLON entity-tag;
+SIP-If-Match       = "SIP-If-Match" HCOLON entity-tag;
+entity-tag         = token;
+
+extension-header   =/ SIP-ETag / SIP-If-Match; /* vf: link to rfc3261 */
+
+/**************************************************************************************************/
 /* SERVICEm, BENOTIFYm, MESSAGEm, INFOm, REFERm */
 
 SERVICEm          = %x53.45.52.56.49.43.45; /* SERVICE in caps */

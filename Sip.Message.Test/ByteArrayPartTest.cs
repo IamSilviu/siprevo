@@ -84,6 +84,11 @@ namespace SipMessageTest
 			Assert.IsFalse(part1.IsEqualValue(part4));
 			Assert.IsFalse(part1.IsEqualValue(part5));
 
+			Assert.IsTrue(part1 == part2);
+			Assert.IsTrue(part1 != part3);
+			Assert.IsTrue(part1 != part4);
+			Assert.IsTrue(part1 != part5);
+
 			var bytes2 = Encoding.UTF8.GetBytes(@"1234567890");
 			var bytes3 = Encoding.UTF8.GetBytes(@"123456789-");
 			var bytes4 = Encoding.UTF8.GetBytes(@"123456789");

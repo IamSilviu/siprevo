@@ -52,23 +52,12 @@ namespace Sip.Message
 		public const ulong ContentDisposition = 0x0000200000000000;
 		public const ulong ProxyAuthorization = 0x0000400000000000;
 		public const ulong ProxyAuthenticationInfo = 0x0000800000000000;
+		public const ulong SipEtag = 0x0001000000000000;
+		public const ulong SipIfMatch = 0x0002000000000000;
 	}
 
 	static class HeaderMasksHelper
 	{
-		static HeaderMasksHelper()
-		{
-			try
-			{
-				foreach (HeaderNames name in Enum.GetValues(typeof(HeaderNames)))
-					name.ToMask();
-			}
-			catch (ArgumentOutOfRangeException)
-			{
-				throw new InvalidProgramException(@"ToMask is not specify all vlues of HeaderNames");
-			}
-		}
-
 		public static bool IsMasked(this HeaderNames name, ulong mask)
 		{
 			return (mask & name.ToMask()) > 0;
@@ -127,9 +116,11 @@ namespace Sip.Message
 				case HeaderNames.ContentDisposition: return HeaderMasks.ContentDisposition;
 				case HeaderNames.ProxyAuthorization: return HeaderMasks.ProxyAuthorization;
 				case HeaderNames.ProxyAuthenticationInfo: return HeaderMasks.ProxyAuthenticationInfo;
+				case HeaderNames.SipEtag: return HeaderMasks.SipEtag;
+				case HeaderNames.SipIfMatch: return HeaderMasks.SipIfMatch;
 
 				default:
-					throw new ArgumentOutOfRangeException();
+					throw new ArgumentOutOfRangeException(name.ToString());
 			}
 		}
 	}

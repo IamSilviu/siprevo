@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text;
 using System.Net;
-using Server.Memory;
 using System.Collections.Generic;
 using System.Threading;
 using System.IO;
@@ -96,7 +95,7 @@ namespace Sip.Message
 			get
 			{
 				if (ip == IPAddress.None)
-					IPAddress.TryParse(Encoding.UTF8.GetString(Host.Items, Host.Offset, Host.Length), out ip);
+					ip = Host.ToIpAddress();
 
 				return ip;
 			}
@@ -148,10 +147,12 @@ namespace Sip.Message
 	{
 		#region IRemovableParams
 
+		private bool isRemoved;
+
 		public bool IsRemoved
 		{
-			get;
-			set;
+			get { return isRemoved; }
+			set { isRemoved = value; }
 		}
 
 		public ByteArrayPart Param
@@ -171,11 +172,11 @@ namespace Sip.Message
 
 		partial void OnSetDefaultValue()
 		{
-			IsRemoved = false;
+			isRemoved = false;
 		}
 	}
 
-	public partial class SipMessageReader : IDefaultValue
+	public partial class SipMessageReader
 	{
 		public partial struct ContactStruct
 		{
@@ -336,7 +337,7 @@ namespace Sip.Message
 
 	#region class SipMessageReader {...}
 
-	public partial class SipMessageReader : IDefaultValue
+	public partial class SipMessageReader
 	{
 		public static void InitializeAsync(Action<int> callback)
 		{
@@ -411,6 +412,8 @@ namespace Sip.Message
 			Count.RouteCount++;
 			Count.RecordRouteCount++;
 			Count.SupportedCount++;
+			Count.AuthorizationCount++;
+			Count.ProxyAuthorizationCount++;
 		}
 
 		public int CountHeaders(HeaderNames name)
@@ -447,7 +450,7 @@ namespace Sip.Message
 		public HeaderNames ValidateHeadersDuplication()
 		{
 			ulong masks = 0;
-			ulong validate = HeaderMasks.CallId | HeaderMasks.CSeq | HeaderMasks.From | 
+			ulong validate = HeaderMasks.CallId | HeaderMasks.CSeq | HeaderMasks.From |
 				HeaderMasks.To | HeaderMasks.ContentLength | HeaderMasks.MaxForwards;
 
 			for (int i = 0; i < Count.HeaderCount; i++)
@@ -502,30 +505,30 @@ namespace Sip.Message
 
 	#region struct SipMessageReader.StatusCodeStruct {...}
 
-	public partial class SipMessageReader : IDefaultValue
+	public partial class SipMessageReader
 	{
 		public partial struct StatusCodeStruct
 		{
 			private StatusCodes code;
 
-			public bool IsInformational()
+			public bool IsInformational
 			{
-				return (Value >= 100) && (Value <= 199);
+				get { return (Value >= 100) && (Value <= 199); }
 			}
 
-			public bool IsSuccessful()
+			public bool IsSuccessful
 			{
-				return (Value >= 200) && (Value <= 299);
+				get { return (Value >= 200) && (Value <= 299); }
 			}
 
-			public bool IsGlobalFailure()
+			public bool IsGlobalFailure
 			{
-				return (Value >= 600) && (Value <= 699);
+				get { return (Value >= 600) && (Value <= 699); }
 			}
 
-			public bool IsClientError()
+			public bool IsClientError
 			{
-				return (Value >= 400) && (Value <= 499);
+				get { return (Value >= 400) && (Value <= 499); }
 			}
 
 			public StatusCodes Code

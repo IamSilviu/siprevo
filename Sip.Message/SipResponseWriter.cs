@@ -154,5 +154,12 @@ namespace Sip.Message
 				}
 			}
 		}
+
+		public void WriteSipEtag(int value)
+		{
+			Write(C.SIP_ETag__);
+			WriteAsHex8(value);
+			Write(C.CRLF);
+		}
 	}
 }

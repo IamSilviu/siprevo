@@ -6,20 +6,33 @@ using System.Net.Sockets;
 namespace Sip.Message
 {
 	public class ByteArrayWriter
+		: IDisposable
 	{
 		protected int end;
 		protected int begin;
 		private ArraySegment<byte> segment;
 
 		public ByteArrayWriter(int size)
+			: this(0, size)
 		{
-			segment = SipMessage.BufferManager.Allocate(size);
 		}
 
 		public ByteArrayWriter(int reservAtBegin, int size)
 		{
 			end = begin = reservAtBegin;
 			segment = SipMessage.BufferManager.Allocate(size);
+		}
+
+		// temporary - should be removed for optimization
+		~ByteArrayWriter()
+		{
+			SipMessage.BufferManager.Free(ref segment);
+		}
+
+		public void Dispose()
+		{
+			SipMessage.BufferManager.Free(ref segment);
+			GC.SuppressFinalize(this);
 		}
 
 		public ArraySegment<byte> Segment

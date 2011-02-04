@@ -179,7 +179,7 @@ namespace SipDfaCompiler
 				_main.WriteLine("using System.Text;");
 				_main.WriteLine("using System.IO;");
 				_main.WriteLine("using System.IO.Compression;");
-				_main.WriteLine("using Server.Memory;");
+				//_main.WriteLine("using Server.Memory;");
 				_main.WriteLine();
 
 				_main.WriteLine("namespace {0}", namespace1);
@@ -189,7 +189,7 @@ namespace SipDfaCompiler
 				GenerateGlobalStructs(_varibalesTree, new List<string>());
 
 				_main.WriteLine("public partial class {0}", filename);
-				_main.WriteLine(":IDefaultValue");
+				//_main.WriteLine(":IDefaultValue");
 				_main.WriteLine("{");
 
 				_main.WriteLine("public bool Final;");

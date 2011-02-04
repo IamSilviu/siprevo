@@ -1631,6 +1631,36 @@ namespace SipDfaCompiler
 			State rule = State.NoCloneAlternation(GetEvent(rulenames),GetAllow_Events(rulenames),GetSubscription_State(rulenames));
 			return rule;
 		}
+		public State GetPUBLISHm0(List<string> rulenames)
+		{
+			State rule = (State)(new byte[] {0x50,0x55,0x42,0x4C,0x49,0x53,0x48,});
+			return rule;
+		}
+		public State Getextension_method2(List<string> rulenames)
+		{
+			State rule = State.NoCloneAlternation(GetPUBLISHm(rulenames),Gettoken(rulenames));
+			return rule;
+		}
+		public State GetSIP_ETag0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("SIP-ETag",rulenames),GetHCOLON(rulenames),Getentity_tag(rulenames)));
+			return rule;
+		}
+		public State GetSIP_If_Match0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("SIP-If-Match",rulenames),GetHCOLON(rulenames),Getentity_tag(rulenames)));
+			return rule;
+		}
+		public State Getentity_tag0(List<string> rulenames)
+		{
+			State rule = Gettoken(rulenames);
+			return rule;
+		}
+		public State Getextension_header2(List<string> rulenames)
+		{
+			State rule = State.NoCloneAlternation(GetSIP_ETag(rulenames),GetSIP_If_Match(rulenames));
+			return rule;
+		}
 		public State GetSERVICEm0(List<string> rulenames)
 		{
 			State rule = (State)(new byte[] {0x53,0x45,0x52,0x56,0x49,0x43,0x45,});
@@ -1656,7 +1686,7 @@ namespace SipDfaCompiler
 			State rule = (State)(new byte[] {0x52,0x45,0x46,0x45,0x52,});
 			return rule;
 		}
-		public State Getextension_method2(List<string> rulenames)
+		public State Getextension_method3(List<string> rulenames)
 		{
 			State rule = State.NoCloneAlternation(GetSERVICEm(rulenames),GetBENOTIFYm(rulenames),GetMESSAGEm(rulenames),GetINFOm(rulenames),GetREFERm(rulenames));
 			return rule;
@@ -1871,7 +1901,7 @@ namespace SipDfaCompiler
 			State rule = State.Repeat(8,-1,GetLHEX(rulenames));
 			return rule;
 		}
-		public State Getextension_header2(List<string> rulenames)
+		public State Getextension_header3(List<string> rulenames)
 		{
 			State rule = GetProxy_Authentication_Info(rulenames);
 			return rule;
@@ -2827,7 +2857,7 @@ namespace SipDfaCompiler
 		public State Getextension_method(List<string> rulenames)
 		{
 			rulenames.Insert(0, "extension-method");
-			State rule = State.NoCloneAlternation(Getextension_method0(rulenames), Getextension_method1(rulenames), Getextension_method2(rulenames));
+			State rule = State.NoCloneAlternation(Getextension_method0(rulenames), Getextension_method1(rulenames), Getextension_method2(rulenames), Getextension_method3(rulenames));
 			rule = OnMarkRule(rule, rulenames);
 			rulenames.RemoveAt(0);
 			return rule;
@@ -4251,7 +4281,7 @@ namespace SipDfaCompiler
 		public State Getextension_header(List<string> rulenames)
 		{
 			rulenames.Insert(0, "extension-header");
-			State rule = State.NoCloneAlternation(Getextension_header0(rulenames), Getextension_header1(rulenames), Getextension_header2(rulenames));
+			State rule = State.NoCloneAlternation(Getextension_header0(rulenames), Getextension_header1(rulenames), Getextension_header2(rulenames), Getextension_header3(rulenames));
 			rule = OnMarkRule(rule, rulenames);
 			rulenames.RemoveAt(0);
 			return rule;
@@ -4396,6 +4426,38 @@ namespace SipDfaCompiler
 		{
 			rulenames.Insert(0, "event-reason-extension");
 			State rule = State.NoCloneAlternation(Getevent_reason_extension0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State GetPUBLISHm(List<string> rulenames)
+		{
+			rulenames.Insert(0, "PUBLISHm");
+			State rule = State.NoCloneAlternation(GetPUBLISHm0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State GetSIP_ETag(List<string> rulenames)
+		{
+			rulenames.Insert(0, "SIP-ETag");
+			State rule = State.NoCloneAlternation(GetSIP_ETag0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State GetSIP_If_Match(List<string> rulenames)
+		{
+			rulenames.Insert(0, "SIP-If-Match");
+			State rule = State.NoCloneAlternation(GetSIP_If_Match0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getentity_tag(List<string> rulenames)
+		{
+			rulenames.Insert(0, "entity-tag");
+			State rule = State.NoCloneAlternation(Getentity_tag0(rulenames));
 			rule = OnMarkRule(rule, rulenames);
 			rulenames.RemoveAt(0);
 			return rule;

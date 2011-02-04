@@ -31,6 +31,7 @@ namespace SipMessageTest
 			Assert.AreEqual(Methods.Registerm, ParseAll("REGISTER sip:domain SIP/2.0\r\n\r\n").Method);
 			Assert.AreEqual(Methods.Servicem, ParseAll("SERVICE sip:domain SIP/2.0\r\n\r\n").Method);
 			Assert.AreEqual(Methods.Subscribem, ParseAll("SUBSCRIBE sip:domain SIP/2.0\r\n\r\n").Method);
+			Assert.AreEqual(Methods.Publishm, ParseAll("PUBLISH sip:domain SIP/2.0\r\n\r\n").Method);
 
 			Assert.AreEqual(Methods.Extension, ParseAll("UNKNOW sip:domain SIP/2.0\r\n\r\n").Method);
 
@@ -304,6 +305,35 @@ namespace SipMessageTest
 		{
 			Assert.IsTrue(ParseHeader("Authorization: NTLM gssapi-data=\"\"")
 				.Authorization[0].GssapiData.IsEmpty);
+		}
+
+		[Test]
+		public void It_should_parse_SIP_ETag()
+		{
+			Assert.AreEqual("1234567890", ParseHeader("SIP-ETag: 1234567890").SipEtag.ToString());
+		}
+
+		[Test]
+		public void It_should_parse_SIP_If_Match()
+		{
+			Assert.AreEqual("1234567890", ParseHeader("SIP-If-Match: 1234567890").SipIfMatch.ToString());
+		}
+
+		[Test]
+		public void It_should_parse_Event()
+		{
+			Assert.AreEqual("presence", ParseHeader("Event: presence").Event.EventType.ToString());
+			Assert.AreEqual("presence", ParseHeader("Event: presence; id = 1234").Event.EventType.ToString());
+			Assert.AreEqual("1234", ParseHeader("Event: presence; id = 1234").Event.Id.ToString());
+		}
+
+		[Test]
+		public void It_should_parse_User_Agent()
+		{
+			Assert.Inconclusive();
+			//Assert.AreEqual("abc", ParseHeader("User-Agent: abc").UserAgent.ToString());
+			//Assert.AreEqual("a.b*c", ParseHeader("User-Agent: a.b*c").UserAgent.ToString());
+			//Assert.AreEqual("abc/123", ParseHeader("User-Agent: abc/123").UserAgent.ToString());
 		}
 
 		[Test]

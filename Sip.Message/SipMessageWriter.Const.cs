@@ -1,5 +1,4 @@
 ﻿using System;
-using Server.Memory;
 
 namespace Sip.Message
 {
@@ -30,6 +29,7 @@ namespace Sip.Message
 			public readonly static ByteArrayPart Require = new ByteArrayPart(@"Require");
 			public readonly static ByteArrayPart Subscription_State = new ByteArrayPart(@"Subscription-State");
 			public readonly static ByteArrayPart Content_Transfer_Encoding = new ByteArrayPart(@"Content-Transfer-Encoding");
+			public readonly static ByteArrayPart SIP_ETag__ = new ByteArrayPart(@"SIP-ETag: ");
 			public readonly static ByteArrayPart x_Error_Details = new ByteArrayPart(@"x-Error-Details");
 
 			public readonly static ByteArrayPart ACK = new ByteArrayPart(@"ACK");
@@ -45,6 +45,7 @@ namespace Sip.Message
 			public readonly static ByteArrayPart REGISTER = new ByteArrayPart(@"REGISTER");
 			public readonly static ByteArrayPart SERVICE = new ByteArrayPart(@"SERVICE");
 			public readonly static ByteArrayPart SUBSCRIBE = new ByteArrayPart(@"SUBSCRIBE");
+			public readonly static ByteArrayPart PUBLISH = new ByteArrayPart(@"PUBLISH");
 
 			public readonly static ByteArrayPart SIP_2_0 = new ByteArrayPart(@"SIP/2.0");
 			public readonly static ByteArrayPart SP = new ByteArrayPart(' ');

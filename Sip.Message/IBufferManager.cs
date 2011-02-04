@@ -6,6 +6,6 @@ namespace Sip.Message
 	{
 		ArraySegment<byte> Allocate(int size);
 		void Reallocate(ref ArraySegment<byte> segment, int extraSize);
-		void Free(ArraySegment<byte> segment);
+		void Free(ref ArraySegment<byte> segment);
 	}
 }

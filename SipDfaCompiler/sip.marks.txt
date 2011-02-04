@@ -109,6 +109,7 @@
 .METHOD.extension-method.MESSAGEm -> Const = ?Method;
 .METHOD.extension-method.INFOm -> Const = ?Method;
 .METHOD.extension-method.REFERm -> Const = ?Method;
+.METHOD.extension-method.PUBLISHm -> Const = ?Method;
 .METHOD.extension-method -> Const = ?Method, Extension, 20;
 
 //
@@ -241,6 +242,8 @@ SIP-messageX.message-headerX.extension-header.Event.HCOLON -> Const = Headers<He
 SIP-messageX.message-headerX.extension-header.Allow-Events.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, AllowEvents;
 SIP-messageX.message-headerX.extension-header.Subscription-State.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, SubscriptionState;
 SIP-messageX.message-headerX.extension-header.Proxy-Authentication-Info.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, ProxyAuthenticationInfo;
+SIP-messageX.message-headerX.extension-header.SIP-ETag.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, SipEtag;
+SIP-messageX.message-headerX.extension-header.SIP-If-Match.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, SipIfMatch;
 SIP-messageX.message-headerX.extension-header.HCOLON -> Const = Headers<Header>[HeaderCount].HeaderName, Extension, 20;
 SIP-messageX.message-headerX.CRLF -> Count = HeaderCount, 200;
 
@@ -355,13 +358,13 @@ SIP-messageX.message-headerX.Via.via-parm.via-params.via-ms-received-port.port.D
 SIP-messageX.message-headerX.Via.via-parm.via-params.via-ms-received-cid.token -> Range = Via[ViaCount].MsReceived.Cid;
 
 //
-// Content-Type
+// -------------------------------------------------------------------------------[ Content-Type
 //
 SIP-messageX.message-headerX.Content-Type.media-type.m-type -> LookupRange = ContentType.Type;
 SIP-messageX.message-headerX.Content-Type.media-type.m-subtype -> LookupRange = ContentType.Subtype;
 
 //
-// Content-Length
+// -------------------------------------------------------------------------------[ Content-Length
 //
 SIP-messageX.message-headerX.Content-Length.DIGIT -> Decimal = ContentLength;
 
@@ -388,9 +391,19 @@ SIP-messageX.message-headerX.Supported.HCOLON.: -> Count = SupportedCount, 25, -
 SIP-messageX.message-headerX.Supported.COMMA., -> Count = SupportedCount, 25, -1;
 SIP-messageX.message-headerX.Supported.option-tag -> LookupRange = Supported[SupportedCount].Option;
 
+//
+// -------------------------------------------------------------------------------[ SIP-ETag, SIP-If-Match
+//
+SIP-messageX.message-headerX.extension-header.SIP-ETag.entity-tag.token -> LookupRange = SipEtag;
+SIP-messageX.message-headerX.extension-header.SIP-If-Match.entity-tag.token -> LookupRange = SipIfMatch;
+
+//
+// -------------------------------------------------------------------------------[ User-Agent
+//
+SIP-messageX.message-headerX.User-Agent.server-val.product.token -> LookupRange = Product;
+SIP-messageX.message-headerX.User-Agent.server-val.product.product-version.token -> LookupRange = Version;
 
 //
 //
 //
-//
-///////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////[...............]
