@@ -3,25 +3,29 @@ using System.Collections.Generic;
 
 namespace Sip.Message
 {
-	class ByteArrayPartEqualityComparer
-		: EqualityComparer<ByteArrayPart>
+	public sealed class ByteArrayPartEqualityComparer
+		: IEqualityComparer<ByteArrayPart>
 	{
-		private static readonly ByteArrayPartEqualityComparer defaultComparer =
+		private static readonly ByteArrayPartEqualityComparer instance = 
 			new ByteArrayPartEqualityComparer();
 
-		public new static EqualityComparer<ByteArrayPart> Default
+		private ByteArrayPartEqualityComparer()
 		{
-			get { return defaultComparer; }
 		}
 
-		public override bool Equals(ByteArrayPart x, ByteArrayPart y)
+		public static IEqualityComparer<ByteArrayPart> GetStaticInstance()
+		{
+			return instance;
+		}
+
+		public bool Equals(ByteArrayPart x, ByteArrayPart y)
 		{
 			return x.IsEqualValue(y);
 		}
 
-		public override int GetHashCode(ByteArrayPart x)
+		public int GetHashCode(ByteArrayPart x)
 		{
-			return x.Bytes.GetHashCode() ^ x.Begin ^ x.End;
+			return x.GetHashCode();
 		}
 	}
 }

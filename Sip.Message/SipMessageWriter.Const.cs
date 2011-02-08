@@ -7,8 +7,11 @@ namespace Sip.Message
 		public static class C
 		{
 			public readonly static ByteArrayPart From = new ByteArrayPart(@"From");
+			public readonly static ByteArrayPart From__ = new ByteArrayPart(@"From: ");
 			public readonly static ByteArrayPart To = new ByteArrayPart(@"To");
+			public readonly static ByteArrayPart To__ = new ByteArrayPart(@"To: ");
 			public readonly static ByteArrayPart Call_ID = new ByteArrayPart(@"Call-ID");
+			public readonly static ByteArrayPart Call_ID__ = new ByteArrayPart(@"Call-ID: ");
 			public readonly static ByteArrayPart CSeq = new ByteArrayPart(@"CSeq");
 			public readonly static ByteArrayPart Max_Forwards = new ByteArrayPart(@"Max-Forwards");
 			public readonly static ByteArrayPart Expires = new ByteArrayPart(@"Expires");
@@ -24,13 +27,17 @@ namespace Sip.Message
 			public readonly static ByteArrayPart Route = new ByteArrayPart(@"Route");
 			public readonly static ByteArrayPart RecordRoute = new ByteArrayPart(@"Record-Route");
 			public readonly static ByteArrayPart Via = new ByteArrayPart(@"Via");
+			public readonly static ByteArrayPart Via__SIP_2_0_ = new ByteArrayPart(@"Via: SIP/2.0/");
 			public readonly static ByteArrayPart Content_Type = new ByteArrayPart(@"Content-Type");
+			public readonly static ByteArrayPart Content_Type__ = new ByteArrayPart(@"Content-Type: ");
 			public readonly static ByteArrayPart Supported = new ByteArrayPart(@"Supported");
 			public readonly static ByteArrayPart Require = new ByteArrayPart(@"Require");
 			public readonly static ByteArrayPart Subscription_State = new ByteArrayPart(@"Subscription-State");
+			public readonly static ByteArrayPart Subscription_State__ = new ByteArrayPart(@"Subscription-State: ");
 			public readonly static ByteArrayPart Content_Transfer_Encoding = new ByteArrayPart(@"Content-Transfer-Encoding");
 			public readonly static ByteArrayPart SIP_ETag__ = new ByteArrayPart(@"SIP-ETag: ");
 			public readonly static ByteArrayPart x_Error_Details = new ByteArrayPart(@"x-Error-Details");
+			public readonly static ByteArrayPart Event__presence = new ByteArrayPart(@"Event: presence");
 
 			public readonly static ByteArrayPart ACK = new ByteArrayPart(@"ACK");
 			public readonly static ByteArrayPart BENOTIFY = new ByteArrayPart(@"BENOTIFY");
@@ -61,10 +68,12 @@ namespace Sip.Message
 			public readonly static ByteArrayPart BACKSLASH = new ByteArrayPart('\\');
 
 			public readonly static ByteArrayPart tag = new ByteArrayPart(@"tag");
+			public readonly static ByteArrayPart _tag_ = new ByteArrayPart(@";tag=");
 			public readonly static ByteArrayPart received = new ByteArrayPart(@"received");
 			public readonly static ByteArrayPart ms_received_port = new ByteArrayPart(@"ms-received-port");
 			public readonly static ByteArrayPart ms_received_cid = new ByteArrayPart(@"ms-received-cid");
 			public readonly static ByteArrayPart expires = new ByteArrayPart(@"expires");
+			public readonly static ByteArrayPart _expires_ = new ByteArrayPart(@";expires=");
 			public readonly static ByteArrayPart Digest = new ByteArrayPart(@"Digest");
 			public readonly static ByteArrayPart NTLM = new ByteArrayPart(@"NTLM");
 			public readonly static ByteArrayPart Kerberos = new ByteArrayPart(@"Kerberos");
@@ -87,9 +96,13 @@ namespace Sip.Message
 			public readonly static ByteArrayPart gssapi_data = new ByteArrayPart(@"gssapi-data");
 			public readonly static ByteArrayPart lr = new ByteArrayPart(@"lr");
 			public readonly static ByteArrayPart branch = new ByteArrayPart(@"branch");
+			public readonly static ByteArrayPart _branch_ = new ByteArrayPart(@";branch=");
 			public readonly static ByteArrayPart epid = new ByteArrayPart(@"epid");
 			public readonly static ByteArrayPart transport = new ByteArrayPart(@"transport");
 			public readonly static ByteArrayPart maddr = new ByteArrayPart(@"maddr");
+			public readonly static ByteArrayPart active = new ByteArrayPart(@"active");
+			public readonly static ByteArrayPart pending = new ByteArrayPart(@"pending");
+			public readonly static ByteArrayPart terminated = new ByteArrayPart(@"terminated");
 
 			public readonly static ByteArrayPart UDP = new ByteArrayPart(@"UDP");
 			public readonly static ByteArrayPart TCP = new ByteArrayPart(@"TCP");

@@ -129,6 +129,13 @@ namespace Sip.Message
 			end += bytes.Length;
 		}
 
+		public void Write(IPEndPoint endpoint)
+		{
+			Write(endpoint.Address);
+			segment.Array[segment.Offset + end++] = (byte)0x3A;
+			Write(endpoint.Port);
+		}
+
 		public void Write(IPAddress address)
 		{
 			if (address.AddressFamily == AddressFamily.InterNetwork)
@@ -157,6 +164,16 @@ namespace Sip.Message
 
 			for (int i = 1; i < 9; i++, value >>= 4)
 				segment.Array[segment.Offset + end - i] = GetLowerHexChar((byte)(value & 0x0f));
+		}
+
+		public ArraySegment<byte> GetBytesForCustomWrite(int size)
+		{
+			ValidateCapacity(size);
+
+			end += size;
+			
+			return new ArraySegment<byte>(
+				segment.Array, segment.Offset + end - size, segment.Offset + end);
 		}
 
 		public void ValidateCapacity(int extraSize)
@@ -260,6 +277,13 @@ namespace Sip.Message
 		}
 
 		public void Write(ByteArrayPart part1, ByteArrayPart part2, ByteArrayPart part3)
+		{
+			Write(part1);
+			Write(part2);
+			Write(part3);
+		}
+
+		public void Write(ByteArrayPart part1, ByteArrayPart part2, int part3)
 		{
 			Write(part1);
 			Write(part2);

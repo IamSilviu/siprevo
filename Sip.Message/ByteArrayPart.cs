@@ -87,7 +87,19 @@ namespace Sip.Message
 
 		public override int GetHashCode()
 		{
-			return Bytes.GetHashCode() ^ Begin ^ End;
+			unchecked
+			{
+				int value = 0;
+				int maxOffset = End - Begin - 1;
+
+				for (int i = 0; i <= 3; i++)
+				{
+					value |= Bytes[Begin + maxOffset * i / 3];
+					value <<= 8;
+				}
+
+				return value;
+			}
 		}
 
 		public bool IsValid
@@ -191,6 +203,17 @@ namespace Sip.Message
 				return null;
 
 			return Encoding.UTF8.GetString(Bytes, Offset, Length);
+		}
+
+		public void BlockCopyTo(byte[] bytes, int offset)
+		{
+			Buffer.BlockCopy(Bytes, Begin, bytes, offset, Length);
+		}
+
+		public void BlockCopyTo(byte[] bytes, ref int offset)
+		{
+			Buffer.BlockCopy(Bytes, Begin, bytes, offset, Length);
+			offset += Length;
 		}
 	}
 }

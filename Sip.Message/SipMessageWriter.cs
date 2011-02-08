@@ -3,6 +3,13 @@ using System.Net;
 
 namespace Sip.Message
 {
+	public enum SubscriptionStates
+	{
+		Active,
+		Pending,
+		Terminated,
+	}
+
 	public partial class SipMessageWriter
 		: ByteArrayWriter
 	{
@@ -368,7 +375,7 @@ namespace Sip.Message
 		{
 			Write(C.Require, C.HCOLON, C.SP, requires, C.CRLF);
 		}
-		
+
 		public void WriteSubscriptionState(ByteArrayPart substate, int expires)
 		{
 			Write(C.Subscription_State, C.HCOLON, C.SP, substate, C.SEMI, C.expires, C.EQUAL);
@@ -415,6 +422,54 @@ namespace Sip.Message
 		public void WriteXErrorDetails(ByteArrayPart details)
 		{
 			Write(C.x_Error_Details, C.HCOLON, C.SP, details, C.CRLF);
+		}
+
+		public void WriteTo(ByteArrayPart uri, ByteArrayPart tag)
+		{
+			Write(C.To__, C.LAQUOT, uri, C.RAQUOT, C._tag_, tag, C.CRLF);
+		}
+
+		public void WriteFrom(ByteArrayPart uri, ByteArrayPart tag)
+		{
+			Write(C.From__, C.LAQUOT, uri, C.RAQUOT, C._tag_, tag, C.CRLF);
+		}
+
+		public void WriteCallId(ByteArrayPart callId)
+		{
+			Write(C.Call_ID__, callId, C.CRLF);
+		}
+
+		public void WriteEventPresence()
+		{
+			Write(C.Event__presence, C.CRLF);
+		}
+
+		public void WriteSubscriptionState(SubscriptionStates state, int expires)
+		{
+			Write(C.Subscription_State__);
+
+			switch (state)
+			{
+				case SubscriptionStates.Active: Write(C.active, C._expires_, expires); break;
+				case SubscriptionStates.Pending: Write(C.pending, C._expires_, expires); break;
+				case SubscriptionStates.Terminated: Write(C.terminated); break;
+			}
+
+			Write(C.CRLF);
+		}
+
+		public void WriteContentType(ByteArrayPart type, ByteArrayPart subtype)
+		{
+			Write(C.Content_Type__, type, C.SLASH, subtype, C.CRLF);
+		}
+
+		public void WriteVia(Transports transport, IPEndPoint endpoint, int branch)
+		{
+			Write(C.Via__SIP_2_0_, transport.ToByteArrayPart(), C.SP);
+			Write(endpoint);
+			Write(C._branch_);
+			WriteAsHex8(branch);
+			Write(C.CRLF);
 		}
 
 		//public void WriteXErrorDetailsAbsentParameter(HeaderNames header, )
