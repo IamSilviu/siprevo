@@ -472,6 +472,20 @@ namespace Sip.Message
 			Write(C.CRLF);
 		}
 
+		public void WriteAllow(Methods[] methods)
+		{
+			Write(C.Allow__);
+
+			Write(methods[0].ToByteArrayPart());
+			for (int i = 1; i < methods.Length; i++)
+			{
+				Write(C.CommaSpace);
+				Write(methods[i].ToByteArrayPart());
+			}
+
+			Write(C.CRLF);
+		}
+
 		//public void WriteXErrorDetailsAbsentParameter(HeaderNames header, )
 		//{
 		//    Write(C.x_Error_Details, C.HCOLON, C.SP, details, C.CRLF);

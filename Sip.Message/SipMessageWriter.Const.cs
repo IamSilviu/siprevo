@@ -38,6 +38,8 @@ namespace Sip.Message
 			public readonly static ByteArrayPart SIP_ETag__ = new ByteArrayPart(@"SIP-ETag: ");
 			public readonly static ByteArrayPart x_Error_Details = new ByteArrayPart(@"x-Error-Details");
 			public readonly static ByteArrayPart Event__presence = new ByteArrayPart(@"Event: presence");
+			public readonly static ByteArrayPart Allow__ = new ByteArrayPart(@"Allow: ");
+			
 
 			public readonly static ByteArrayPart ACK = new ByteArrayPart(@"ACK");
 			public readonly static ByteArrayPart BENOTIFY = new ByteArrayPart(@"BENOTIFY");
@@ -66,6 +68,7 @@ namespace Sip.Message
 			public readonly static ByteArrayPart COMMA = new ByteArrayPart(',');
 			public readonly static ByteArrayPart SLASH = new ByteArrayPart('/');
 			public readonly static ByteArrayPart BACKSLASH = new ByteArrayPart('\\');
+			public readonly static ByteArrayPart CommaSpace = new ByteArrayPart(@", ");
 
 			public readonly static ByteArrayPart tag = new ByteArrayPart(@"tag");
 			public readonly static ByteArrayPart _tag_ = new ByteArrayPart(@";tag=");
