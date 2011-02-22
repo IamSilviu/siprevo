@@ -23,16 +23,23 @@ namespace SipDfaCompiler
 				return -1;
 			LoadSuppressWarngin(path + "suppress.warning.txt");
 
-			var generator = new Generator();
-			if (false)
+			string className = "SipMessageReader";
+			string namespace1 = "Sip.Message";
+
+			if (args.Length == 0)
 			{
+				var generator = new Generator(false);
 				generator.ParseDeclaration(_marks);
-				generator.Generate("SipMessageReader", "Sip.Message", null);
+				generator.Generate(className, className, namespace1, null, true);
 			}
 			else
 			{
 				var dfa = CompileDfa();
-				generator.Generate("SipMessageReader", "Sip.Message", dfa);
+
+				var generator1 = new Generator(false);
+				generator1.Generate(className, className, namespace1, dfa, true);
+				var generator2 = new Generator(true);
+				generator2.Generate(className + "Optimized", className, namespace1, dfa, false);
 			}
 
 			return 0;

@@ -21,7 +21,7 @@ namespace Sip.Message
 		}
 
 		public ByteArrayPart(ByteArrayPart part)
-			: this(part.Items, part.Offset, part.Length)
+			: this(part.Bytes, part.Offset, part.Length)
 		{
 		}
 
@@ -87,19 +87,19 @@ namespace Sip.Message
 
 		public override int GetHashCode()
 		{
-			unchecked
-			{
-				int value = 0;
-				int maxOffset = End - Begin - 1;
+			int value = 0;
+			int maxOffset = End - Begin - 1;
 
+			if (maxOffset >= 0)
+			{
 				for (int i = 0; i <= 3; i++)
 				{
-					value |= Bytes[Begin + maxOffset * i / 3];
 					value <<= 8;
+					value |= Bytes[Begin + maxOffset * i / 3];
 				}
-
-				return value;
 			}
+
+			return value;
 		}
 
 		public bool IsValid
@@ -109,13 +109,19 @@ namespace Sip.Message
 
 		public bool IsInvalid
 		{
-			get { return Bytes == null || Begin < 0 || End < 0; }
+			get { return Begin < 0 || End < 0; }
+			//get { return Bytes == null || Begin < 0 || End < 0; }
 		}
 
-		public byte[] Items
-		{
-			get { return Bytes; }
-		}
+		//public bool IsEmpty
+		//{
+		//    get { return Begin < 0 || End < 0; }
+		//}
+
+		//public byte[] Items
+		//{
+		//    get { return Bytes; }
+		//}
 
 		public int Offset
 		{
@@ -125,11 +131,6 @@ namespace Sip.Message
 		public int Length
 		{
 			get { return End - Begin; }
-		}
-
-		public bool IsEmpty
-		{
-			get { return Begin < 0 || End < 0; }
 		}
 
 		public void SetDefaultValue()

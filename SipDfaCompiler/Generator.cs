@@ -12,9 +12,13 @@ namespace SipDfaCompiler
 		private TextWriter _main;
 		private BinaryWriter _table;
 		private VariableTreeItem _varibalesTree;
+		private bool _optimized;
+		private string _beginEndStructName;
 
-		public Generator()
+		public Generator(bool optimized)
 		{
+			_optimized = optimized;
+			_beginEndStructName = optimized ? "BeginEnd" : "ByteArrayPart";
 		}
 
 		public void ParseDeclaration(DfaState dfa)
@@ -164,22 +168,26 @@ namespace SipDfaCompiler
 			_main.WriteLine("#endregion");
 		}
 
-		public void Generate(string filename, string namespace1, DfaState dfa)
+		public void Generate(string filename, string classname, string namespace1, DfaState dfa, bool writeDfaFile)
 		{
 			using (_main = File.CreateText(filename + ".cs"))
-			using (_table = new BinaryWriter(
-				new DeflateStream(
-					new BufferedStream(File.Create(filename + ".dfa"), 65536), CompressionMode.Compress)))
+			using (_table = new BinaryWriter((writeDfaFile) ?
+					new DeflateStream(
+						new BufferedStream(File.Create(namespace1 + ".dfa"), 65536), CompressionMode.Compress)
+					: Stream.Null))
 			{
 
 				if (dfa != null)
 					ParseDeclaration(dfa);
 
+				_main.WriteLine("#if OPTIMIZED");
+				if (_optimized == false)
+					_main.WriteLine("#else");
+
 				_main.WriteLine("using System;");
 				_main.WriteLine("using System.Text;");
 				_main.WriteLine("using System.IO;");
 				_main.WriteLine("using System.IO.Compression;");
-				//_main.WriteLine("using Server.Memory;");
 				_main.WriteLine();
 
 				_main.WriteLine("namespace {0}", namespace1);
@@ -188,9 +196,19 @@ namespace SipDfaCompiler
 				GenerateEnums(_varibalesTree, new List<string>());
 				GenerateGlobalStructs(_varibalesTree, new List<string>());
 
-				_main.WriteLine("public partial class {0}", filename);
-				//_main.WriteLine(":IDefaultValue");
+				_main.WriteLine("public partial class {0}", classname);
 				_main.WriteLine("{");
+
+				if (_optimized)
+				{
+					_main.WriteLine("[ThreadStatic]");
+					_main.WriteLine("public static byte[] Bytes;");
+
+					_main.WriteLine("public void SetArray(byte[] bytes)");
+					_main.WriteLine("{");
+					_main.WriteLine("Bytes=bytes;");
+					_main.WriteLine("}");
+				}
 
 				_main.WriteLine("public bool Final;");
 				_main.WriteLine("public bool IsFinal { get { return Final; }}");
@@ -201,7 +219,7 @@ namespace SipDfaCompiler
 				_main.WriteLine("private int state;");
 				_main.WriteLine("private int boolExPosition;");
 
-				GenerateVariables(_varibalesTree);
+				GenerateVariables(_varibalesTree, true);
 
 				int countStates = 0;
 				if (dfa != null)
@@ -218,6 +236,8 @@ namespace SipDfaCompiler
 				_main.WriteLine("}");
 				_main.WriteLine("}");
 
+				_main.WriteLine("#endif");
+
 				_main.Flush();
 				_table.Flush();
 			}
@@ -225,11 +245,16 @@ namespace SipDfaCompiler
 
 		private void GenerateVariables(VariableTreeItem item)
 		{
+			GenerateVariables(item, false);
+		}
+
+		private void GenerateVariables(VariableTreeItem item, bool sipMessageReaderClass)
+		{
 			GenerateConstsMax(item.Counts, "const int");
 
 			GenerateVaribales(item.Counts, "int", "Count");
 			GenerateCustomVaribales(item.Customs);
-			GenerateVaribales(item.Begins1, "ByteArrayPart");
+			GenerateVaribales(item.Begins1, _beginEndStructName);
 			GenerateVaribales(item.Decimals1, "int");
 			GenerateVaribales(item.Bools, "bool");
 
@@ -259,49 +284,52 @@ namespace SipDfaCompiler
 				GenerateVaribale(RemoveExtraInfo(subitem.Name), structName);
 			}
 
-			GenerateInitializers(item);
+			GenerateInitializers(item, sipMessageReaderClass);
 
 			GenerateSetArrayFunction(item);
 		}
 
 		private void GenerateSetArrayFunction(VariableTreeItem item)
 		{
-			_main.WriteLine("public void SetArray(byte[] bytes)");
-			_main.WriteLine("{");
-
-			foreach (var subitem in item.Subitems)
+			if (_optimized == false)
 			{
-				if (HasBrackets(subitem.Name))
-				{
-					var name = RemoveExtraInfo(RemoveBrackets(subitem.Name));
-					var counter = GetCounter(subitem.Name);
+				_main.WriteLine("public void SetArray(byte[] bytes)");
+				_main.WriteLine("{");
 
-					_main.WriteLine("for(int i=0; i<Max.{0}; i++)", counter);
-					_main.WriteLine("{0}[i].SetArray(bytes);", name);
-				}
-				else
+				foreach (var subitem in item.Subitems)
 				{
-					_main.WriteLine("{0}.SetArray(bytes);", RemoveExtraInfo(subitem.Name));
+					if (HasBrackets(subitem.Name))
+					{
+						var name = RemoveExtraInfo(RemoveBrackets(subitem.Name));
+						var counter = GetCounter(subitem.Name);
+
+						_main.WriteLine("for(int i=0; i<Max.{0}; i++)", counter);
+						_main.WriteLine("{0}[i].SetArray(bytes);", name);
+					}
+					else
+					{
+						_main.WriteLine("{0}.SetArray(bytes);", RemoveExtraInfo(subitem.Name));
+					}
 				}
+
+				foreach (var begin in item.Begins1)
+				{
+					if (HasBrackets(begin.Value.ShortName))
+					{
+						var name = RemoveExtraInfo(RemoveBrackets(begin.Value.ShortName));
+						var counter = GetCounter(begin.Value.ShortName);
+
+						_main.WriteLine("for(int i=0; i<Max.{0}; i++)", counter);
+						_main.WriteLine("{0}[i].Bytes = bytes;", name);
+					}
+					else
+					{
+						_main.WriteLine("{0}.Bytes = bytes;", begin.Value.ShortName);
+					}
+				}
+
+				_main.WriteLine("}");
 			}
-
-			foreach (var begin in item.Begins1)
-			{
-				if (HasBrackets(begin.Value.ShortName))
-				{
-					var name = RemoveExtraInfo(RemoveBrackets(begin.Value.ShortName));
-					var counter = GetCounter(begin.Value.ShortName);
-
-					_main.WriteLine("for(int i=0; i<Max.{0}; i++)", counter);
-					_main.WriteLine("{0}[i].Bytes = bytes;", name);
-				}
-				else
-				{
-					_main.WriteLine("{0}.Bytes = bytes;", begin.Value.ShortName);
-				}
-			}
-
-			_main.WriteLine("}");
 		}
 
 		private void GenerateInitializers(Dictionary<string, VariableInfo> vars, string type1, string prefix, string value)
@@ -341,10 +369,20 @@ namespace SipDfaCompiler
 
 		private void GenerateInitializers(VariableTreeItem item)
 		{
+			GenerateInitializers(item, false);
+		}
+
+		private void GenerateInitializers(VariableTreeItem item, bool sipMessageReaderClass)
+		{
 			_main.WriteLine("partial void OnSetDefaultValue();");
 
 			_main.WriteLine("public void SetDefaultValue()");
 			_main.WriteLine("{");
+
+			if (_optimized && sipMessageReaderClass)
+			{
+				_main.WriteLine("Bytes=null;");
+			}
 
 			foreach (var subitem in item.Subitems)
 			{
@@ -388,7 +426,7 @@ namespace SipDfaCompiler
 
 			//foreach(var begin in item.Begins1)
 			//    _main.WriteLine("{0}.SetDefaultValue();", begin.Value.ShortName);
-			GenerateInitializers(item.Begins1, "ByteArrayPart", "", ".SetDefaultValue()");
+			GenerateInitializers(item.Begins1, _beginEndStructName, "", ".SetDefaultValue()");
 
 			GenerateInitializers(item.Counts, "int", "Count.");
 			GenerateInitializers(item.Decimals1, "int", "", "int.MinValue");

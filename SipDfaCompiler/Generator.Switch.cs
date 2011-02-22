@@ -38,12 +38,15 @@ namespace SipDfaCompiler
 				GenerateSwitch(dfa, errorState, SwitchMode.ActionOnly);
 
 				_main.WriteLine("exit1: ;");
+				_main.WriteLine("OnAfterParse();");
 				_main.WriteLine("return i - offset;");
 			}
 			else
+			{
+				_main.WriteLine("OnAfterParse();");
 				_main.WriteLine("return 0;");
+			}
 
-			_main.WriteLine("OnAfterParse();");
 			_main.WriteLine("}");
 
 			_main.WriteLine("#endregion");
@@ -196,7 +199,8 @@ namespace SipDfaCompiler
 							_main.WriteLine("{0} = ({0} << 1) * 5 + bytes[i - 1] - 48;", GetVarname(decimal1.Name, ""));
 
 						foreach (var hex1 in state.Hexes)
-							_main.WriteLine("{0} = ({0} << 4) + GetHexDigit(bytes[i - 1]);", GetVarname(hex1.Name, ""));
+							_main.WriteLine("{0} = ({0} << 4) + AsciiCodeToHex[bytes[i - 1]];", GetVarname(hex1.Name, ""));
+						//	_main.WriteLine("{0} = ({0} << 4) + GetHexDigit(bytes[i - 1]);", GetVarname(hex1.Name, ""));
 					}
 				}
 
@@ -342,66 +346,86 @@ namespace SipDfaCompiler
 
 		private void GenerateGetHexDigitFunction()
 		{
-			_main.WriteLine("private int GetHexDigit(byte ch)");
-			_main.WriteLine("{");
-			_main.WriteLine("switch (ch)");
-			_main.WriteLine("{");
-			_main.WriteLine("case (byte)'0':");
-			_main.WriteLine("return 0;");
-			_main.WriteLine("case (byte)'1':");
-			_main.WriteLine("return 1;");
-			_main.WriteLine("case (byte)'2':");
-			_main.WriteLine("return 2;");
-			_main.WriteLine("case (byte)'3':");
-			_main.WriteLine("return 3;");
-			_main.WriteLine("case (byte)'4':");
-			_main.WriteLine("return 4;");
-			_main.WriteLine("case (byte)'5':");
-			_main.WriteLine("return 5;");
-			_main.WriteLine("case (byte)'6':");
-			_main.WriteLine("return 6;");
-			_main.WriteLine("case (byte)'7':");
-			_main.WriteLine("return 7;");
-			_main.WriteLine("case (byte)'8':");
-			_main.WriteLine("return 8;");
-			_main.WriteLine("case (byte)'9':");
-			_main.WriteLine("return 9;");
-			_main.WriteLine("}");
+			_main.WriteLine("public static readonly byte[] AsciiCodeToHex = new byte[256] {");
+			_main.WriteLine("0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,");
+			_main.WriteLine("0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,");
+			_main.WriteLine("0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,");
+			_main.WriteLine("0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,");
+			_main.WriteLine("0xff, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,");
+			_main.WriteLine("0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,");
+			_main.WriteLine("0xff, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,");
+			_main.WriteLine("0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,");
+			_main.WriteLine("0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,");
+			_main.WriteLine("0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,");
+			_main.WriteLine("0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,");
+			_main.WriteLine("0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,");
+			_main.WriteLine("0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,");
+			_main.WriteLine("0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,");
+			_main.WriteLine("0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,");
+			_main.WriteLine("0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,");
+			_main.WriteLine("};");
 
-			_main.WriteLine("switch (ch)");
-			_main.WriteLine("{");
-			_main.WriteLine("case (byte)'a':");
-			_main.WriteLine("return 10;");
-			_main.WriteLine("case (byte)'b':");
-			_main.WriteLine("return 11;");
-			_main.WriteLine("case (byte)'c':");
-			_main.WriteLine("return 12;");
-			_main.WriteLine("case (byte)'d':");
-			_main.WriteLine("return 13;");
-			_main.WriteLine("case (byte)'e':");
-			_main.WriteLine("return 14;");
-			_main.WriteLine("case (byte)'f':");
-			_main.WriteLine("return 15;");
-			_main.WriteLine("}");
 
-			_main.WriteLine("switch (ch)");
-			_main.WriteLine("{");
-			_main.WriteLine("case (byte)'A':");
-			_main.WriteLine("return 10;");
-			_main.WriteLine("case (byte)'B':");
-			_main.WriteLine("return 11;");
-			_main.WriteLine("case (byte)'C':");
-			_main.WriteLine("return 12;");
-			_main.WriteLine("case (byte)'D':");
-			_main.WriteLine("return 13;");
-			_main.WriteLine("case (byte)'E':");
-			_main.WriteLine("return 14;");
-			_main.WriteLine("case (byte)'F':");
-			_main.WriteLine("return 15;");
-			_main.WriteLine("}");
+			//_main.WriteLine("private int GetHexDigit(byte ch)");
+			//_main.WriteLine("{");
+			//_main.WriteLine("switch (ch)");
+			//_main.WriteLine("{");
+			//_main.WriteLine("case (byte)'0':");
+			//_main.WriteLine("return 0;");
+			//_main.WriteLine("case (byte)'1':");
+			//_main.WriteLine("return 1;");
+			//_main.WriteLine("case (byte)'2':");
+			//_main.WriteLine("return 2;");
+			//_main.WriteLine("case (byte)'3':");
+			//_main.WriteLine("return 3;");
+			//_main.WriteLine("case (byte)'4':");
+			//_main.WriteLine("return 4;");
+			//_main.WriteLine("case (byte)'5':");
+			//_main.WriteLine("return 5;");
+			//_main.WriteLine("case (byte)'6':");
+			//_main.WriteLine("return 6;");
+			//_main.WriteLine("case (byte)'7':");
+			//_main.WriteLine("return 7;");
+			//_main.WriteLine("case (byte)'8':");
+			//_main.WriteLine("return 8;");
+			//_main.WriteLine("case (byte)'9':");
+			//_main.WriteLine("return 9;");
+			//_main.WriteLine("}");
 
-			_main.WriteLine("throw new ArgumentOutOfRangeException(string.Format(\"GetHexDigit: {0} is not hex digit\", ch));");
-			_main.WriteLine("}");
+			//_main.WriteLine("switch (ch)");
+			//_main.WriteLine("{");
+			//_main.WriteLine("case (byte)'a':");
+			//_main.WriteLine("return 10;");
+			//_main.WriteLine("case (byte)'b':");
+			//_main.WriteLine("return 11;");
+			//_main.WriteLine("case (byte)'c':");
+			//_main.WriteLine("return 12;");
+			//_main.WriteLine("case (byte)'d':");
+			//_main.WriteLine("return 13;");
+			//_main.WriteLine("case (byte)'e':");
+			//_main.WriteLine("return 14;");
+			//_main.WriteLine("case (byte)'f':");
+			//_main.WriteLine("return 15;");
+			//_main.WriteLine("}");
+
+			//_main.WriteLine("switch (ch)");
+			//_main.WriteLine("{");
+			//_main.WriteLine("case (byte)'A':");
+			//_main.WriteLine("return 10;");
+			//_main.WriteLine("case (byte)'B':");
+			//_main.WriteLine("return 11;");
+			//_main.WriteLine("case (byte)'C':");
+			//_main.WriteLine("return 12;");
+			//_main.WriteLine("case (byte)'D':");
+			//_main.WriteLine("return 13;");
+			//_main.WriteLine("case (byte)'E':");
+			//_main.WriteLine("return 14;");
+			//_main.WriteLine("case (byte)'F':");
+			//_main.WriteLine("return 15;");
+			//_main.WriteLine("}");
+
+			//_main.WriteLine("throw new ArgumentOutOfRangeException(string.Format(\"GetHexDigit: {0} is not hex digit\", ch));");
+			//_main.WriteLine("}");
 		}
 	}
 }

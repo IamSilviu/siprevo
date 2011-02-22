@@ -60,8 +60,8 @@ namespace SipMessageTest
 			Assert.AreEqual("user", ParseAll("ACK sip:user:password@domain SIP/2.0\r\n\r\n").RequestUri.User.ToString());
 			Assert.AreEqual("user", ParseAll("ACK sip:user@domain SIP/2.0\r\n\r\n").RequestUri.User.ToString());
 			Assert.AreEqual("user", ParseAll("ACK sip:user:password@domain:5060 SIP/2.0\r\n\r\n").RequestUri.User.ToString());
-			Assert.IsTrue(ParseAll("ACK sip:domain SIP/2.0\r\n\r\n").RequestUri.User.IsEmpty);
-			Assert.IsTrue(ParseAll("ACK sip:domain:5060;lr SIP/2.0\r\n\r\n").RequestUri.User.IsEmpty);
+			Assert.IsTrue(ParseAll("ACK sip:domain SIP/2.0\r\n\r\n").RequestUri.User.IsInvalid);
+			Assert.IsTrue(ParseAll("ACK sip:domain:5060;lr SIP/2.0\r\n\r\n").RequestUri.User.IsInvalid);
 		}
 
 		[Test]
@@ -70,8 +70,8 @@ namespace SipMessageTest
 			Assert.AreEqual("user", ParseAll("ACK sips:user:password@domain SIP/2.0\r\n\r\n").RequestUri.User.ToString());
 			Assert.AreEqual("user", ParseAll("ACK sips:user@domain SIP/2.0\r\n\r\n").RequestUri.User.ToString());
 			Assert.AreEqual("user", ParseAll("ACK sips:user:password@domain:5060 SIP/2.0\r\n\r\n").RequestUri.User.ToString());
-			Assert.IsTrue(ParseAll("ACK sips:domain SIP/2.0\r\n\r\n").RequestUri.User.IsEmpty);
-			Assert.IsTrue(ParseAll("ACK sips:domain:5060;lr SIP/2.0\r\n\r\n").RequestUri.User.IsEmpty);
+			Assert.IsTrue(ParseAll("ACK sips:domain SIP/2.0\r\n\r\n").RequestUri.User.IsInvalid);
+			Assert.IsTrue(ParseAll("ACK sips:domain:5060;lr SIP/2.0\r\n\r\n").RequestUri.User.IsInvalid);
 		}
 
 		[Test]
@@ -142,7 +142,7 @@ namespace SipMessageTest
 		public void It_should_parse_ms_received_param_in_uri()
 		{
 			Assert.AreEqual("A123F", ParseAll("X sip:domain;ms-received-cid=A123F SIP/2.0\r\n\r\n").RequestUri.MsReceivedCid.ToString());
-			Assert.IsTrue(ParseAll("X sips:user:password@domain SIP/2.0\r\n\r\n").RequestUri.MsReceivedCid.IsEmpty);
+			Assert.IsTrue(ParseAll("X sips:user:password@domain SIP/2.0\r\n\r\n").RequestUri.MsReceivedCid.IsInvalid);
 		}
 
 		[Test]
@@ -170,7 +170,7 @@ namespace SipMessageTest
 			Assert.AreEqual(";  proxy=replace", dfa.Contact[1].ProxyReplace.ToString());
 			Assert.AreEqual(";proxy=replace", dfa.Contact[2].ProxyReplace.ToString());
 			Assert.AreEqual(";proxy=replace", dfa.Contact[3].ProxyReplace.ToString());
-			Assert.IsTrue(dfa.Contact[4].ProxyReplace.IsEmpty);
+			Assert.IsTrue(dfa.Contact[4].ProxyReplace.IsInvalid);
 		}
 
 		[Test]
@@ -304,7 +304,7 @@ namespace SipMessageTest
 		public void It_should_parse_Authorization_header_with_empty_gssapi_data()
 		{
 			Assert.IsTrue(ParseHeader("Authorization: NTLM gssapi-data=\"\"")
-				.Authorization[0].GssapiData.IsEmpty);
+				.Authorization[0].GssapiData.IsInvalid);
 		}
 
 		[Test]
@@ -330,10 +330,10 @@ namespace SipMessageTest
 		[Test]
 		public void It_should_parse_User_Agent()
 		{
-			Assert.Inconclusive();
-			//Assert.AreEqual("abc", ParseHeader("User-Agent: abc").UserAgent.ToString());
-			//Assert.AreEqual("a.b*c", ParseHeader("User-Agent: a.b*c").UserAgent.ToString());
-			//Assert.AreEqual("abc/123", ParseHeader("User-Agent: abc/123").UserAgent.ToString());
+			Assert.AreEqual("abc", ParseHeader("User-Agent: abc").Product.ToString());
+			Assert.AreEqual("a.b*c", ParseHeader("User-Agent: a.b*c").Product.ToString());
+			Assert.AreEqual("abc", ParseHeader("User-Agent: abc/123").Product.ToString());
+			Assert.AreEqual("123", ParseHeader("User-Agent: abc/123").Version.ToString());
 		}
 
 		[Test]

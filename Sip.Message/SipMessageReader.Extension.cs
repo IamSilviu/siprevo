@@ -28,7 +28,7 @@ namespace Sip.Message
 		{
 			get
 			{
-				if (AddrSpec1.Hostport.Host.IsEmpty == false)
+				if (AddrSpec1.Hostport.Host.IsValid)
 					return AddrSpec1;
 				return AddrSpec2;
 			}
@@ -61,7 +61,7 @@ namespace Sip.Message
 		{
 			get
 			{
-				return _MsReceivedCid.IsValid == false ? MsReceivedCid : _MsReceivedCid;
+				return _MsReceivedCid.IsValid == false ? (ByteArrayPart)MsReceivedCid : _MsReceivedCid;
 			}
 			set
 			{
@@ -186,7 +186,7 @@ namespace Sip.Message
 			{
 				get
 				{
-					if (AddrSpec1.Hostport.Host.IsEmpty == false)
+					if (AddrSpec1.Hostport.Host.IsValid)
 						return AddrSpec1;
 					return AddrSpec2;
 				}
@@ -360,7 +360,7 @@ namespace Sip.Message
 		public void LoadTables()
 		{
 			LoadTables(
-				Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\SipMessageReader.dfa");
+				Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\Sip.Message.dfa");
 		}
 
 		public bool IsRequest
@@ -594,25 +594,25 @@ namespace Sip.Message
 	/// <summary>
 	/// this class should be removed
 	/// </summary>
-	public static class SipMessageReaderExtension
-	{
-		public static IPAddress IP(this ByteArrayPart part)
-		{
-			IPAddress ip;
+	//public static class SipMessageReaderExtension
+	//{
+	//    public static IPAddress IP(this ByteArrayPart part)
+	//    {
+	//        IPAddress ip;
 
-			if (part.IsValid == true)
-			{
-				if (IPAddress.TryParse(part.ToString(), out ip) == false)
-				{
-					ip = IPAddress.None;
-				}
-			}
-			else
-			{
-				ip = IPAddress.None;
-			}
+	//        if (part.IsValid == true)
+	//        {
+	//            if (IPAddress.TryParse(part.ToString(), out ip) == false)
+	//            {
+	//                ip = IPAddress.None;
+	//            }
+	//        }
+	//        else
+	//        {
+	//            ip = IPAddress.None;
+	//        }
 
-			return ip;
-		}
-	}
+	//        return ip;
+	//    }
+	//}
 }

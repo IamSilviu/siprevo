@@ -400,8 +400,8 @@ SIP-messageX.message-headerX.extension-header.SIP-If-Match.entity-tag.token -> L
 //
 // -------------------------------------------------------------------------------[ User-Agent
 //
-SIP-messageX.message-headerX.User-Agent.server-val.product.token -> LookupRange = Product;
-SIP-messageX.message-headerX.User-Agent.server-val.product.product-version.token -> LookupRange = Version;
+SIP-messageX.message-headerX.User-Agent.server-val.product.token -> LookupRange = UserAgent.Product;
+SIP-messageX.message-headerX.User-Agent.server-val.product.product-version.token -> LookupRange = UserAgent.Version;
 
 //
 //

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Threading;
 using Sip.Message;
 
 namespace SipDfaTester
@@ -12,7 +13,7 @@ namespace SipDfaTester
 			int start = Environment.TickCount;
 			var dfa = new SipMessageReader();
 			//dfa.LoadTables(@"..\..\..\Sip.Message\SipMessageReader.dfa");
-			dfa.LoadTables(@"..\..\..\SipDfaCompiler\bin\Debug\SipMessageReader.dfa");
+			dfa.LoadTables(@"..\..\..\SipDfaCompiler\bin\Debug\Sip.Message.dfa");
 			int loadTablesDelay = Environment.TickCount - start;
 			start = Environment.TickCount;
 			dfa.SetDefaultValue();
@@ -281,13 +282,14 @@ namespace SipDfaTester
 			//Console.ReadKey(true);
 
 			Console.WriteLine("Testing speed");
-
+			
 			int repeat = 100000;
 			int start2 = Environment.TickCount;
 			for (int i = 0; i < repeat; i++)
 			{
 				dfa.SetDefaultValue();
 				dfa.Parse(message1, 0, message1.Length);
+				dfa.SetArray(message1);
 			}
 			int spent = Environment.TickCount - start2;
 

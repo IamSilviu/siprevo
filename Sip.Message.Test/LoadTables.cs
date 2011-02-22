@@ -11,7 +11,7 @@ namespace SipMessageTest
 		public void Load()
 		{
 			var dfa = new SipMessageReader();
-			dfa.LoadTables(@"..\..\..\Sip.Message\SipMessageReader.dfa");
+			dfa.LoadTables(@"..\..\..\Sip.Message\Sip.Message.dfa");
 			dfa.SetDefaultValue();
 			dfa.Parse(new byte[] { 0 }, 0, 1);
 		}

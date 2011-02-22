@@ -99,5 +99,21 @@ namespace SipMessageTest
 			Assert.IsFalse(part1.IsEqualValue(bytes4));
 			Assert.IsFalse(part1.IsEqualValue(bytes5));
 		}
+
+		[Test]
+		public void It_should_return_valid_hash_code()
+		{
+			var part1 = new ByteArrayPart();
+			Assert.AreEqual(0, part1.GetHashCode());
+
+			var part2 = new ByteArrayPart(new byte[] { 0, 1, 2, 3, }, 0, 4);
+			Assert.AreEqual(0x00010203, part2.GetHashCode());
+
+			var part3 = new ByteArrayPart(new byte[] { 0, 1, 2, 3, 4, 5, 6, }, 0, 7);
+			Assert.AreEqual(0x00020406, part3.GetHashCode());
+
+			var part4 = new ByteArrayPart(new byte[] { 0, 1, 2, 3, 4, 5, }, 0, 6);
+			Assert.AreEqual(0x00010305, part4.GetHashCode());
+		}
 	}
 }

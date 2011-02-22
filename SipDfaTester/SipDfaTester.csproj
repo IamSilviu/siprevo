@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;OPTIMIZED</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -26,7 +26,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;OPTIMIZED</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -45,11 +45,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Sip.Message\BeginEnd.cs">
+      <Link>BeginEnd.cs</Link>
+    </Compile>
     <Compile Include="..\Sip.Message\ByteArrayPart.cs">
       <Link>ByteArrayPart.cs</Link>
     </Compile>
     <Compile Include="..\SipDfaCompiler\bin\Debug\SipMessageReader.cs">
       <Link>SipMessageReader.cs</Link>
+    </Compile>
+    <Compile Include="..\SipDfaCompiler\bin\Debug\SipMessageReaderOptimized.cs">
+      <Link>SipMessageReaderOptimized.cs</Link>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
