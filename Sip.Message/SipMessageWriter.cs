@@ -13,15 +13,136 @@ namespace Sip.Message
 	public partial class SipMessageWriter
 		: ByteArrayWriter
 	{
+		#region struct Range {...}
+
+		protected struct Range
+		{
+			public Range(int offset, int length)
+			{
+				Offset = offset;
+				Length = length;
+			}
+
+			public Range(int offset, ByteArrayPart part)
+			{
+				Offset = offset;
+				Length = part.Length;
+			}
+
+			public readonly int Offset;
+			public readonly int Length;
+
+			public ByteArrayPart ToByteArrayPart(byte[] bytes, int offset)
+			{
+				if (Length == 0)
+					return new ByteArrayPart();
+
+				return new ByteArrayPart()
+				{
+					Bytes = bytes,
+					Begin = offset + Offset,
+					End = offset + Offset + Length,
+				};
+			}
+		}
+
+		#endregion
+
+		protected Range callId;
+		protected Range fromAddrspec;
+		protected Range fromTag;
+		protected Range toAddrspec;
+		protected Range toTag;
+		protected Range epid;
+
 		public SipMessageWriter()
 			: base(128, 2048)
 		{
+			InitializeProperties();
 		}
 
 		public SipMessageWriter(int size)
 			: base(128, size)
 		{
+			InitializeProperties();
 		}
+
+		#region Properties
+
+		public void InitializeProperties()
+		{
+			Method = Methods.None;
+			StatusCode = 0;
+			CSeq = 0;
+			Expires = int.MinValue;
+
+			callId = new Range();
+			fromAddrspec = new Range();
+			fromTag = new Range();
+			toAddrspec = new Range();
+			toTag = new Range();
+			epid = new Range();
+		}
+
+		public Methods Method { get; private set; }
+		public int StatusCode { get; private set; }
+		public int CSeq { get; private set; }
+		public int Expires { get; private set; }
+
+		public bool IsRequest
+		{
+			get { return StatusCode == 0; }
+		}
+
+		public bool IsResponse
+		{
+			get { return StatusCode > 0; }
+		}
+
+		public ByteArrayPart CallId
+		{
+			get { return callId.ToByteArrayPart(Buffer, Segment.Offset); }
+		}
+
+		public ByteArrayPart FromAddrspec
+		{
+			get { return fromAddrspec.ToByteArrayPart(Buffer, Segment.Offset); }
+		}
+
+		public ByteArrayPart FromTag
+		{
+			get { return fromTag.ToByteArrayPart(Buffer, Segment.Offset); }
+		}
+
+		public ByteArrayPart ToAddrspec
+		{
+			get { return toAddrspec.ToByteArrayPart(Buffer, Segment.Offset); }
+		}
+
+		public ByteArrayPart ToTag
+		{
+			get { return toTag.ToByteArrayPart(Buffer, Segment.Offset); }
+		}
+
+		public ByteArrayPart Epid
+		{
+			get { return epid.ToByteArrayPart(Buffer, Segment.Offset); }
+		}
+
+		#endregion
+
+		#region Custom Headers Writer
+
+		public event Action<SipMessageWriter> WriteCustomHeadersEvent;
+
+		public void WriteCustomHeaders()
+		{
+			var handler = WriteCustomHeadersEvent;
+			if (handler != null)
+				handler(this);
+		}
+
+		#endregion
 
 		public void WriteHeader(Header header)
 		{
@@ -38,6 +159,8 @@ namespace Sip.Message
 
 		public void WriteStatusLine(int statusCode, ByteArrayPart responsePhrase)
 		{
+			StatusCode = statusCode;
+
 			Write(C.SIP_2_0, C.SP, statusCode, C.SP);
 			if (responsePhrase.IsValid)
 				Write(responsePhrase);
@@ -120,6 +243,7 @@ namespace Sip.Message
 
 		public void WriteExpires(int expires)
 		{
+			Expires = expires;
 			Write(C.Expires, C.HCOLON, C.SP, expires, C.CRLF);
 		}
 
@@ -184,14 +308,16 @@ namespace Sip.Message
 			}
 		}
 
-		public void WriteTo(Sip.Message.Header header, ByteArrayPart epid)
+		public void WriteTo(Sip.Message.Header header, ByteArrayPart epid1)
 		{
 			if (header.Name.IsValid == true)
 			{
 				Write(header.Name, C.HCOLON, header.Value);
-				if (epid.IsValid == true)
+				if (epid1.IsValid == true)
 				{
-					Write(C.SEMI, C.epid, C.EQUAL, epid);
+					Write(C.SEMI, C.epid, C.EQUAL);
+					epid = new Range(end, epid1.Length);
+					Write(epid1);
 				}
 				Write(C.CRLF);
 			}
@@ -386,8 +512,17 @@ namespace Sip.Message
 
 		// vf:...
 
+		public void WriteStatusLine(StatusCodes statusCode)
+		{
+			StatusCode = (int)statusCode;
+
+			Write(C.SIP_2_0, C.SP, (int)statusCode, C.SP, statusCode.GetReason(), C.CRLF);
+		}
+
 		public void WriteStatusLine(StatusCodes statusCode, ByteArrayPart reason)
 		{
+			StatusCode = (int)statusCode;
+
 			Write(C.SIP_2_0, C.SP, (int)statusCode, C.SP, reason, C.CRLF);
 		}
 
@@ -419,6 +554,15 @@ namespace Sip.Message
 			contentLengthEnd = -1;
 		}
 
+		public void RewriteContentLength()
+		{
+			if (contentLengthEnd < 0)
+				throw new InvalidOperationException(@"WriteContentLength must be called before RewriteContentLength");
+
+			ReversWrite((uint)(end - contentLengthEnd - C.CRLF.Length * 2), ref contentLengthEnd);
+			contentLengthEnd = -1;
+		}
+
 		public void WriteXErrorDetails(ByteArrayPart details)
 		{
 			Write(C.x_Error_Details, C.HCOLON, C.SP, details, C.CRLF);
@@ -429,19 +573,48 @@ namespace Sip.Message
 			Write(C.To__, C.LAQUOT, uri, C.RAQUOT, C._tag_, tag, C.CRLF);
 		}
 
-		public void WriteFrom(ByteArrayPart uri, ByteArrayPart tag)
+		public void WriteTo(ByteArrayPart uri, ByteArrayPart tag, ByteArrayPart epid1)
 		{
-			Write(C.From__, C.LAQUOT, uri, C.RAQUOT, C._tag_, tag, C.CRLF);
+			Write(C.To__, C.LAQUOT);
+			toAddrspec = new Range(end, uri.Length);
+			Write(uri, C.RAQUOT, C._tag_);
+			toTag = new Range(end, tag.Length);
+			Write(tag, C._epid_);
+			epid = new Range(end, epid1.Length);
+			Write(epid1, C.CRLF);
 		}
 
-		public void WriteCallId(ByteArrayPart callId)
+		public void WriteFrom(ByteArrayPart uri, ByteArrayPart tag)
 		{
-			Write(C.Call_ID__, callId, C.CRLF);
+			Write(C.From__, C.LAQUOT);
+			fromAddrspec = new Range(end, uri.Length);
+			Write(uri, C.RAQUOT, C._tag_);
+			fromTag = new Range(end, tag.Length);
+			Write(tag, C.CRLF);
+		}
+
+		public void WriteCallId(ByteArrayPart callIdValue)
+		{
+			Write(C.Call_ID__);
+			callId = new Range(end, callIdValue.Length);
+			Write(callIdValue, C.CRLF);
 		}
 
 		public void WriteEventPresence()
 		{
 			Write(C.Event__presence, C.CRLF);
+		}
+
+		public void WriteSubscriptionState(int expires)
+		{
+			Write(C.Subscription_State__);
+
+			if (expires > 0)
+				Write(C.active, C._expires_, expires);
+			else
+				Write(C.terminated);
+
+			Write(C.CRLF);
 		}
 
 		public void WriteSubscriptionState(SubscriptionStates state, int expires)
@@ -463,11 +636,16 @@ namespace Sip.Message
 			Write(C.Content_Type__, type, C.SLASH, subtype, C.CRLF);
 		}
 
+		public void WriteContentType(ByteArrayPart value)
+		{
+			Write(C.Content_Type__, value, C.CRLF);
+		}
+
 		public void WriteVia(Transports transport, IPEndPoint endpoint, int branch)
 		{
 			Write(C.Via__SIP_2_0_, transport.ToByteArrayPart(), C.SP);
 			Write(endpoint);
-			Write(C._branch_);
+			Write(C._branch_z9hG4bK);
 			WriteAsHex8(branch);
 			Write(C.CRLF);
 		}
@@ -486,9 +664,31 @@ namespace Sip.Message
 			Write(C.CRLF);
 		}
 
-		//public void WriteXErrorDetailsAbsentParameter(HeaderNames header, )
-		//{
-		//    Write(C.x_Error_Details, C.HCOLON, C.SP, details, C.CRLF);
-		//}
+		public void WriteContentTransferEncodingBinary()
+		{
+			Write(C.Content_Transfer_Encoding__binary__);
+		}
+
+		public void WriteSipEtag(int value)
+		{
+			Write(C.SIP_ETag__);
+			WriteAsHex8(value);
+			Write(C.CRLF);
+		}
+
+		public void WriteContentTypeMultipart(ByteArrayPart contentType)
+		{
+			Write(C.Content_Type__multipart_related_type___, contentType, C.__boundary_OFFICESIP2011VITALIFOMINE__);
+		}
+
+		public void WriteBoundary()
+		{
+			Write(C.__OFFICESIP2011VITALIFOMINE__1);
+		}
+
+		public void WriteBoundaryEnd()
+		{
+			Write(C.__OFFICESIP2011VITALIFOMINE__2);
+		}
 	}
 }

@@ -88,7 +88,7 @@ namespace SipMessageTest
 				"Require: token1, token2, token3",
 				"Require: token4");
 
-			Assert.AreEqual(3, dfa.Count.RequireCount);
+			Assert.AreEqual(4, dfa.Count.RequireCount);
 			Assert.AreEqual("token1", dfa.Require[0].ToString());
 			Assert.AreEqual("token2", dfa.Require[1].ToString());
 			Assert.AreEqual("token3", dfa.Require[2].ToString());
@@ -102,7 +102,7 @@ namespace SipMessageTest
 				"Proxy-Require: token1, token2, token3",
 				"Proxy-Require: token4");
 
-			Assert.AreEqual(3, dfa.Count.ProxyRequireCount);
+			Assert.AreEqual(4, dfa.Count.ProxyRequireCount);
 			Assert.AreEqual("token1", dfa.ProxyRequire[0].ToString());
 			Assert.AreEqual("token2", dfa.ProxyRequire[1].ToString());
 			Assert.AreEqual("token3", dfa.ProxyRequire[2].ToString());
@@ -165,7 +165,7 @@ namespace SipMessageTest
 				"Contact: <sip:domain>;proxy=replace",
 				"Contact: <sip:domain>;proxy=replacewrong");
 
-			Assert.AreEqual(4, dfa.Count.ContactCount);
+			Assert.AreEqual(5, dfa.Count.ContactCount);
 			Assert.AreEqual(";proxy=replace", dfa.Contact[0].ProxyReplace.ToString());
 			Assert.AreEqual(";  proxy=replace", dfa.Contact[1].ProxyReplace.ToString());
 			Assert.AreEqual(";proxy=replace", dfa.Contact[2].ProxyReplace.ToString());
@@ -181,7 +181,7 @@ namespace SipMessageTest
 				"Contact: <sip:domain>;expires=0",
 				"Contact: <sip:domain>");
 
-			Assert.AreEqual(2, dfa.Count.ContactCount);
+			Assert.AreEqual(3, dfa.Count.ContactCount);
 			Assert.AreEqual(123, dfa.Contact[0].Expires);
 			Assert.AreEqual(0, dfa.Contact[1].Expires);
 			Assert.IsTrue(dfa.Contact[2].Expires < 0);
@@ -194,7 +194,7 @@ namespace SipMessageTest
 				"Contact: <sip:domain1>",
 				"Contact: sip:domain2");
 
-			Assert.AreEqual(1, dfa.Count.ContactCount);
+			Assert.AreEqual(2, dfa.Count.ContactCount);
 			Assert.AreEqual("domain1", dfa.Contact[0].AddrSpec.Hostport.Host.ToString());
 			Assert.AreEqual("domain2", dfa.Contact[1].AddrSpec.Hostport.Host.ToString());
 		}
@@ -206,7 +206,7 @@ namespace SipMessageTest
 				"Route: <sip:domain1>, <sip:domain2>  ,<sip:domain3>",
 				"Route: <sip:domain4>");
 
-			Assert.AreEqual(3, dfa.Count.RouteCount);
+			Assert.AreEqual(4, dfa.Count.RouteCount);
 			Assert.AreEqual(" <sip:domain1>", dfa.Route[0].CommaAndValue.ToString());
 			Assert.AreEqual(", <sip:domain2>  ", dfa.Route[1].CommaAndValue.ToString());
 			Assert.AreEqual(",<sip:domain3>", dfa.Route[2].CommaAndValue.ToString());
@@ -220,7 +220,7 @@ namespace SipMessageTest
 				"Record-Route: <sip:domain1>, <sip:domain2>  ,<sip:domain3>",
 				"Record-Route: <sip:domain4>");
 
-			Assert.AreEqual(3, dfa.Count.RecordRouteCount);
+			Assert.AreEqual(4, dfa.Count.RecordRouteCount);
 			Assert.AreEqual(" <sip:domain1>", dfa.RecordRoute[0].CommaAndValue.ToString());
 			Assert.AreEqual(", <sip:domain2>  ", dfa.RecordRoute[1].CommaAndValue.ToString());
 			Assert.AreEqual(",<sip:domain3>", dfa.RecordRoute[2].CommaAndValue.ToString());
@@ -234,7 +234,7 @@ namespace SipMessageTest
 				"Via:SIP/2.0/TCP 127.0.0.1:1801,SIP/2.0/TCP 127.0.0.2:1802,SIP/2.0/TCP 127.0.0.3:1803",
 				"Via:  SIP/2.0/TCP 127.0.0.4:1804  ,  SIP/2.0/TCP 127.0.0.5:1805  ,  SIP/2.0/TCP 127.0.0.6:1806");
 
-			Assert.AreEqual(5, dfa.Count.ViaCount);
+			Assert.AreEqual(6, dfa.Count.ViaCount);
 			Assert.AreEqual("SIP/2.0/TCP 127.0.0.1:1801", dfa.Via[0].CommaAndValue.ToString());
 			Assert.AreEqual(",SIP/2.0/TCP 127.0.0.2:1802", dfa.Via[1].CommaAndValue.ToString());
 			Assert.AreEqual(",SIP/2.0/TCP 127.0.0.3:1803", dfa.Via[2].CommaAndValue.ToString());

@@ -220,7 +220,7 @@ namespace Sip.Message
 					return DoesNotExistAnywhere;
 
 				case StatusCodes.None:
-					throw new ArgumentOutOfRangeException(@"");
+					throw new ArgumentOutOfRangeException(@"statusCode: " + statusCode.ToString());
 				default:
 					return NoReason;
 			}

@@ -14,11 +14,6 @@ namespace Sip.Message
 		{
 		}
 
-		public void WriteResponse(SipMessageReader request, StatusCodes statusCode)
-		{
-			WriteResponse(request, statusCode, statusCode.GetReason());
-		}
-
 		public void WriteStatusLineToTop(StatusCodes statusCode)
 		{
 			WriteStatusLineToTop(statusCode, statusCode.GetReason());
@@ -34,45 +29,91 @@ namespace Sip.Message
 			WriteToTop(C.SIP_2_0);
 		}
 
-		public void WriteResponse(SipMessageReader request, StatusCodes statusCode, ByteArrayPart reasonPhrase)
+		public void WriteResponse(SipMessageReader request, StatusCodes statusCode)
 		{
-			WriteStatusLine(statusCode, reasonPhrase);
+			WriteResponse(request, statusCode, GenerateTag());
+		}
 
-			int viaCount = 0;
+		public void WriteResponse(SipMessageReader request, StatusCodes statusCode, ByteArrayPart localTag)
+		{
+			WriteStatusLine(statusCode);
+			CopyViaToFromCallIdRecordRouteCSeq(request, statusCode, localTag);
+			WriteContentLength(0);
+			WriteCustomHeaders();
+			WriteCRLF();
+		}
+
+		public void CopyViaToFromCallIdRecordRouteCSeq(SipMessageReader request, StatusCodes statusCode)
+		{
+			CopyViaToFromCallIdRecordRouteCSeq(request, statusCode, GenerateTag());
+		}
+
+		public void CopyViaToFromCallIdRecordRouteCSeq(SipMessageReader request, StatusCodes statusCode, ByteArrayPart localTag)
+		{
+			WriteCallId(request.CallId);
+			WriteCseq(request.CSeq.Value, request.CSeq.Method);
+
 			for (int i = 0; i < request.Count.HeaderCount; i++)
 			{
 				switch (request.Headers[i].HeaderName)
 				{
-					case HeaderNames.CallId:
-					case HeaderNames.From:
 					case HeaderNames.RecordRoute:
-					case HeaderNames.CSeq:
+					case HeaderNames.Via:
 						WriteHeader(request.Headers[i]);
 						break;
 
-					case HeaderNames.To:
-						if (request.To.Tag.IsValid || statusCode == StatusCodes.Trying || request.Method == Methods.Cancelm)
-							WriteHeader(request.Headers[i]);
-						else
-							WriteHeaderWithTag(request.Headers[i], GenerateTag());
+					case HeaderNames.From:
+						Write(C.From__);
+
+						fromAddrspec = new Range(end + request.From.AddrSpec.Value.Begin -
+							request.Headers[i].Value.Begin, request.From.AddrSpec.Value.Length);
+
+						if (request.From.Tag.IsValid)
+							fromTag = new Range(end + request.From.Tag.Begin -
+								request.Headers[i].Value.Begin, request.From.Tag.Length);
+
+						if (request.From.Epid.IsValid)
+							epid = new Range(end + request.From.Epid.Begin -
+								request.Headers[i].Value.Begin, request.From.Epid.Length);
+
+						Write(request.Headers[i].Value);
+						WriteCRLF();
 						break;
 
-					case HeaderNames.Via:
-						// здесь ошибка!!!
-						WriteVia(request.Headers[i], request.Via[viaCount++]);
+					case HeaderNames.To:
+						Write(C.To__);
+
+						toAddrspec = new Range(end + request.To.AddrSpec.Value.Begin -
+							request.Headers[i].Value.Begin, request.To.AddrSpec.Value.Length);
+
+						if (request.To.Tag.IsValid)
+							toTag = new Range(end + request.To.Tag.Begin -
+								request.Headers[i].Value.Begin, request.To.Tag.Length);
+
+						Write(request.Headers[i].Value);
+
+						if (request.To.Tag.IsInvalid && statusCode != StatusCodes.Trying && request.Method != Methods.Cancelm)
+						{
+							Write(C._tag_);
+							toTag = new Range(end, localTag.Length);
+							Write(localTag);
+						}
+
+						WriteCRLF();
 						break;
 				}
 			}
-
-			WriteContentLength(0);
-			//WriteCRLF();
 		}
 
+		// TODO: should be removed
+		//
 		public void WriteResponseHeaders(SipMessageReader request, StatusCodes statusCode)
 		{
 			WriteResponseHeaders(request, statusCode, GenerateTag());
 		}
 
+		// TODO: should be removed
+		//
 		public void WriteResponseHeaders(SipMessageReader request, StatusCodes statusCode, ByteArrayPart totag)
 		{
 			int viaCount = 0;
@@ -102,16 +143,19 @@ namespace Sip.Message
 			}
 		}
 
+		// TODO: should be removed if possible
+		//
 		public void WriteHeaders(SipMessageReader reader, ulong exclude)
 		{
 			if (HeaderNames.Via.IsMasked(exclude) == false)
-			{		for (int i = 0; i < reader.Count.ViaCount; i++)
-				if (reader.Via[i].IsRemoved == false)
-				{
-					reader.Via[i].CommaAndValue.TrimStartComma();
-					reader.Via[i].CommaAndValue.TrimSws();
-					Write(C.Via, C.HCOLON, C.SP, reader.Via[i].CommaAndValue, C.CRLF);
-				}
+			{
+				for (int i = 0; i < reader.Count.ViaCount; i++)
+					if (reader.Via[i].IsRemoved == false)
+					{
+						reader.Via[i].CommaAndValue.TrimStartComma();
+						reader.Via[i].CommaAndValue.TrimSws();
+						Write(C.Via, C.HCOLON, C.SP, reader.Via[i].CommaAndValue, C.CRLF);
+					}
 			}
 
 			if (HeaderNames.Route.IsMasked(exclude) == false)
@@ -153,13 +197,6 @@ namespace Sip.Message
 						break;
 				}
 			}
-		}
-
-		public void WriteSipEtag(int value)
-		{
-			Write(C.SIP_ETag__);
-			WriteAsHex8(value);
-			Write(C.CRLF);
 		}
 	}
 }

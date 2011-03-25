@@ -35,6 +35,13 @@ namespace Sip.Message
 			GC.SuppressFinalize(this);
 		}
 
+		public ArraySegment<byte> Detach()
+		{
+			var oldSegment = segment;
+			segment = new ArraySegment<byte>();
+			return oldSegment;
+		}
+
 		public ArraySegment<byte> Segment
 		{
 			get { return segment; }
@@ -48,6 +55,11 @@ namespace Sip.Message
 		public int Offset
 		{
 			get { return segment.Offset + begin; }
+		}
+
+		public byte[] Buffer
+		{
+			get { return segment.Array; }
 		}
 
 		public ByteArrayPart ToByteArrayPart()
@@ -64,7 +76,7 @@ namespace Sip.Message
 		{
 			ValidateCapacity(part.Length);
 
-			Buffer.BlockCopy(part.Bytes, part.Offset, segment.Array, segment.Offset + end, part.Length);
+			System.Buffer.BlockCopy(part.Bytes, part.Offset, segment.Array, segment.Offset + end, part.Length);
 			end += part.Length;
 		}
 
@@ -125,7 +137,7 @@ namespace Sip.Message
 		{
 			ValidateCapacity(bytes.Length);
 
-			Buffer.BlockCopy(bytes, 0, segment.Array, segment.Offset + end, bytes.Length);
+			System.Buffer.BlockCopy(bytes, 0, segment.Array, segment.Offset + end, bytes.Length);
 			end += bytes.Length;
 		}
 
@@ -223,7 +235,7 @@ namespace Sip.Message
 			ValidateCapacityToTop(length);
 
 			begin -= length;
-			Buffer.BlockCopy(part.Bytes, part.Offset, segment.Array, segment.Offset + begin, length);
+			System.Buffer.BlockCopy(part.Bytes, part.Offset, segment.Array, segment.Offset + begin, length);
 		}
 
 		public void WriteToTop(Int32 value)

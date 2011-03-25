@@ -15,8 +15,8 @@ namespace Sip.Message
 			public readonly static ByteArrayPart CSeq = new ByteArrayPart(@"CSeq");
 			public readonly static ByteArrayPart Max_Forwards = new ByteArrayPart(@"Max-Forwards");
 			public readonly static ByteArrayPart Expires = new ByteArrayPart(@"Expires");
-			public readonly static ByteArrayPart Min_Expires = new ByteArrayPart( @"Min-Expires" );
-			public readonly static ByteArrayPart Content_Length = new ByteArrayPart( @"Content-Length" );
+			public readonly static ByteArrayPart Min_Expires = new ByteArrayPart(@"Min-Expires");
+			public readonly static ByteArrayPart Content_Length = new ByteArrayPart(@"Content-Length");
 			public readonly static ByteArrayPart Contact = new ByteArrayPart(@"Contact");
 			public readonly static ByteArrayPart WWW_Authenticate = new ByteArrayPart(@"WWW-Authenticate");
 			public readonly static ByteArrayPart Proxy_Authenticate = new ByteArrayPart(@"Proxy-Authenticate");
@@ -34,12 +34,12 @@ namespace Sip.Message
 			public readonly static ByteArrayPart Require = new ByteArrayPart(@"Require");
 			public readonly static ByteArrayPart Subscription_State = new ByteArrayPart(@"Subscription-State");
 			public readonly static ByteArrayPart Subscription_State__ = new ByteArrayPart(@"Subscription-State: ");
-			public readonly static ByteArrayPart Content_Transfer_Encoding = new ByteArrayPart(@"Content-Transfer-Encoding");
+			//public readonly static ByteArrayPart Content_Transfer_Encoding = new ByteArrayPart(@"Content-Transfer-Encoding");
+			public readonly static ByteArrayPart Content_Transfer_Encoding__binary__ = new ByteArrayPart("Content-Transfer-Encoding: binary\r\n");
 			public readonly static ByteArrayPart SIP_ETag__ = new ByteArrayPart(@"SIP-ETag: ");
 			public readonly static ByteArrayPart x_Error_Details = new ByteArrayPart(@"x-Error-Details");
 			public readonly static ByteArrayPart Event__presence = new ByteArrayPart(@"Event: presence");
 			public readonly static ByteArrayPart Allow__ = new ByteArrayPart(@"Allow: ");
-			
 
 			public readonly static ByteArrayPart ACK = new ByteArrayPart(@"ACK");
 			public readonly static ByteArrayPart BENOTIFY = new ByteArrayPart(@"BENOTIFY");
@@ -80,11 +80,11 @@ namespace Sip.Message
 			public readonly static ByteArrayPart Digest = new ByteArrayPart(@"Digest");
 			public readonly static ByteArrayPart NTLM = new ByteArrayPart(@"NTLM");
 			public readonly static ByteArrayPart Kerberos = new ByteArrayPart(@"Kerberos");
-			public readonly static ByteArrayPart realm = new ByteArrayPart( @"realm" );
+			public readonly static ByteArrayPart realm = new ByteArrayPart(@"realm");
 			public readonly static ByteArrayPart nonce = new ByteArrayPart(@"nonce");
 			public readonly static ByteArrayPart qop = new ByteArrayPart(@"qop");
 			public readonly static ByteArrayPart auth = new ByteArrayPart(@"auth");
-			public readonly static ByteArrayPart auth_int = new ByteArrayPart( @"auth-int" );
+			public readonly static ByteArrayPart auth_int = new ByteArrayPart(@"auth-int");
 			public readonly static ByteArrayPart algorithm = new ByteArrayPart(@"algorithm");
 			public readonly static ByteArrayPart MD5 = new ByteArrayPart(@"MD5");
 			public readonly static ByteArrayPart stale = new ByteArrayPart(@"stale");
@@ -100,7 +100,9 @@ namespace Sip.Message
 			public readonly static ByteArrayPart lr = new ByteArrayPart(@"lr");
 			public readonly static ByteArrayPart branch = new ByteArrayPart(@"branch");
 			public readonly static ByteArrayPart _branch_ = new ByteArrayPart(@";branch=");
+			public readonly static ByteArrayPart _branch_z9hG4bK = new ByteArrayPart(@";branch=z9hG4bK");
 			public readonly static ByteArrayPart epid = new ByteArrayPart(@"epid");
+			public readonly static ByteArrayPart _epid_ = new ByteArrayPart(@";epid=");
 			public readonly static ByteArrayPart transport = new ByteArrayPart(@"transport");
 			public readonly static ByteArrayPart maddr = new ByteArrayPart(@"maddr");
 			public readonly static ByteArrayPart active = new ByteArrayPart(@"active");
@@ -122,6 +124,11 @@ namespace Sip.Message
 			public readonly static ByteArrayPart ms_benotify = new ByteArrayPart(@"ms-benotify");
 
 			public readonly static ByteArrayPart _________0 = new ByteArrayPart("         0");
+
+			public readonly static ByteArrayPart Content_Type__multipart_related_type___ = new ByteArrayPart("Content-Type: multipart/related;type=\"");
+			public readonly static ByteArrayPart __boundary_OFFICESIP2011VITALIFOMINE__ = new ByteArrayPart("\";boundary=OFFICESIP2011VITALIFOMINE\r\n");
+			public readonly static ByteArrayPart __OFFICESIP2011VITALIFOMINE__1 = new ByteArrayPart("--OFFICESIP2011VITALIFOMINE\r\n");
+			public readonly static ByteArrayPart __OFFICESIP2011VITALIFOMINE__2 = new ByteArrayPart("--OFFICESIP2011VITALIFOMINE--");
 		}
 	}
 }

@@ -138,6 +138,33 @@ namespace SipMessageTest
 			Assert.AreEqual(expeted, actual);
 		}
 
+		[Test]
+		public void It_should_increase_size_of_buffer()
+		{
+			var writer = new ByteArrayWriter(1);
+
+			var block1 = new byte[] { 1, };
+			var block2 = new byte[] { 2, };
+
+			writer.Write(block1);
+			Assert.AreEqual(writer.Segment.Count, 1);
+
+			writer.Write(block2);
+			Assert.AreEqual(writer.Segment.Count, 2);
+
+			writer.Write(block1);
+			Assert.AreEqual(writer.Segment.Count, 3);
+
+			writer.Write(block2);
+			Assert.AreEqual(writer.Segment.Count, 4);
+
+			writer.Write(block1);
+			Assert.AreEqual(writer.Segment.Count, 5);
+
+			var actual = GetWritedArrayPart(writer);
+			Assert.AreEqual(new byte[] { 1, 2, 1, 2, 1 }, actual);
+		}
+
 		private byte[] GetWritedArrayPart(ByteArrayWriter writer)
 		{
 			var bytes = new byte[writer.Count];

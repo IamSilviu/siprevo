@@ -24,6 +24,13 @@ namespace Sip.Message
 
 	public partial struct Fromto
 	{
+		//public Addrspec AddrSpec;
+		// SetArray вызывается позже - AddrSpec остается без массива
+		//public void SetValidAddrspec()
+		//{
+		//    AddrSpec = (AddrSpec1.Hostport.Host.IsValid) ? AddrSpec1 : AddrSpec2;
+		//}
+
 		public Addrspec AddrSpec
 		{
 			get
@@ -363,6 +370,15 @@ namespace Sip.Message
 				Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\Sip.Message.dfa");
 		}
 
+		partial void OnAfterParse()
+		{
+			//	From.SetValidAddrspec();
+			//	To.SetValidAddrspec();
+
+			if (IsFinal)
+				CorrectCounts();
+		}
+
 		public bool IsRequest
 		{
 			get { return StatusCode.Value == int.MinValue; }
@@ -403,7 +419,7 @@ namespace Sip.Message
 			get { return ContentType.Type.IsValid; }
 		}
 
-		public void CorrectCounts()
+		private void CorrectCounts()
 		{
 			Count.ContactCount++;
 			Count.RequireCount++;
@@ -499,6 +515,21 @@ namespace Sip.Message
 
 			throw new Exception(string.Format(@"Header {0} not found", name.ToString()));
 		}
+
+		public bool IsExpiresValid(int minValue)
+		{
+			return Expires < 0 && Expires > minValue;
+		}
+
+		public bool IsExpiresTooBrief(int minValue)
+		{
+			return Expires > 0 && Expires <= minValue;
+		}
+
+		public int GetExpires(int defValue, int maxValue)
+		{
+			return (Expires < 0) ? defValue : ((Expires < maxValue) ? Expires : maxValue);
+		}
 	}
 
 	#endregion
@@ -590,29 +621,4 @@ namespace Sip.Message
 	}
 
 	#endregion
-
-	/// <summary>
-	/// this class should be removed
-	/// </summary>
-	//public static class SipMessageReaderExtension
-	//{
-	//    public static IPAddress IP(this ByteArrayPart part)
-	//    {
-	//        IPAddress ip;
-
-	//        if (part.IsValid == true)
-	//        {
-	//            if (IPAddress.TryParse(part.ToString(), out ip) == false)
-	//            {
-	//                ip = IPAddress.None;
-	//            }
-	//        }
-	//        else
-	//        {
-	//            ip = IPAddress.None;
-	//        }
-
-	//        return ip;
-	//    }
-	//}
 }

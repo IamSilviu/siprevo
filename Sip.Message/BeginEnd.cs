@@ -25,7 +25,7 @@ namespace Sip.Message
 
 		public int Length
 		{
-			get { return End - Begin; }
+			get { return IsInvalid ? 0 : End - Begin; }
 		}
 
 		public void SetDefaultValue()
@@ -43,11 +43,6 @@ namespace Sip.Message
 		{
 			get { return Begin < 0 || End < 0; }
 		}
-
-		//public static implicit operator BeginEnd(ByteArrayPart part)
-		//{
-		//    return new BeginEnd() { Begin = part.Begin, End = part.End, };
-		//}
 
 		public static implicit operator ByteArrayPart(BeginEnd be)
 		{
@@ -81,6 +76,23 @@ namespace Sip.Message
 		{
 			Buffer.BlockCopy(Bytes, Begin, bytes, offset, Length);
 			offset += Length;
+		}
+
+		public bool StartsWith(byte[] bytes)
+		{
+			int length = bytes.Length;
+
+			if (Length < length)
+				return false;
+
+			int startIndex = 0;
+			int endIndex = startIndex + length;
+
+			for (int i = Begin, j = startIndex; j < endIndex; i++, j++)
+				if (Bytes[i] != bytes[j])
+					return false;
+
+			return true;
 		}
 
 		#region IEquatable<...>, GetHashCode()
@@ -120,7 +132,7 @@ namespace Sip.Message
 			return !x.Equals(y);
 		}
 
-		public bool Equals(byte[] bytes, int startIndex, int length)
+		private bool Equals(byte[] bytes, int startIndex, int length)
 		{
 			if (Length != length)
 				return false;

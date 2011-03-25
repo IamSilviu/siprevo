@@ -278,11 +278,35 @@ namespace SipDfaTester
 			//Console.WriteLine("From.AddrSpec2 #0: |{0}|", dfa.From.AddrSpec2.Hostport.Host.ToString());
 			//Console.WriteLine("From.Tag #0: |{0}|", dfa.From.Tag.ToString());
 
+			var message6 = utf.GetBytes(
+				"INVITE sip:rtk@13.141.225.46 SIP/2.0\r\n" +
+				"From: sip:jupiter@xstar.local;tag=34f0f5fb-5586-48da-9d20-b23b2dc81ed5\r\n" +
+				"\r\n");
+
+
+			dfa.SetDefaultValue();
+			dfa.Parse(message6, 0, message6.Length);
+			dfa.SetArray(message6);
+
+			Console.WriteLine("Final: {0}", dfa.Final);
+			Console.WriteLine("From: {0} : {1} @ {2} ; tag= {3}", dfa.From.AddrSpec2.UriScheme.ToString(),
+				dfa.From.AddrSpec2.User.ToString(), dfa.From.AddrSpec2.Hostport.Host.ToString(),
+				dfa.From.Tag.ToString());
+
+			Console.WriteLine("--");
+
+			var message7 = utf.GetBytes("REGISTER sip:officesip.local SIP/2.0\r\n\r\nR");
+			dfa.SetDefaultValue();
+			int parsed7 = dfa.Parse(message7, 0, message7.Length);
+			Console.WriteLine("Final : {0}", dfa.Final);
+			Console.WriteLine("Parsed: {0} ({1})", parsed7, message7.Length);
+
+			Console.WriteLine("--");
 
 			//Console.ReadKey(true);
 
 			Console.WriteLine("Testing speed");
-			
+
 			int repeat = 100000;
 			int start2 = Environment.TickCount;
 			for (int i = 0; i < repeat; i++)

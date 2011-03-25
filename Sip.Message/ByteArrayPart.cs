@@ -113,6 +113,23 @@ namespace Sip.Message
 			//get { return Bytes == null || Begin < 0 || End < 0; }
 		}
 
+		public bool StartsWith(byte[] bytes)
+		{
+			int length = bytes.Length;
+
+			if (Length < length)
+				return false;
+
+			int startIndex = 0;
+			int endIndex = startIndex + length;
+
+			for (int i = Begin, j = startIndex; j < endIndex; i++, j++)
+				if (Bytes[i] != bytes[j])
+					return false;
+
+			return true;
+		}
+
 		//public bool IsEmpty
 		//{
 		//    get { return Begin < 0 || End < 0; }
