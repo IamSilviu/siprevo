@@ -18,6 +18,7 @@ namespace Sip.Message
 			public readonly static ByteArrayPart Min_Expires = new ByteArrayPart(@"Min-Expires");
 			public readonly static ByteArrayPart Content_Length = new ByteArrayPart(@"Content-Length");
 			public readonly static ByteArrayPart Contact = new ByteArrayPart(@"Contact");
+			public readonly static ByteArrayPart Contact___ = new ByteArrayPart(@"Contact: <");
 			public readonly static ByteArrayPart WWW_Authenticate = new ByteArrayPart(@"WWW-Authenticate");
 			public readonly static ByteArrayPart Proxy_Authenticate = new ByteArrayPart(@"Proxy-Authenticate");
 			public readonly static ByteArrayPart Authentication_Info = new ByteArrayPart(@"Authentication-Info");
@@ -40,6 +41,7 @@ namespace Sip.Message
 			public readonly static ByteArrayPart x_Error_Details = new ByteArrayPart(@"x-Error-Details");
 			public readonly static ByteArrayPart Event__presence = new ByteArrayPart(@"Event: presence");
 			public readonly static ByteArrayPart Allow__ = new ByteArrayPart(@"Allow: ");
+			public readonly static ByteArrayPart Supported__ms_benotify__ = new ByteArrayPart("Supported: ms-benotify\r\n");
 
 			public readonly static ByteArrayPart ACK = new ByteArrayPart(@"ACK");
 			public readonly static ByteArrayPart BENOTIFY = new ByteArrayPart(@"BENOTIFY");
@@ -75,6 +77,7 @@ namespace Sip.Message
 			public readonly static ByteArrayPart received = new ByteArrayPart(@"received");
 			public readonly static ByteArrayPart ms_received_port = new ByteArrayPart(@"ms-received-port");
 			public readonly static ByteArrayPart ms_received_cid = new ByteArrayPart(@"ms-received-cid");
+			public readonly static ByteArrayPart _ms_received_cid_ = new ByteArrayPart(@";ms-received-cid=");
 			public readonly static ByteArrayPart expires = new ByteArrayPart(@"expires");
 			public readonly static ByteArrayPart _expires_ = new ByteArrayPart(@";expires=");
 			public readonly static ByteArrayPart Digest = new ByteArrayPart(@"Digest");
@@ -101,6 +104,7 @@ namespace Sip.Message
 			public readonly static ByteArrayPart branch = new ByteArrayPart(@"branch");
 			public readonly static ByteArrayPart _branch_ = new ByteArrayPart(@";branch=");
 			public readonly static ByteArrayPart _branch_z9hG4bK = new ByteArrayPart(@";branch=z9hG4bK");
+			public readonly static ByteArrayPart z9hG4bK_NO_TRANSACTION = new ByteArrayPart(@"z9hG4bK.N0.TRAN5ACT10N");
 			public readonly static ByteArrayPart epid = new ByteArrayPart(@"epid");
 			public readonly static ByteArrayPart _epid_ = new ByteArrayPart(@";epid=");
 			public readonly static ByteArrayPart transport = new ByteArrayPart(@"transport");
@@ -108,6 +112,7 @@ namespace Sip.Message
 			public readonly static ByteArrayPart active = new ByteArrayPart(@"active");
 			public readonly static ByteArrayPart pending = new ByteArrayPart(@"pending");
 			public readonly static ByteArrayPart terminated = new ByteArrayPart(@"terminated");
+			public readonly static ByteArrayPart __sip_instance__ = new ByteArrayPart(";+sip.instance=\"");
 
 			public readonly static ByteArrayPart UDP = new ByteArrayPart(@"UDP");
 			public readonly static ByteArrayPart TCP = new ByteArrayPart(@"TCP");

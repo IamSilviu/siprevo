@@ -150,6 +150,45 @@ namespace Sip.Message
 				Write(header.Name, C.HCOLON, header.Value, C.CRLF);
 		}
 
+		public void WriteHeader(SipMessageReader reader, int index)
+		{
+			Write(reader.Headers[index].Name, C.HCOLON);
+
+			int headerBegin = reader.Headers[index].Value.Begin;
+
+			switch (reader.Headers[index].HeaderName)
+			{
+				case HeaderNames.CallId:
+					callId = CreateRange(reader.CallId, headerBegin);
+					break;
+
+				case HeaderNames.From:
+					fromAddrspec = CreateRange(reader.From.AddrSpec.Value, headerBegin);
+					fromTag = CreateRange(reader.From.Tag, headerBegin);
+					epid = CreateRange(reader.From.Epid, headerBegin);
+					break;
+
+				case HeaderNames.To:
+					toAddrspec = CreateRange(reader.To.AddrSpec.Value, headerBegin);
+					toTag = CreateRange(reader.To.Tag, headerBegin);
+					break;
+
+				case HeaderNames.CSeq:
+					Method = reader.CSeq.Method;
+					CSeq = reader.CSeq.Value;
+					break;
+			}
+
+			Write(reader.Headers[index].Value, C.CRLF);
+		}
+
+		private Range CreateRange(ByteArrayPart part, int headerBegin)
+		{
+			if (part.IsValid)
+				return new Range(end + part.Begin - headerBegin, part.Length);
+			return new Range();
+		}
+
 		public void WriteHeaderName(ByteArrayPart name, bool sp)
 		{
 			Write(name, C.HCOLON);
@@ -170,7 +209,20 @@ namespace Sip.Message
 
 		public void WriteRequestLine(Methods method, ByteArrayPart requestUri)
 		{
+			Method = method;
+
 			Write(method.ToByteArrayPart(), C.SP, requestUri, C.SP, C.SIP_2_0, C.CRLF);
+		}
+
+		public void WriteRequestLine(Methods method, Transports transport, IPEndPoint endPoint)
+		{
+			Method = method;
+
+			Write(method.ToByteArrayPart(), C.SP, C.sip, C.HCOLON);
+			Write(endPoint);
+			Write(C.SEMI, C.transport, C.EQUAL);
+			Write(transport.ToLowerUtf8Bytes());
+			Write(C.SP, C.SIP_2_0, C.CRLF);
 		}
 
 		public void WriteCRLF()
@@ -181,6 +233,17 @@ namespace Sip.Message
 		{
 			for (int i = 0; i < reader.Count.ContactCount; i++)
 				WriteContact(reader.Contact[i]);
+		}
+
+		public void WriteContact(ByteArrayPart addrSpec, ByteArrayPart sipInstance, int expires)
+		{
+			Write(C.Contact___, addrSpec, C.RAQUOT);
+
+			if (sipInstance.IsValid)
+				Write(C.__sip_instance__, sipInstance, C.DQUOTE);
+
+			Write(C._expires_, expires);
+			Write(C.CRLF);
 		}
 
 		public void WriteContact(SipMessageReader.ContactStruct contact)
@@ -241,6 +304,18 @@ namespace Sip.Message
 			Write(C.RAQUOT, C.CRLF);
 		}
 
+		public void WriteContact(IPEndPoint endPoint, Transports transport)
+		{
+			Write(C.Contact, C.HCOLON, C.SP, C.LAQUOT, C.sip, C.HCOLON);
+			Write(endPoint);
+			if (transport != Transports.None)
+			{
+				Write(C.SEMI, C.transport, C.EQUAL);
+				Write(transport.ToLowerUtf8Bytes());
+			}
+			Write(C.RAQUOT, C.CRLF);
+		}
+
 		public void WriteExpires(int expires)
 		{
 			Expires = expires;
@@ -259,6 +334,8 @@ namespace Sip.Message
 
 		public void WriteCseq(int number, Methods method)
 		{
+			Method = method;
+
 			Write(C.CSeq, C.HCOLON, C.SP, number, C.SP, method.ToByteArrayPart(), C.CRLF);
 		}
 
@@ -337,7 +414,7 @@ namespace Sip.Message
 					Write(C.SEMI, C.ms_received_port, C.EQUAL);
 					Write(via.MsReceivedPort);
 				}
-				if (via.MsReceivedCid.IsValid == true)
+				if (via.MsReceivedCid.IsValid == true && via.MsReceivedCid.Bytes != null)
 				{
 					Write(C.SEMI, C.ms_received_cid, C.EQUAL);
 					Write(via.MsReceivedCid);
@@ -479,6 +556,17 @@ namespace Sip.Message
 		{
 			Write(C.RecordRoute, C.HCOLON, C.SP, C.LAQUOT, scheme.ToByteArrayPart(), C.HCOLON, host, C.HCOLON);
 			Write(port);
+			Write(C.SEMI, C.lr, C.RAQUOT, C.CRLF);
+		}
+
+		public void WriteRecordRoute(Transports transport, IPEndPoint endpoint, ArraySegment<byte> msReceivedCid)
+		{
+			var scheme = (transport == Transports.Tls) ? UriSchemes.Sips : UriSchemes.Sip;
+
+			Write(C.RecordRoute, C.HCOLON, C.SP, C.LAQUOT, scheme.ToByteArrayPart(), C.HCOLON);
+			Write(endpoint);
+			Write(C._ms_received_cid_);
+			Write(msReceivedCid);
 			Write(C.SEMI, C.lr, C.RAQUOT, C.CRLF);
 		}
 
@@ -648,6 +736,31 @@ namespace Sip.Message
 			Write(C._branch_z9hG4bK);
 			WriteAsHex8(branch);
 			Write(C.CRLF);
+		}
+
+		public void WriteVia(Transports transport, IPEndPoint endpoint)
+		{
+			Write(C.Via__SIP_2_0_, transport.ToByteArrayPart(), C.SP);
+			Write(endpoint);
+			Write(C._branch_);
+			Write(C.z9hG4bK_NO_TRANSACTION);
+			Write(C.CRLF);
+		}
+
+		public void WriteVia(Transports transport, IPEndPoint endpoint, int branch, ArraySegment<byte> msRecivedCid)
+		{
+			Write(C.Via__SIP_2_0_, transport.ToByteArrayPart(), C.SP);
+			Write(endpoint);
+			Write(C._branch_z9hG4bK);
+			WriteAsHex8(branch);
+			Write(C._ms_received_cid_);
+			Write(msRecivedCid);
+			Write(C.CRLF);
+		}
+
+		public void WriteSupportedMsBenotify()
+		{
+			Write(C.Supported__ms_benotify__);
 		}
 
 		public void WriteAllow(Methods[] methods)

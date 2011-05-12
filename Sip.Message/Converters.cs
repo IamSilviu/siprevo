@@ -1,10 +1,22 @@
 ﻿using System;
 using System.Net;
+using System.Text;
 
 namespace Sip.Message
 {
 	public static class Converters
 	{
+		private static readonly byte[][] lowerTransport;
+
+		static Converters()
+		{
+			lowerTransport = new byte[Enum.GetValues(typeof(Transports)).Length][];
+
+			InitializeLowerTransport();
+
+			Verify(lowerTransport, typeof(Transports));
+		}
+
 		public static ByteArrayPart ToByteArrayPart(this Methods method)
 		{
 			switch (method)
@@ -87,9 +99,34 @@ namespace Sip.Message
 			}
 		}
 
+		public static byte[] ToLowerUtf8Bytes(this Transports transport)
+		{
+			return lowerTransport[(int)transport];
+		}
+
 		public static ByteArrayPart ToByteArrayPart(this string text)
 		{
 			return new ByteArrayPart(text);
+		}
+
+		private static void InitializeLowerTransport()
+		{
+			lowerTransport[(int)Transports.None] = new byte[0];
+			lowerTransport[(int)Transports.Other] = new byte[0];
+			lowerTransport[(int)Transports.Sctp] = Encoding.UTF8.GetBytes(@"sctp");
+			lowerTransport[(int)Transports.Tcp] = Encoding.UTF8.GetBytes(@"tcp");
+			lowerTransport[(int)Transports.Tls] = Encoding.UTF8.GetBytes(@"tls");
+			lowerTransport[(int)Transports.Udp] = Encoding.UTF8.GetBytes(@"udp");
+		}
+
+		private static void Verify(byte[][] values, Type type)
+		{
+			int length = Enum.GetValues(typeof(Transports)).Length;
+
+			for (int i = 0; i < length; i++)
+				if (values[i] == null)
+					throw new InvalidProgramException(
+						string.Format(@"Converter value {0} not defined for type {1}", i, type.Name));
 		}
 	}
 }

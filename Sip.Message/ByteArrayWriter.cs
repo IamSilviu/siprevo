@@ -80,6 +80,17 @@ namespace Sip.Message
 			end += part.Length;
 		}
 
+		public void Write(ArraySegment<byte> source)
+		{
+			if (source.Count > 0 && source.Array != null)
+			{
+				ValidateCapacity(source.Count);
+
+				System.Buffer.BlockCopy(source.Array, source.Offset, segment.Array, segment.Offset + end, source.Count);
+				end += source.Count;
+			}
+		}
+
 		public void Write(Int32 value)
 		{
 			ValidateCapacity(11);
@@ -183,7 +194,7 @@ namespace Sip.Message
 			ValidateCapacity(size);
 
 			end += size;
-			
+
 			return new ArraySegment<byte>(
 				segment.Array, segment.Offset + end - size, segment.Offset + end);
 		}
@@ -283,6 +294,12 @@ namespace Sip.Message
 		#region public void Write(params object[] parts) {...}
 
 		public void Write(ByteArrayPart part1, ByteArrayPart part2)
+		{
+			Write(part1);
+			Write(part2);
+		}
+
+		public void Write(ByteArrayPart part1, int part2)
 		{
 			Write(part1);
 			Write(part2);

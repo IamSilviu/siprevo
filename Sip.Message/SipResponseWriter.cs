@@ -50,9 +50,6 @@ namespace Sip.Message
 
 		public void CopyViaToFromCallIdRecordRouteCSeq(SipMessageReader request, StatusCodes statusCode, ByteArrayPart localTag)
 		{
-			WriteCallId(request.CallId);
-			WriteCseq(request.CSeq.Value, request.CSeq.Method);
-
 			for (int i = 0; i < request.Count.HeaderCount; i++)
 			{
 				switch (request.Headers[i].HeaderName)
@@ -60,6 +57,14 @@ namespace Sip.Message
 					case HeaderNames.RecordRoute:
 					case HeaderNames.Via:
 						WriteHeader(request.Headers[i]);
+						break;
+
+					case HeaderNames.CallId:
+						WriteCallId(request.CallId);
+						break;
+
+					case HeaderNames.CSeq:
+						WriteCseq(request.CSeq.Value, request.CSeq.Method);
 						break;
 
 					case HeaderNames.From:

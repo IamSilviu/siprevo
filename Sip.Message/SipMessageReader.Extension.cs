@@ -376,7 +376,12 @@ namespace Sip.Message
 			//	To.SetValidAddrspec();
 
 			if (IsFinal)
+			{
 				CorrectCounts();
+
+				if (Method == Methods.None)
+					Method = CSeq.Method;
+			}
 		}
 
 		public bool IsRequest
@@ -547,7 +552,17 @@ namespace Sip.Message
 				get { return (Value >= 100) && (Value <= 199); }
 			}
 
+			public bool Is1xx
+			{
+				get { return (Value >= 100) && (Value <= 199); }
+			}
+
 			public bool IsSuccessful
+			{
+				get { return (Value >= 200) && (Value <= 299); }
+			}
+
+			public bool Is2xx
 			{
 				get { return (Value >= 200) && (Value <= 299); }
 			}
