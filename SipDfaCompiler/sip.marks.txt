@@ -156,6 +156,25 @@
 .CREDENTIALS.msspi-response.msspi-resp.msspi-resp-data.msspi-resp-data-value.quoted-string -> Bool = ?<Credentials>.HasResponse;
 
 //
+// -------------------------------------------------------------------------------[ .CHALLENGE
+//
+.CHALLENGE.Digest -> Const = ?<Challenge>.AuthScheme;
+.CHALLENGE.NTLM -> Const = ?<Challenge>.AuthScheme;
+.CHALLENGE.Kerberos -> Const = ?<Challenge>.AuthScheme;
+.CHALLENGE.TLS-DSK -> Const = ?<Challenge>.AuthScheme;
+.CHALLENGE.digest-cln.realm.realm-value.quoted-string.qdtext -> Range = ?<Challenge>.Realm;
+.CHALLENGE.digest-cln.realm.realm-value.quoted-string.quoted-pair -> Range = ?<Challenge>.Realm;
+.CHALLENGE.digest-cln.nonce.nonce-value.quoted-string.qdtext -> Range = ?<Challenge>.Nonce;
+.CHALLENGE.digest-cln.nonce.nonce-value.quoted-string.quoted-pair -> Range = ?<Challenge>.Nonce;
+.CHALLENGE.digest-cln.opaque.quoted-string.qdtext -> Range = ?<Challenge>.Opaque;
+.CHALLENGE.digest-cln.opaque.quoted-string.quoted-pair -> Range = ?<Challenge>.Opaque;
+.CHALLENGE.digest-cln.stale.true -> Bool = ?<Challenge>.Stale;
+.CHALLENGE.digest-cln.qop-options.qop-value -> Range = ?<Challenge>.Qop;
+.CHALLENGE.digest-cln.algorithm.MD5 -> Const = ?<Challenge>.AuthAlgorithm;
+.CHALLENGE.digest-cln.algorithm.MD5-sess -> Const = ?<Challenge>.AuthAlgorithm;
+.CHALLENGE.digest-cln.algorithm.token -> Const = ?<Challenge>.AuthAlgorithm, Other, 20;
+
+//
 // -------------------------------------------------------------------------------[ Authorization
 //
 SIP-messageX.message-headerX.Authorization.HCOLON.: -> Count = AuthorizationCount, 10, -1;
@@ -166,6 +185,18 @@ SIP-messageX.message-headerX.Authorization.credentials -> Group = Authorization[
 //
 SIP-messageX.message-headerX.Proxy-Authorization.HCOLON.: -> Count = ProxyAuthorizationCount, 10, -1;
 SIP-messageX.message-headerX.Proxy-Authorization.credentials -> Group = ProxyAuthorization[ProxyAuthorizationCount], CREDENTIALS;
+
+//
+// -------------------------------------------------------------------------------[ WWW-Authenticate
+//
+SIP-messageX.message-headerX.WWW-Authenticate.HCOLON.: -> Count = WwwAuthenticateCount, 10, -1;
+SIP-messageX.message-headerX.WWW-Authenticate.challenge -> Group = WwwAuthenticate[WwwAuthenticateCount], CHALLENGE;
+
+//
+// -------------------------------------------------------------------------------[ Proxy-Authenticate
+//
+SIP-messageX.message-headerX.Proxy-Authenticate.HCOLON.: -> Count = ProxyAuthenticateCount, 10, -1;
+SIP-messageX.message-headerX.Proxy-Authenticate.challenge -> Group = ProxyAuthenticate[ProxyAuthenticateCount], CHALLENGE;
 
 //
 // -------------------------------------------------------------------------------[ From

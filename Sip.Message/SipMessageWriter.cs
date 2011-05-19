@@ -672,6 +672,13 @@ namespace Sip.Message
 			Write(epid1, C.CRLF);
 		}
 
+		public void WriteTo(ByteArrayPart uri)
+		{
+			Write(C.To__, C.LAQUOT);
+			toAddrspec = new Range(end, uri.Length);
+			Write(uri, C.RAQUOT, C.CRLF);
+		}
+
 		public void WriteFrom(ByteArrayPart uri, ByteArrayPart tag)
 		{
 			Write(C.From__, C.LAQUOT);
@@ -681,6 +688,16 @@ namespace Sip.Message
 			Write(tag, C.CRLF);
 		}
 
+		public void WriteFrom(ByteArrayPart uri, int tag)
+		{
+			Write(C.From__, C.LAQUOT);
+			fromAddrspec = new Range(end, uri.Length);
+			Write(uri, C.RAQUOT, C._tag_);
+			fromTag = new Range(end, 8);
+			WriteAsHex8(tag);
+			Write(C.CRLF);
+		}
+
 		public void WriteCallId(ByteArrayPart callIdValue)
 		{
 			Write(C.Call_ID__);
@@ -688,9 +705,25 @@ namespace Sip.Message
 			Write(callIdValue, C.CRLF);
 		}
 
+		public void WriteCallId(IPAddress localAddreess, int random)
+		{
+			Write(C.Call_ID__);
+			int start = end;
+			WriteAsHex8(random);
+			Write(C.At);
+			Write(localAddreess);
+			callId = new Range(start, end);
+			Write(C.CRLF);
+		}
+
 		public void WriteEventPresence()
 		{
 			Write(C.Event__presence, C.CRLF);
+		}
+
+		public void WriteEventRegistration()
+		{
+			Write(C.Event__registration, C.CRLF);
 		}
 
 		public void WriteSubscriptionState(int expires)

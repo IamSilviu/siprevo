@@ -40,8 +40,10 @@ namespace Sip.Message
 			public readonly static ByteArrayPart SIP_ETag__ = new ByteArrayPart(@"SIP-ETag: ");
 			public readonly static ByteArrayPart x_Error_Details = new ByteArrayPart(@"x-Error-Details");
 			public readonly static ByteArrayPart Event__presence = new ByteArrayPart(@"Event: presence");
+			public readonly static ByteArrayPart Event__registration = new ByteArrayPart(@"Event: registration");
 			public readonly static ByteArrayPart Allow__ = new ByteArrayPart(@"Allow: ");
 			public readonly static ByteArrayPart Supported__ms_benotify__ = new ByteArrayPart("Supported: ms-benotify\r\n");
+			public readonly static ByteArrayPart At = new ByteArrayPart(@"@");
 
 			public readonly static ByteArrayPart ACK = new ByteArrayPart(@"ACK");
 			public readonly static ByteArrayPart BENOTIFY = new ByteArrayPart(@"BENOTIFY");

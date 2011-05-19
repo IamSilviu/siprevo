@@ -330,10 +330,65 @@ namespace SipMessageTest
 		[Test]
 		public void It_should_parse_User_Agent()
 		{
-			Assert.AreEqual("abc", ParseHeader("User-Agent: abc").Product.ToString());
-			Assert.AreEqual("a.b*c", ParseHeader("User-Agent: a.b*c").Product.ToString());
-			Assert.AreEqual("abc", ParseHeader("User-Agent: abc/123").Product.ToString());
-			Assert.AreEqual("123", ParseHeader("User-Agent: abc/123").Version.ToString());
+			Assert.AreEqual("abc", ParseHeader("User-Agent: abc").UserAgent.Product.ToString());
+			Assert.AreEqual("a.b*c", ParseHeader("User-Agent: a.b*c").UserAgent.Product.ToString());
+			Assert.AreEqual("abc", ParseHeader("User-Agent: abc/123").UserAgent.Product.ToString());
+			Assert.AreEqual("123", ParseHeader("User-Agent: abc/123").UserAgent.Version.ToString());
+		}
+
+		[Test]
+		public void It_should_return_correct_parsed_count_when_error()
+		{
+			var dfa = new SipMessageReader();
+			{
+				var message = Encoding.UTF8.GetBytes("\r\n\r\n");
+
+				dfa.SetDefaultValue();
+				int parsed = dfa.Parse(message, 0, message.Length);
+
+				Assert.AreEqual(0, parsed);
+			}
+			{
+				var message = Encoding.UTF8.GetBytes("REG@@@@");
+
+				dfa.SetDefaultValue();
+				Assert.AreEqual(3, dfa.Parse(message, 0, message.Length));
+
+				dfa.SetDefaultValue();
+				Assert.AreEqual(3, dfa.Parse(message, 0, 4));
+			}
+		}
+
+		[Test]
+		public void It_should_parse_WWW_Authenticate_Digest()
+		{
+			var reader = ParseHeaders(
+				"WWW-Authenticate: Digest realm=\"realm1\",nonce=\"11111\",qop=\"auth\",algorithm=MD5,stale=false,opaque=\"opaque1\"",
+				"WWW-Authenticate: Digest realm=\"realm2\",nonce=\"22222\",qop=\"auth,auth-int\",algorithm=MD5,stale=true,opaque=\"opaque2\""
+				);
+
+			Assert.AreEqual(2, reader.Count.WwwAuthenticateCount);
+
+			Assert.AreEqual(AuthSchemes.Digest, reader.WwwAuthenticate[0].AuthScheme);
+			Assert.AreEqual(AuthSchemes.Digest, reader.WwwAuthenticate[1].AuthScheme);
+
+			Assert.AreEqual("realm1", reader.WwwAuthenticate[0].Realm.ToString());
+			Assert.AreEqual("realm2", reader.WwwAuthenticate[1].Realm.ToString());
+
+			Assert.AreEqual("11111", reader.WwwAuthenticate[0].Nonce.ToString());
+			Assert.AreEqual("22222", reader.WwwAuthenticate[1].Nonce.ToString());
+
+			Assert.AreEqual("auth", reader.WwwAuthenticate[0].Qop.ToString());
+			Assert.AreEqual("auth,auth-int", reader.WwwAuthenticate[1].Qop.ToString());
+
+			Assert.AreEqual(AuthAlgorithms.Md5, reader.WwwAuthenticate[0].AuthAlgorithm);
+			Assert.AreEqual(AuthAlgorithms.Md5, reader.WwwAuthenticate[1].AuthAlgorithm);
+
+			Assert.AreEqual(false, reader.WwwAuthenticate[0].Stale);
+			Assert.AreEqual(true, reader.WwwAuthenticate[1].Stale);
+
+			Assert.AreEqual("opaque1", reader.WwwAuthenticate[0].Opaque.ToString());
+			Assert.AreEqual("opaque2", reader.WwwAuthenticate[1].Opaque.ToString());
 		}
 
 		[Test]

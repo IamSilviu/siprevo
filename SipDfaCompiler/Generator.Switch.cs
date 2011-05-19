@@ -25,6 +25,10 @@ namespace SipDfaCompiler
 				_main.WriteLine("int i = offset;");
 
 				GenerateSwitch(dfa, errorState, SwitchMode.JumpOnly);
+
+				//_main.WriteLine("if (state == State{0})", errorState);
+				//_main.WriteLine("goto exit1;");
+
 				_main.WriteLine("i++;");
 
 				_main.WriteLine("int end = offset + length;");
@@ -233,6 +237,8 @@ namespace SipDfaCompiler
 			});
 
 			_main.WriteLine("case State{0}:", errorState);
+			if (mode == SwitchMode.ActionJump || mode == SwitchMode.ActionOnly)
+				_main.WriteLine("i--;");
 			_main.WriteLine("Error = true;");
 			_main.WriteLine("goto exit1;");
 

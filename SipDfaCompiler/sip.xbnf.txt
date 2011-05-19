@@ -855,7 +855,7 @@ message-headerX =  (Accept
                 /  extension-header) CRLF;
 
 
-message-headerZ =  (Authorization / Proxy-Authorization) CRLF;
+message-headerZ =  (WWW-Authenticate / Proxy-Authenticate) CRLF;
 
 
 message-headerZ =  (extension-header) CRLF;

@@ -435,6 +435,8 @@ namespace Sip.Message
 			Count.SupportedCount++;
 			Count.AuthorizationCount++;
 			Count.ProxyAuthorizationCount++;
+			Count.WwwAuthenticateCount++;
+			Count.ProxyAuthenticateCount++;
 		}
 
 		public int CountHeaders(HeaderNames name)
