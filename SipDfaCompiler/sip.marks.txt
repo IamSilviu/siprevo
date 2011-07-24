@@ -132,6 +132,7 @@
 .CREDENTIALS.digest-response.dig-resp.dresponse.EQUAL -> Bool = ?<Credentials>.HasResponse;
 .CREDENTIALS.digest-response.dig-resp.algorithm.MD5 -> Const = ?<Credentials>.AuthAlgorithm;
 .CREDENTIALS.digest-response.dig-resp.algorithm.MD5-sess -> Const = ?<Credentials>.AuthAlgorithm;
+.CREDENTIALS.digest-response.dig-resp.algorithm.SHA256-sess -> Const = ?<Credentials>.AuthAlgorithm;
 .CREDENTIALS.digest-response.dig-resp.algorithm.token -> Const = ?<Credentials>.AuthAlgorithm, Other, 20;
 .CREDENTIALS.digest-response.dig-resp.cnonce.cnonce-value.nonce-value.quoted-string.qdtext -> Range = ?<Credentials>.Cnonce;
 .CREDENTIALS.digest-response.dig-resp.cnonce.cnonce-value.nonce-value.quoted-string.quoted-pair -> Range = ?<Credentials>.Cnonce;

@@ -1278,7 +1278,7 @@ namespace SipDfaCompiler
 		}
 		public State Getalgorithm0(List<string> rulenames)
 		{
-			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("algorithm",rulenames),GetEQUAL(rulenames),(State.NoCloneAlternation(FromString("MD5",rulenames),FromString("MD5-sess",rulenames),Gettoken(rulenames)))));
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("algorithm",rulenames),GetEQUAL(rulenames),(State.NoCloneAlternation(FromString("MD5",rulenames),FromString("MD5-sess",rulenames),FromString("SHA256-sess",rulenames),Gettoken(rulenames)))));
 			return rule;
 		}
 		public State Getqop_options0(List<string> rulenames)
@@ -1793,7 +1793,7 @@ namespace SipDfaCompiler
 		}
 		public State Getcnum_value0(List<string> rulenames)
 		{
-			State rule = State.Repeat(1,-1,GetDIGIT(rulenames));
+			State rule = State.NoCloneAlternation(State.Repeat(1,-1,GetDIGIT(rulenames)),State.NoCloneConcatanation(OnChangeConcatanation(rulenames,GetDQUOTE(rulenames),State.Repeat(1,-1,GetDIGIT(rulenames)),GetDQUOTE(rulenames))));
 			return rule;
 		}
 		public State Getcrand0(List<string> rulenames)
@@ -1803,7 +1803,7 @@ namespace SipDfaCompiler
 		}
 		public State Getcrand_val0(List<string> rulenames)
 		{
-			State rule = State.Repeat(8,-1,GetLHEX(rulenames));
+			State rule = State.NoCloneAlternation(State.Repeat(8,-1,GetLHEX(rulenames)),State.NoCloneConcatanation(OnChangeConcatanation(rulenames,GetDQUOTE(rulenames),State.Repeat(8,-1,GetLHEX(rulenames)),GetDQUOTE(rulenames))));
 			return rule;
 		}
 		public State Getmsspi_resp_data0(List<string> rulenames)
@@ -1888,7 +1888,7 @@ namespace SipDfaCompiler
 		}
 		public State Getsnum_value0(List<string> rulenames)
 		{
-			State rule = State.Repeat(1,-1,GetDIGIT(rulenames));
+			State rule = State.NoCloneAlternation(State.Repeat(1,-1,GetDIGIT(rulenames)),State.NoCloneConcatanation(OnChangeConcatanation(rulenames,GetDQUOTE(rulenames),State.Repeat(1,-1,GetDIGIT(rulenames)),GetDQUOTE(rulenames))));
 			return rule;
 		}
 		public State Getsrand0(List<string> rulenames)
@@ -1898,7 +1898,7 @@ namespace SipDfaCompiler
 		}
 		public State Getsrand_value0(List<string> rulenames)
 		{
-			State rule = State.Repeat(8,-1,GetLHEX(rulenames));
+			State rule = State.NoCloneAlternation(State.Repeat(8,-1,GetLHEX(rulenames)),State.NoCloneConcatanation(OnChangeConcatanation(rulenames,GetDQUOTE(rulenames),State.Repeat(8,-1,GetLHEX(rulenames)),GetDQUOTE(rulenames))));
 			return rule;
 		}
 		public State Getextension_header3(List<string> rulenames)
@@ -1913,7 +1913,7 @@ namespace SipDfaCompiler
 		}
 		public State Getmessage_headerZ0(List<string> rulenames)
 		{
-			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(State.NoCloneAlternation(GetWWW_Authenticate(rulenames),GetProxy_Authenticate(rulenames))),GetCRLF(rulenames)));
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(GetAuthorization(rulenames)),GetCRLF(rulenames)));
 			return rule;
 		}
 		public State Getmessage_headerZ1(List<string> rulenames)

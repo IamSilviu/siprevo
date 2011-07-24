@@ -43,7 +43,7 @@ namespace Sip.Message
 
 		public void PostParsing()
 		{
-			AddrSpec1 = AddrSpec;
+			//	AddrSpec1 = AddrSpec;
 		}
 	}
 
@@ -88,6 +88,14 @@ namespace Sip.Message
 		{
 			xMaddrIP = IPAddress.None;
 			_MsReceivedCid.SetDefaultValue();
+		}
+
+		public bool IsValid
+		{
+			get
+			{
+				return Hostport.Host.IsValid;
+			}
 		}
 	}
 
@@ -185,6 +193,15 @@ namespace Sip.Message
 
 	public partial class SipMessageReader
 	{
+		public int GetExpires(int contact)
+		{
+			if (Contact[contact].Expires >= 0)
+				return Contact[contact].Expires;
+			if (Expires >= 0)
+				return Expires;
+			return 3600;
+		}
+
 		public partial struct ContactStruct
 		{
 			public bool _RemoveProxy;
@@ -267,27 +284,27 @@ namespace Sip.Message
 			}
 		}
 
-		public partial struct CSeqStruct
-		{
-			Methods _Method;
+		//public partial struct CSeqStruct
+		//{
+		//    Methods _Method;
 
-			public Methods xMethod
-			{
-				get
-				{
-					return _Method == Methods.None ? Method : _Method;
-				}
-				set
-				{
-					_Method = value;
-				}
-			}
+		//    public Methods xMethod
+		//    {
+		//        get
+		//        {
+		//            return _Method == Methods.None ? Method : _Method;
+		//        }
+		//        set
+		//        {
+		//            _Method = value;
+		//        }
+		//    }
 
-			partial void OnSetDefaultValue()
-			{
-				_Method = Methods.None;
-			}
-		}
+		//    partial void OnSetDefaultValue()
+		//    {
+		//        _Method = Methods.None;
+		//    }
+		//}
 
 		public partial struct RouteStruct : IRemovableParams
 		{
@@ -340,6 +357,13 @@ namespace Sip.Message
 				IsRemoved = false;
 			}
 		}
+	}
+
+	public enum AuthQops
+	{
+		None,
+		Auth,
+		AuthInt,
 	}
 
 	#region class SipMessageReader {...}
@@ -537,6 +561,79 @@ namespace Sip.Message
 		{
 			return (Expires < 0) ? defValue : ((Expires < maxValue) ? Expires : maxValue);
 		}
+
+		public Challenge? GetAnyChallenge()
+		{
+			if (Count.WwwAuthenticateCount > 0)
+				return WwwAuthenticate[0];
+			else if (Count.ProxyAuthenticateCount > 0)
+				return ProxyAuthenticate[0];
+			return null;
+		}
+
+		public bool TryGetCredentialsByRealm(AuthSchemes scheme, ByteArrayPart realm, out Credentials credentials)
+		{
+			for (int i = 0; i < Count.AuthorizationCount; i++)
+			{
+				if (Authorization[i].AuthScheme == scheme && Authorization[i].Realm.Equals(realm))
+				{
+					credentials = Authorization[i];
+					return true;
+				}
+			}
+
+			for (int i = 0; i < Count.ProxyAuthorizationCount; i++)
+			{
+				if (ProxyAuthorization[i].AuthScheme == scheme && ProxyAuthorization[i].Realm.Equals(realm))
+				{
+					credentials = ProxyAuthorization[i];
+					return true;
+				}
+			}
+
+			credentials = new Credentials();
+			return false;
+		}
+
+		public Credentials GetCredentialsByRealm(AuthSchemes scheme, ByteArrayPart realm)
+		{
+			Credentials credentials;
+			TryGetCredentialsByRealm(scheme, realm, out credentials);
+
+			return credentials;
+		}
+
+		public bool TryGetCredentialsByTargetname(AuthSchemes scheme, ByteArrayPart targetname, out Credentials credentials)
+		{
+			for (int i = 0; i < Count.AuthorizationCount; i++)
+			{
+				if (Authorization[i].AuthScheme == scheme && Authorization[i].Targetname.Equals(targetname))
+				{
+					credentials = Authorization[i];
+					return true;
+				}
+			}
+
+			for (int i = 0; i < Count.ProxyAuthorizationCount; i++)
+			{
+				if (ProxyAuthorization[i].AuthScheme == scheme && ProxyAuthorization[i].Targetname.Equals(targetname))
+				{
+					credentials = ProxyAuthorization[i];
+					return true;
+				}
+			}
+
+			credentials = new Credentials();
+			return false;
+		}
+
+		public Credentials GetCredentialsByTargetname(AuthSchemes scheme, ByteArrayPart targetname)
+		{
+			Credentials credentials;
+			TryGetCredentialsByTargetname(scheme, targetname, out credentials);
+
+			return credentials;
+		}
 	}
 
 	#endregion
@@ -633,6 +730,62 @@ namespace Sip.Message
 			public static implicit operator StatusCodes(StatusCodeStruct statusCodeStruct)
 			{
 				return statusCodeStruct.Code;
+			}
+		}
+	}
+
+	#endregion
+
+	#region struct SipMessageReader.UserAgentStruct {...}
+
+	public enum UserAgents
+	{
+		None,
+		XLite,
+		Nch,
+		Unknown,
+	}
+
+	public partial class SipMessageReader
+	{
+		public partial struct UserAgentStruct
+		{
+			private static readonly byte[] xlite = Encoding.UTF8.GetBytes("X-Lite");
+			private static readonly byte[] nch = Encoding.UTF8.GetBytes("NCH Software");
+
+			private UserAgents userAgent;
+
+			public UserAgents Defined
+			{
+				get
+				{
+					if (userAgent == UserAgents.None)
+					{
+						if (Product.StartsWith(xlite))
+							userAgent = UserAgents.XLite;
+						else if (Product.StartsWith(nch))
+							userAgent = UserAgents.Nch;
+						else
+							userAgent = UserAgents.Unknown;
+					}
+
+					return userAgent;
+				}
+			}
+
+			public bool IsXLite
+			{
+				get { return Defined == UserAgents.XLite; }
+			}
+
+			public bool IsNch
+			{
+				get { return Defined == UserAgents.Nch; }
+			}
+
+			partial void OnSetDefaultValue()
+			{
+				userAgent = UserAgents.None;
 			}
 		}
 	}

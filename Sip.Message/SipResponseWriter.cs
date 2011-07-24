@@ -64,7 +64,9 @@ namespace Sip.Message
 						break;
 
 					case HeaderNames.CSeq:
-						WriteCseq(request.CSeq.Value, request.CSeq.Method);
+						CSeq = request.CSeq.Value;
+						Method = request.CSeq.Method;
+						WriteHeader(request.Headers[i]);
 						break;
 
 					case HeaderNames.From:
@@ -134,7 +136,7 @@ namespace Sip.Message
 						break;
 
 					case HeaderNames.To:
-						if (request.To.Tag.IsValid || statusCode == StatusCodes.Trying || request.Method == Methods.Cancelm)
+						if (request.To.Tag.IsValid || statusCode == StatusCodes.Trying || request.Method == Methods.Cancelm || totag.IsInvalid)
 							WriteHeader(request.Headers[i]);
 						else
 							WriteHeaderWithTag(request.Headers[i], totag);

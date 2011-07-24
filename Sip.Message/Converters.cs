@@ -99,6 +99,37 @@ namespace Sip.Message
 			}
 		}
 
+		public static ByteArrayPart ToByteArrayPart(this AuthQops qop)
+		{
+			switch (qop)
+			{
+				case AuthQops.Auth:
+					return SipMessageWriter.C.auth;
+				case AuthQops.AuthInt:
+					return SipMessageWriter.C.auth_int;
+
+				default:
+					throw new NotImplementedException();
+			}
+		}
+		public static ByteArrayPart ToByteArrayPart(this AuthAlgorithms algorithm)
+		{
+			switch (algorithm)
+			{
+				case AuthAlgorithms.Md5:
+					return SipMessageWriter.C.MD5;
+				case AuthAlgorithms.Md5Sess:
+					return SipMessageWriter.C.MD5_sess;
+
+				case AuthAlgorithms.Other:
+				case AuthAlgorithms.None:
+					throw new ArgumentException();
+
+				default:
+					throw new NotImplementedException();
+			}
+		}
+
 		public static byte[] ToLowerUtf8Bytes(this Transports transport)
 		{
 			return lowerTransport[(int)transport];
@@ -107,6 +138,23 @@ namespace Sip.Message
 		public static ByteArrayPart ToByteArrayPart(this string text)
 		{
 			return new ByteArrayPart(text);
+		}
+
+		public static UriSchemes ToScheme(this Transports transport)
+		{
+			switch (transport)
+			{
+				case Transports.Tls:
+					return UriSchemes.Sips;
+
+				case Transports.Udp:
+				case Transports.Tcp:
+				case Transports.Sctp:
+					return UriSchemes.Sip;
+
+				default:
+					throw new ArgumentException(@"Can not convert Transports to UriSchemes: " + transport.ToString());
+			}
 		}
 
 		private static void InitializeLowerTransport()

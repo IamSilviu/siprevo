@@ -496,7 +496,7 @@ nonce-value         =  quoted-string;
 opaque              =  "opaque" EQUAL quoted-string;
 stale               =  "stale" EQUAL ( "true" / "false" );
 algorithm           =  "algorithm" EQUAL ( "MD5" / "MD5-sess"
-                       / token );
+                       / "SHA256-sess" / token );
 qop-options         =  "qop" EQUAL LDQUOT qop-value
                        *("," qop-value) RDQUOT;
 qop-value           =  "auth" / "auth-int" / token;
@@ -742,10 +742,10 @@ msspi-resp            =  qop-options / realm / opaque
                        / crand / cnum / msspi-resp-data;
 
 cnum                  =  "cnum" EQUAL cnum-value;
-cnum-value            =  1*DIGIT;
+cnum-value            =  1*DIGIT / DQUOTE 1*DIGIT DQUOTE;
 
 crand                 =  "crand" EQUAL crand-val;
-crand-val             =  8 LHEX;
+crand-val             =  8 LHEX / DQUOTE 8 LHEX DQUOTE;
 
 msspi-resp-data       =  "response" EQUAL msspi-resp-data-value;
 msspi-resp-data-value =  quoted-string;
@@ -779,10 +779,10 @@ ainfo               = nextnonce / message-qop / response-auth
                      / snum / srand / realm / targetname / opaque;
 
 snum                = "snum" EQUAL snum-value;
-snum-value          = 1*DIGIT;
+snum-value          = 1*DIGIT / DQUOTE 1*DIGIT DQUOTE;
 
 srand               = "srand" EQUAL srand-value;
-srand-value         = 8 LHEX;
+srand-value         = 8 LHEX / DQUOTE 8 LHEX DQUOTE;
 
 extension-header    =/ Proxy-Authentication-Info; /* vf: link to rfc3261 */
 
@@ -855,7 +855,7 @@ message-headerX =  (Accept
                 /  extension-header) CRLF;
 
 
-message-headerZ =  (WWW-Authenticate / Proxy-Authenticate) CRLF;
+message-headerZ =  (Authorization) CRLF;
 
 
 message-headerZ =  (extension-header) CRLF;

@@ -11,6 +11,8 @@ namespace Sip.Message
 		public int Begin;
 		public int End;
 
+		public static readonly ByteArrayPart Invalid = new ByteArrayPart() { Bytes = null, Begin = int.MinValue, End = int.MinValue, };
+
 		public ByteArrayPart(byte[] array, int offset, int length)
 		{
 			Bytes = new byte[length];
@@ -107,6 +109,11 @@ namespace Sip.Message
 			get { return Begin >= 0 && End >= 0; }
 		}
 
+		public bool IsNotEmpty
+		{
+			get { return Begin >= 0 && End >= 0 && Begin < End; }
+		}
+
 		public bool IsInvalid
 		{
 			get { return Begin < 0 || End < 0; }
@@ -155,6 +162,23 @@ namespace Sip.Message
 			Bytes = null;
 			Begin = int.MinValue;
 			End = int.MinValue;
+		}
+
+		public ByteArrayPart DeepCopy()
+		{
+			if (IsInvalid)
+				return Invalid;
+
+			var copy = new ByteArrayPart()
+				{
+					Bytes = new byte[Length],
+					Begin = 0,
+					End = Length,
+				};
+
+			Buffer.BlockCopy(Bytes, Offset, copy.Bytes, copy.Offset, Length);
+
+			return copy;
 		}
 
 		#region Trim methods

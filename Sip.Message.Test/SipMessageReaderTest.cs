@@ -301,6 +301,36 @@ namespace SipMessageTest
 		}
 
 		[Test]
+		public void It_should_parse_Authorization_header_for_NTLM_signature()
+		{
+			var dfa = ParseHeader("Authorization: NTLM qop=\"auth\", realm=\"OfficeSIP Server\", opaque=\"05cee767\", targetname=\"officesip.local\", crand=\"3c1c4c7b\", cnum=\"21\", response=\"0100000061646d69de3324fd36334466\"");
+
+			var auth = dfa.Authorization[0];
+
+			Assert.AreEqual(AuthSchemes.Ntlm, auth.AuthScheme);
+			Assert.AreEqual("auth", auth.MessageQop.ToString());
+			Assert.AreEqual("OfficeSIP Server", auth.Realm.ToString());
+			Assert.AreEqual("auth", auth.MessageQop.ToString());
+			Assert.AreEqual("05cee767", auth.Opaque.ToString());
+			Assert.AreEqual("officesip.local", auth.Targetname.ToString());
+			Assert.AreEqual(0x3c1c4c7b, auth.Crand);
+			Assert.AreEqual(21, auth.Cnum);
+			Assert.AreEqual("0100000061646d69de3324fd36334466", auth.Response.ToString());
+		}
+
+		[Test]
+		public void It_should_parse_Authorization_header_for_NTLM_signature_crand_and_cnum_without_qoute()
+		{
+			var dfa = ParseHeader("Authorization: NTLM crand=3c1c4c7b, cnum=1234567");
+
+			var auth = dfa.Authorization[0];
+
+			Assert.AreEqual(AuthSchemes.Ntlm, auth.AuthScheme);
+			Assert.AreEqual(0x3c1c4c7b, auth.Crand);
+			Assert.AreEqual(1234567, auth.Cnum);
+		}
+
+		[Test]
 		public void It_should_parse_Authorization_header_with_empty_gssapi_data()
 		{
 			Assert.IsTrue(ParseHeader("Authorization: NTLM gssapi-data=\"\"")

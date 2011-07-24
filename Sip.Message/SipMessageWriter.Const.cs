@@ -23,6 +23,8 @@ namespace Sip.Message
 			public readonly static ByteArrayPart Proxy_Authenticate = new ByteArrayPart(@"Proxy-Authenticate");
 			public readonly static ByteArrayPart Authentication_Info = new ByteArrayPart(@"Authentication-Info");
 			public readonly static ByteArrayPart Proxy_Authentication_Info = new ByteArrayPart(@"Proxy-Authentication-Info");
+			public readonly static ByteArrayPart Authorization = new ByteArrayPart(@"Authorization");
+			public readonly static ByteArrayPart Proxy_Authorization = new ByteArrayPart(@"Proxy-Authorization");
 			public readonly static ByteArrayPart Date = new ByteArrayPart(@"Date");
 			public readonly static ByteArrayPart Unsupported = new ByteArrayPart(@"Unsupported");
 			public readonly static ByteArrayPart Route = new ByteArrayPart(@"Route");
@@ -35,7 +37,6 @@ namespace Sip.Message
 			public readonly static ByteArrayPart Require = new ByteArrayPart(@"Require");
 			public readonly static ByteArrayPart Subscription_State = new ByteArrayPart(@"Subscription-State");
 			public readonly static ByteArrayPart Subscription_State__ = new ByteArrayPart(@"Subscription-State: ");
-			//public readonly static ByteArrayPart Content_Transfer_Encoding = new ByteArrayPart(@"Content-Transfer-Encoding");
 			public readonly static ByteArrayPart Content_Transfer_Encoding__binary__ = new ByteArrayPart("Content-Transfer-Encoding: binary\r\n");
 			public readonly static ByteArrayPart SIP_ETag__ = new ByteArrayPart(@"SIP-ETag: ");
 			public readonly static ByteArrayPart x_Error_Details = new ByteArrayPart(@"x-Error-Details");
@@ -44,6 +45,17 @@ namespace Sip.Message
 			public readonly static ByteArrayPart Allow__ = new ByteArrayPart(@"Allow: ");
 			public readonly static ByteArrayPart Supported__ms_benotify__ = new ByteArrayPart("Supported: ms-benotify\r\n");
 			public readonly static ByteArrayPart At = new ByteArrayPart(@"@");
+
+			public readonly static ByteArrayPart __Digest_username__ = new ByteArrayPart(": Digest username=\"");
+			public readonly static ByteArrayPart ___realm__ = new ByteArrayPart("\", realm=\"");
+			public readonly static ByteArrayPart ___qop__ = new ByteArrayPart("\", qop=");
+			public readonly static ByteArrayPart __algorithm_ = new ByteArrayPart(", algorithm=");
+			public readonly static ByteArrayPart __uri__ = new ByteArrayPart(", uri=\"");
+			public readonly static ByteArrayPart ___nonce__ = new ByteArrayPart("\", nonce=\"");
+			public readonly static ByteArrayPart __nc_ = new ByteArrayPart("\", nc=");
+			public readonly static ByteArrayPart __cnonce__ = new ByteArrayPart(", cnonce=\"");
+			public readonly static ByteArrayPart ___opaque__ = new ByteArrayPart("\", opaque=\"");
+			public readonly static ByteArrayPart ___response__ = new ByteArrayPart("\", response=\"");
 
 			public readonly static ByteArrayPart ACK = new ByteArrayPart(@"ACK");
 			public readonly static ByteArrayPart BENOTIFY = new ByteArrayPart(@"BENOTIFY");
@@ -92,6 +104,7 @@ namespace Sip.Message
 			public readonly static ByteArrayPart auth_int = new ByteArrayPart(@"auth-int");
 			public readonly static ByteArrayPart algorithm = new ByteArrayPart(@"algorithm");
 			public readonly static ByteArrayPart MD5 = new ByteArrayPart(@"MD5");
+			public readonly static ByteArrayPart MD5_sess = new ByteArrayPart(@"MD5-sess");
 			public readonly static ByteArrayPart stale = new ByteArrayPart(@"stale");
 			public readonly static ByteArrayPart _true = new ByteArrayPart(@"true");
 			public readonly static ByteArrayPart _false = new ByteArrayPart(@"false");
@@ -114,7 +127,7 @@ namespace Sip.Message
 			public readonly static ByteArrayPart active = new ByteArrayPart(@"active");
 			public readonly static ByteArrayPart pending = new ByteArrayPart(@"pending");
 			public readonly static ByteArrayPart terminated = new ByteArrayPart(@"terminated");
-			public readonly static ByteArrayPart __sip_instance__ = new ByteArrayPart(";+sip.instance=\"");
+			public readonly static ByteArrayPart __sip_instance___ = new ByteArrayPart(";+sip.instance=\"<");
 
 			public readonly static ByteArrayPart UDP = new ByteArrayPart(@"UDP");
 			public readonly static ByteArrayPart TCP = new ByteArrayPart(@"TCP");

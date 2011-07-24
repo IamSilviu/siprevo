@@ -305,11 +305,13 @@ namespace SipDfaTester
 
 			var message8 = utf.GetBytes(
 				"REGISTER sip:officesip.local SIP/2.0\r\n" +
-				"WWW-Authenticate: Digest realm=\"o1fficesip.local\",nonce=\"189396c747dedfc87fbe5deb420db5ca\",qop=\"auth\",algorithm=MD5,stale=false,opaque=\"abc00000001\"\r\n" +
-				"WWW-Authenticate: Digest realm=\"o2fficesip.local\",nonce=\"289396c747dedfc87fbe5deb420db5ca\",qop=\"auth\",algorithm=MD5,stale=true,opaque=\"def00000001\"\r\n" +
-				"WWW-Authenticate: Digest realm=\"of3ficesip.local\",nonce=\"389396c747dedfc87fbe5deb420db5ca\",qop=\"auth,auth-int\",algorithm=MD5,stale=false,opaque=\"gfh00000001\"\r\n" +
-				"Proxy-Authenticate: Digest realm=\"of3ficesip.local\",nonce=\"389396c747dedfc87fbe5deb420db5ca\",qop=\"auth,auth-int\",algorithm=MD5,stale=false,opaque=\"gfh00000001\"\r\n" +
-				"Proxy-Authenticate: Digest realm=\"of3ficesip.local\",nonce=\"389396c747dedfc87fbe5deb420db5ca\",qop=\"auth,auth-int\",algorithm=MD5,stale=false,opaque=\"gfh00000001\"\r\n" +
+				"Authorization: NTLM qop=\"auth\", realm=\"OfficeSIP Server\", opaque=\"05cee767\", targetname=\"officesip.local\", crand=\"3c1c4c7b\", cnum=\"1234567\", response=\"0100000061646d69de3324fd36334466\"\r\n" +
+				//	Authorization: Digest username="proxy", realm="officesip.local", qop=auth, algorithm=MD5, uri="sip:officesip.local", nonce="d44b4f96b00841f9cada22d5cc678d94", nc=1, cnonce="0084800a", opaque="00000001", response="c07d8fc21bcf4ced9b45414f3d10a498"
+				//"WWW-Authenticate: Digest realm=\"o1fficesip.local\",nonce=\"189396c747dedfc87fbe5deb420db5ca\",qop=\"auth\",algorithm=MD5,stale=false,opaque=\"abc00000001\"\r\n" +
+				//"WWW-Authenticate: Digest realm=\"o2fficesip.local\",nonce=\"289396c747dedfc87fbe5deb420db5ca\",qop=\"auth\",algorithm=MD5,stale=true,opaque=\"def00000001\"\r\n" +
+				//"WWW-Authenticate: Digest realm=\"of3ficesip.local\",nonce=\"389396c747dedfc87fbe5deb420db5ca\",qop=\"auth,auth-int\",algorithm=MD5,stale=false,opaque=\"gfh00000001\"\r\n" +
+				//"Proxy-Authenticate: Digest realm=\"of3ficesip.local\",nonce=\"389396c747dedfc87fbe5deb420db5ca\",qop=\"auth,auth-int\",algorithm=MD5,stale=false,opaque=\"gfh00000001\"\r\n" +
+				//"Proxy-Authenticate: Digest realm=\"of3ficesip.local\",nonce=\"389396c747dedfc87fbe5deb420db5ca\",qop=\"auth,auth-int\",algorithm=MD5,stale=false,opaque=\"gfh00000001\"\r\n" +
 				"\r\n"
 				);
 
@@ -319,22 +321,28 @@ namespace SipDfaTester
 			Console.WriteLine("Final : {0}", dfa.Final);
 			Console.WriteLine("Parsed: {0} ({1})", parsed8, message8.Length);
 
-			Console.WriteLine("www Count: {0}", dfa.Count.WwwAuthenticateCount);
-			Console.WriteLine("proxy Count: {0}", dfa.Count.ProxyAuthenticateCount);
+			//Console.WriteLine("www Count: {0}", dfa.Count.WwwAuthenticateCount);
+			//Console.WriteLine("proxy Count: {0}", dfa.Count.ProxyAuthenticateCount);
 
-			for (int i = 0; i < dfa.Count.WwwAuthenticateCount + 1; i++)
-			{
-				var www = dfa.WwwAuthenticate[i];
+			//for (int i = 0; i < dfa.Count.WwwAuthenticateCount + 1; i++)
+			//{
+			//    var www = dfa.WwwAuthenticate[i];
 
-				Console.WriteLine();
-				Console.WriteLine("Scheme: {0}", www.AuthScheme);
-				Console.WriteLine("Nonce: {0}", www.Nonce.ToString());
-				Console.WriteLine("Realm: {0}", www.Realm.ToString());
-				Console.WriteLine("Qop: {0}", www.Qop.ToString());
-				Console.WriteLine("Alg: {0}", www.AuthAlgorithm.ToString());
-				Console.WriteLine("Opaque: {0}", www.Opaque.ToString());
-				Console.WriteLine("Stale: {0}", www.Stale);
-			}
+			//    Console.WriteLine();
+			//    Console.WriteLine("Scheme: {0}", www.AuthScheme);
+			//    Console.WriteLine("Nonce: {0}", www.Nonce.ToString());
+			//    Console.WriteLine("Realm: {0}", www.Realm.ToString());
+			//    Console.WriteLine("Qop: {0}", www.Qop.ToString());
+			//    Console.WriteLine("Alg: {0}", www.AuthAlgorithm.ToString());
+			//    Console.WriteLine("Opaque: {0}", www.Opaque.ToString());
+			//    Console.WriteLine("Stale: {0}", www.Stale);
+			//}
+
+			Console.WriteLine("Scheme: {0}", dfa.Authorization[0].AuthScheme);
+			Console.WriteLine("targetname: {0}", dfa.Authorization[0].Targetname.ToString());
+			Console.WriteLine("Crand: {0:x8}", dfa.Authorization[0].Crand);
+			Console.WriteLine("Cnum: {0}", dfa.Authorization[0].Cnum);
+			Console.WriteLine("Response: {0}", dfa.Authorization[0].Response.ToString());
 
 			Console.WriteLine("--");
 

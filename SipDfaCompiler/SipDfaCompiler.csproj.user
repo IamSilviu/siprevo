@@ -4,4 +4,7 @@
     </StartWorkingDirectory>
     <StartArguments>x</StartArguments>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <StartArguments>compile</StartArguments>
+  </PropertyGroup>
 </Project>

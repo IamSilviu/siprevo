@@ -35,7 +35,7 @@ namespace Sip.Message
 			public ByteArrayPart ToByteArrayPart(byte[] bytes, int offset)
 			{
 				if (Length == 0)
-					return new ByteArrayPart();
+					return ByteArrayPart.Invalid;
 
 				return new ByteArrayPart()
 				{
@@ -84,9 +84,9 @@ namespace Sip.Message
 			epid = new Range();
 		}
 
-		public Methods Method { get; private set; }
+		public Methods Method { get; protected set; }
 		public int StatusCode { get; private set; }
-		public int CSeq { get; private set; }
+		public int CSeq { get; protected set; }
 		public int Expires { get; private set; }
 
 		public bool IsRequest
@@ -214,6 +214,15 @@ namespace Sip.Message
 			Write(method.ToByteArrayPart(), C.SP, requestUri, C.SP, C.SIP_2_0, C.CRLF);
 		}
 
+		public void WriteRequestLine(Methods method, UriSchemes scheme, ByteArrayPart user, ByteArrayPart domain)
+		{
+			Method = method;
+
+			Write(method.ToByteArrayPart(), C.SP);
+			Write(scheme.ToByteArrayPart(), C.HCOLON, user, C.At, domain);
+			Write(C.SP, C.SIP_2_0, C.CRLF);
+		}
+
 		public void WriteRequestLine(Methods method, Transports transport, IPEndPoint endPoint)
 		{
 			Method = method;
@@ -240,7 +249,7 @@ namespace Sip.Message
 			Write(C.Contact___, addrSpec, C.RAQUOT);
 
 			if (sipInstance.IsValid)
-				Write(C.__sip_instance__, sipInstance, C.DQUOTE);
+				Write(C.__sip_instance___, sipInstance, C.RAQUOT, C.DQUOTE);
 
 			Write(C._expires_, expires);
 			Write(C.CRLF);
@@ -306,6 +315,11 @@ namespace Sip.Message
 
 		public void WriteContact(IPEndPoint endPoint, Transports transport)
 		{
+			WriteContact(endPoint, transport, ByteArrayPart.Invalid);
+		}
+
+		public void WriteContact(IPEndPoint endPoint, Transports transport, ByteArrayPart sipInstance)
+		{
 			Write(C.Contact, C.HCOLON, C.SP, C.LAQUOT, C.sip, C.HCOLON);
 			Write(endPoint);
 			if (transport != Transports.None)
@@ -313,7 +327,10 @@ namespace Sip.Message
 				Write(C.SEMI, C.transport, C.EQUAL);
 				Write(transport.ToLowerUtf8Bytes());
 			}
-			Write(C.RAQUOT, C.CRLF);
+			Write(C.RAQUOT);
+			if (sipInstance.IsValid)
+				Write(C.__sip_instance___, sipInstance, C.RAQUOT, C.DQUOTE);
+			Write(C.CRLF);
 		}
 
 		public void WriteExpires(int expires)
@@ -334,6 +351,7 @@ namespace Sip.Message
 
 		public void WriteCseq(int number, Methods method)
 		{
+			CSeq = number;
 			Method = method;
 
 			Write(C.CSeq, C.HCOLON, C.SP, number, C.SP, method.ToByteArrayPart(), C.CRLF);
@@ -527,6 +545,72 @@ namespace Sip.Message
 			Write(C.gssapi_data, C.EQUAL, C.DQUOTE, gssapiData, C.DQUOTE, C.CRLF);
 		}
 
+		public void WriteMsAuthentication(HeaderNames header, AuthSchemes scheme, ByteArrayPart targetname, ByteArrayPart realm, int opaque)
+		{
+			ByteArrayPart name;
+			switch (header)
+			{
+				case HeaderNames.ProxyAuthenticate:
+					name = C.Proxy_Authenticate;
+					break;
+
+				case HeaderNames.WwwAuthenticate:
+					name = C.WWW_Authenticate;
+					break;
+
+				default:
+					throw new ArgumentException();
+			}
+			Write(name, C.HCOLON, C.SP, scheme == AuthSchemes.Ntlm ? C.NTLM : C.Kerberos, C.SP);
+
+			Write(C.targetname, C.EQUAL, C.DQUOTE);
+			if (scheme == AuthSchemes.Kerberos)
+				Write(C.sip, C.SLASH);
+			Write(targetname, C.DQUOTE, C.COMMA);
+
+			Write(C.realm, C.EQUAL, C.DQUOTE, realm, C.DQUOTE);
+			Write(C.COMMA, C.version, C.EQUAL, 3);
+
+			Write(C.COMMA, C.opaque, C.EQUAL, C.DQUOTE);
+			WriteAsHex8(opaque);
+			Write(C.DQUOTE, C.COMMA);
+			
+			Write(C.CRLF);
+		}
+
+		public void WriteMsAuthentication(HeaderNames header, AuthSchemes scheme, ByteArrayPart targetname, ByteArrayPart realm, int opaque, ByteArrayPart gssapiData)
+		{
+			ByteArrayPart name;
+			switch (header)
+			{
+				case HeaderNames.ProxyAuthenticate:
+					name = C.Proxy_Authenticate;
+					break;
+
+				case HeaderNames.WwwAuthenticate:
+					name = C.WWW_Authenticate;
+					break;
+
+				default:
+					throw new ArgumentException();
+			}
+			Write(name, C.HCOLON, C.SP, scheme == AuthSchemes.Ntlm ? C.NTLM : C.Kerberos, C.SP);
+
+			Write(C.targetname, C.EQUAL, C.DQUOTE);
+			if (scheme == AuthSchemes.Kerberos)
+				Write(C.sip, C.SLASH);
+			Write(targetname, C.DQUOTE, C.COMMA);
+
+			Write(C.realm, C.EQUAL, C.DQUOTE, realm, C.DQUOTE);
+			Write(C.COMMA, C.version, C.EQUAL, 3);
+
+			Write(C.COMMA, C.opaque, C.EQUAL, C.DQUOTE);
+			WriteAsHex8(opaque);
+			Write(C.DQUOTE, C.COMMA);
+
+			Write(C.gssapi_data, C.EQUAL, C.DQUOTE, gssapiData, C.DQUOTE, C.CRLF);
+		}
+
 		public void WriteDate(DateTime date)
 		{
 			Write(C.Date, C.HCOLON, C.SP, date.ToString(@"R").ToByteArrayPart(), C.CRLF);
@@ -567,6 +651,15 @@ namespace Sip.Message
 			Write(endpoint);
 			Write(C._ms_received_cid_);
 			Write(msReceivedCid);
+			Write(C.SEMI, C.lr, C.RAQUOT, C.CRLF);
+		}
+
+		public void WriteRecordRoute(Transports transport, IPEndPoint endpoint)
+		{
+			var scheme = (transport == Transports.Tls) ? UriSchemes.Sips : UriSchemes.Sip;
+
+			Write(C.RecordRoute, C.HCOLON, C.SP, C.LAQUOT, scheme.ToByteArrayPart(), C.HCOLON);
+			Write(endpoint);
 			Write(C.SEMI, C.lr, C.RAQUOT, C.CRLF);
 		}
 
@@ -658,7 +751,24 @@ namespace Sip.Message
 
 		public void WriteTo(ByteArrayPart uri, ByteArrayPart tag)
 		{
-			Write(C.To__, C.LAQUOT, uri, C.RAQUOT, C._tag_, tag, C.CRLF);
+			Write(C.To__, C.LAQUOT, uri, C.RAQUOT);
+			if (tag.IsValid)
+				Write(C._tag_, tag);
+			Write(C.CRLF);
+		}
+
+		public void WriteTo2(ByteArrayPart user, ByteArrayPart domain, ByteArrayPart tag)
+		{
+			Write(C.To__, C.LAQUOT, C.sip, C.HCOLON, user, C.At, domain, C.RAQUOT);
+			if (tag.IsValid)
+				Write(C._tag_, tag);
+			Write(C.CRLF);
+		}
+
+		public void WriteToRaw(ByteArrayPart user, ByteArrayPart domain, ByteArrayPart raw)
+		{
+			Write(C.To__, C.LAQUOT, C.sip, C.HCOLON, user, C.At, domain, C.RAQUOT);
+			Write(raw, C.CRLF);
 		}
 
 		public void WriteTo(ByteArrayPart uri, ByteArrayPart tag, ByteArrayPart epid1)
@@ -681,11 +791,19 @@ namespace Sip.Message
 
 		public void WriteFrom(ByteArrayPart uri, ByteArrayPart tag)
 		{
+			WriteFrom(uri, tag, ByteArrayPart.Invalid);
+		}
+
+		public void WriteFrom(ByteArrayPart uri, ByteArrayPart tag, ByteArrayPart epid)
+		{
 			Write(C.From__, C.LAQUOT);
 			fromAddrspec = new Range(end, uri.Length);
 			Write(uri, C.RAQUOT, C._tag_);
 			fromTag = new Range(end, tag.Length);
-			Write(tag, C.CRLF);
+			Write(tag);
+			if (epid.IsValid)
+				Write(C._epid_, epid);
+			Write(C.CRLF);
 		}
 
 		public void WriteFrom(ByteArrayPart uri, int tag)
@@ -695,6 +813,12 @@ namespace Sip.Message
 			Write(uri, C.RAQUOT, C._tag_);
 			fromTag = new Range(end, 8);
 			WriteAsHex8(tag);
+			Write(C.CRLF);
+		}
+
+		public void WriteFromRaw(ByteArrayPart displayName, ByteArrayPart uri, ByteArrayPart raw)
+		{
+			Write(C.From__, C.DQUOTE, displayName, C.DQUOTE, C.SP, C.LAQUOT, uri, C.RAQUOT, raw);
 			Write(C.CRLF);
 		}
 
@@ -788,6 +912,49 @@ namespace Sip.Message
 			WriteAsHex8(branch);
 			Write(C._ms_received_cid_);
 			Write(msRecivedCid);
+			Write(C.CRLF);
+		}
+
+		public void WriteDigestAuthorization(HeaderNames header, ByteArrayPart username, ByteArrayPart realm, AuthQops qop,
+			AuthAlgorithms algorithm, ByteArrayPart uri, ByteArrayPart nonce, int nc, int cnonce, ByteArrayPart opaque, byte[] response)
+		{
+			if (header == HeaderNames.Authorization)
+				Write(C.Authorization);
+			else if (header == HeaderNames.ProxyAuthorization)
+				Write(C.Proxy_Authorization);
+			else
+				throw new ArgumentException(@"HeaderNames");
+
+			Write(C.__Digest_username__);
+			Write(username);
+			Write(C.___realm__);
+			Write(realm);
+			if (qop != AuthQops.None)
+			{
+				Write(C.___qop__);
+				Write(qop.ToByteArrayPart());
+			}
+			else
+				Write(C.DQUOTE);
+			Write(C.__algorithm_);
+			Write(algorithm.ToByteArrayPart());
+			Write(C.__uri__);
+			Write(uri);
+			Write(C.___nonce__);
+			Write(nonce);
+			if (qop != AuthQops.None)
+			{
+				Write(C.__nc_);
+				Write(nc);
+				Write(C.__cnonce__);
+				WriteAsHex8(cnonce);
+			}
+			Write(C.___opaque__);
+			if (opaque.IsValid)
+				Write(opaque);
+			Write(C.___response__);
+			Write(response);
+			Write(C.DQUOTE);
 			Write(C.CRLF);
 		}
 
