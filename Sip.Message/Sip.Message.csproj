@@ -37,6 +37,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base64Encoding.cs" />
     <Compile Include="BeginEnd.cs" />
     <Compile Include="BufferManager.cs" />
     <Compile Include="ByteArrayPart.cs" />

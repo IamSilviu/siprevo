@@ -45,6 +45,10 @@ namespace SipMessageTest
 
 			var actual = GetWritedArrayPart(writer);
 			Assert.AreEqual(new byte[] { 48, 52, 50, 57, 52, 57, 54, 55, 50, 57, 53, }, actual);
+
+			var writer2 = new ByteArrayWriter(11);
+			writer2.Write(100);
+			Assert.AreEqual(new byte[] { 49, 48, 48, }, GetWritedArrayPart(writer2));
 		}
 
 		[Test]

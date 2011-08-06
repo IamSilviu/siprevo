@@ -189,6 +189,27 @@ namespace Sip.Message
 				segment.Array[segment.Offset + end - i] = GetLowerHexChar((byte)(value & 0x0f));
 		}
 
+		public void WriteAsHex(ArraySegment<byte> data)
+		{
+			ValidateCapacity(data.Count * 2);
+
+			for (int i = 0; i < data.Count; i++)
+			{
+				segment.Array[segment.Offset + end] = GetLowerHexChar((byte)(data.Array[data.Offset + i] >> 4));
+				end++;
+
+				segment.Array[segment.Offset + end] = GetLowerHexChar((byte)(data.Array[data.Offset + i] & 0x0f));
+				end++;
+			}
+		}
+
+		public void WriteAsBase64(ArraySegment<byte> data)
+		{
+			ValidateCapacity(Base64Encoding.GetEncodedLength(data.Count));
+
+			end += Base64Encoding.Encode(data, segment.Array, segment.Offset + end);
+		}
+
 		public ArraySegment<byte> GetBytesForCustomWrite(int size)
 		{
 			ValidateCapacity(size);
@@ -313,6 +334,13 @@ namespace Sip.Message
 		}
 
 		public void Write(ByteArrayPart part1, ByteArrayPart part2, int part3)
+		{
+			Write(part1);
+			Write(part2);
+			Write(part3);
+		}
+
+		public void Write(ByteArrayPart part1, int part2, ByteArrayPart part3)
 		{
 			Write(part1);
 			Write(part2);

@@ -603,34 +603,41 @@ namespace Sip.Message
 			return credentials;
 		}
 
-		public bool TryGetCredentialsByTargetname(AuthSchemes scheme, ByteArrayPart targetname, out Credentials credentials)
+		public bool TryGetCredentialsByTargetname(AuthSchemes scheme, ByteArrayPart targetname, out Credentials credentials, out bool proxy)
 		{
+			int length = targetname.Length + ((scheme == AuthSchemes.Kerberos) ? 4 : 0);
+
 			for (int i = 0; i < Count.AuthorizationCount; i++)
 			{
-				if (Authorization[i].AuthScheme == scheme && Authorization[i].Targetname.Equals(targetname))
-				{
-					credentials = Authorization[i];
-					return true;
-				}
+				if (Authorization[i].AuthScheme == scheme)
+					if (Authorization[i].Targetname.Length == length && Authorization[i].Targetname.EndWith(targetname))
+					{
+						credentials = Authorization[i];
+						proxy = false;
+						return true;
+					}
 			}
 
 			for (int i = 0; i < Count.ProxyAuthorizationCount; i++)
 			{
-				if (ProxyAuthorization[i].AuthScheme == scheme && ProxyAuthorization[i].Targetname.Equals(targetname))
-				{
-					credentials = ProxyAuthorization[i];
-					return true;
-				}
+				if (ProxyAuthorization[i].AuthScheme == scheme)
+					if (ProxyAuthorization[i].Targetname.Length == length && ProxyAuthorization[i].Targetname.EndWith(targetname))
+					{
+						credentials = ProxyAuthorization[i];
+						proxy = true;
+						return true;
+					}
 			}
 
 			credentials = new Credentials();
+			proxy = false;
 			return false;
 		}
 
-		public Credentials GetCredentialsByTargetname(AuthSchemes scheme, ByteArrayPart targetname)
+		public Credentials GetCredentialsByTargetname(AuthSchemes scheme, ByteArrayPart targetname, out bool proxy)
 		{
 			Credentials credentials;
-			TryGetCredentialsByTargetname(scheme, targetname, out credentials);
+			TryGetCredentialsByTargetname(scheme, targetname, out credentials, out proxy);
 
 			return credentials;
 		}

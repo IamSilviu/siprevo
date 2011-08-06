@@ -137,6 +137,20 @@ namespace Sip.Message
 			return true;
 		}
 
+		public bool EndWith(ByteArrayPart part)
+		{
+			int length = part.Length;
+
+			if (Length < length)
+				return false;
+
+			for (int i = Begin + Length - part.Length, j = part.Begin; j < part.End; i++, j++)
+				if (Bytes[i] != part.Bytes[j])
+					return false;
+
+			return true;
+		}
+
 		//public bool IsEmpty
 		//{
 		//    get { return Begin < 0 || End < 0; }

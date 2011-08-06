@@ -7,14 +7,17 @@ namespace Sip.Message
 	public static class Converters
 	{
 		private static readonly byte[][] lowerTransport;
+		private static readonly byte[][] authSchemes;
 
 		static Converters()
 		{
 			lowerTransport = new byte[Enum.GetValues(typeof(Transports)).Length][];
-
 			InitializeLowerTransport();
-
 			Verify(lowerTransport, typeof(Transports));
+
+			authSchemes = new byte[Enum.GetValues(typeof(AuthSchemes)).Length][];
+			InitializeAuthSchemes();
+			Verify(authSchemes, typeof(AuthSchemes));
 		}
 
 		public static ByteArrayPart ToByteArrayPart(this Methods method)
@@ -135,6 +138,11 @@ namespace Sip.Message
 			return lowerTransport[(int)transport];
 		}
 
+		public static byte[] ToUtf8Bytes(this AuthSchemes schemes)
+		{
+			return authSchemes[(int)schemes];
+		}
+
 		public static ByteArrayPart ToByteArrayPart(this string text)
 		{
 			return new ByteArrayPart(text);
@@ -167,9 +175,18 @@ namespace Sip.Message
 			lowerTransport[(int)Transports.Udp] = Encoding.UTF8.GetBytes(@"udp");
 		}
 
+		private static void InitializeAuthSchemes()
+		{
+			authSchemes[(int)AuthSchemes.None] = new byte[0];
+			authSchemes[(int)AuthSchemes.Digest] = Encoding.UTF8.GetBytes(@"Digest");
+			authSchemes[(int)AuthSchemes.Kerberos] = Encoding.UTF8.GetBytes(@"Kerberos");
+			authSchemes[(int)AuthSchemes.Ntlm] = Encoding.UTF8.GetBytes(@"NTLM");
+			authSchemes[(int)AuthSchemes.TlsDsk] = Encoding.UTF8.GetBytes(@"TLS-DSK");
+		}
+
 		private static void Verify(byte[][] values, Type type)
 		{
-			int length = Enum.GetValues(typeof(Transports)).Length;
+			int length = Enum.GetValues(type).Length;
 
 			for (int i = 0; i < length; i++)
 				if (values[i] == null)

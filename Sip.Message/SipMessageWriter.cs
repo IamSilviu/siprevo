@@ -448,26 +448,26 @@ namespace Sip.Message
 			Write(C.SEMI, C.branch, C.EQUAL, branch, C.CRLF);
 		}
 
-		public void WriteAuthenticateDigest(bool wwwOrProxy, ByteArrayPart realm, ByteArrayPart nonce, bool authint, bool stale, ByteArrayPart opaque)
+		//public void WriteAuthenticateDigest(bool proxy, ByteArrayPart realm, ByteArrayPart nonce, bool authint, bool stale, ByteArrayPart opaque)
+		//{
+		//    Write(proxy ? C.Proxy_Authenticate : C.WWW_Authenticate, C.HCOLON, C.SP, C.Digest, C.SP);
+
+		//    Write(C.realm, C.EQUAL, C.DQUOTE, realm, C.DQUOTE, C.COMMA);
+		//    Write(C.nonce, C.EQUAL, C.DQUOTE, nonce, C.DQUOTE, C.COMMA);
+		//    Write(C.qop, C.EQUAL, C.DQUOTE, C.auth);
+		//    if (authint)
+		//        Write(C.COMMA, C.auth_int);
+		//    Write(C.DQUOTE, C.COMMA);
+		//    Write(C.algorithm, C.EQUAL, C.MD5, C.COMMA);
+		//    Write(C.stale, C.EQUAL, stale ? C._true : C._false, C.COMMA);
+		//    Write(C.opaque, C.EQUAL, C.DQUOTE, opaque, C.DQUOTE);
+
+		//    Write(C.CRLF);
+		//}
+
+		public void WriteAuthenticateDigest(bool proxy, ByteArrayPart realm, int nonce1, int nonce2, int nonce3, int nonce4, bool authint, bool stale, int opaque)
 		{
-			Write(wwwOrProxy ? C.WWW_Authenticate : C.Proxy_Authenticate, C.HCOLON, C.SP, C.Digest, C.SP);
-
-			Write(C.realm, C.EQUAL, C.DQUOTE, realm, C.DQUOTE, C.COMMA);
-			Write(C.nonce, C.EQUAL, C.DQUOTE, nonce, C.DQUOTE, C.COMMA);
-			Write(C.qop, C.EQUAL, C.DQUOTE, C.auth);
-			if (authint)
-				Write(C.COMMA, C.auth_int);
-			Write(C.DQUOTE, C.COMMA);
-			Write(C.algorithm, C.EQUAL, C.MD5, C.COMMA);
-			Write(C.stale, C.EQUAL, stale ? C._true : C._false, C.COMMA);
-			Write(C.opaque, C.EQUAL, C.DQUOTE, opaque, C.DQUOTE);
-
-			Write(C.CRLF);
-		}
-
-		public void WriteAuthenticateDigest(bool wwwOrProxy, ByteArrayPart realm, int nonce1, int nonce2, int nonce3, int nonce4, bool authint, bool stale, int opaque)
-		{
-			Write(wwwOrProxy ? C.WWW_Authenticate : C.Proxy_Authenticate, C.HCOLON, C.SP, C.Digest, C.SP);
+			Write(proxy ? C.Proxy_Authenticate : C.WWW_Authenticate, C.HCOLON, C.SP, C.Digest, C.SP);
 
 			Write(C.realm, C.EQUAL, C.DQUOTE, realm, C.DQUOTE, C.COMMA);
 			Write(C.nonce, C.EQUAL, C.DQUOTE);
@@ -489,79 +489,66 @@ namespace Sip.Message
 			Write(C.CRLF);
 		}
 
-		public void WriteMsAuthentication(HeaderNames header, AuthSchemes scheme, ByteArrayPart targetname, ByteArrayPart realm, bool version, bool crlf)
+		//public void WriteMsAuthentication(HeaderNames header, AuthSchemes scheme, ByteArrayPart targetname, ByteArrayPart realm, bool version, bool crlf)
+		//{
+		//    ByteArrayPart name;
+
+		//    switch (header)
+		//    {
+		//        case HeaderNames.ProxyAuthenticate:
+		//            name = C.Proxy_Authenticate;
+		//            break;
+
+		//        case HeaderNames.WwwAuthenticate:
+		//            name = C.WWW_Authenticate;
+		//            break;
+
+		//        case HeaderNames.AuthenticationInfo:
+		//            name = C.Authentication_Info;
+		//            break;
+
+		//        case HeaderNames.ProxyAuthenticationInfo:
+		//            name = C.Proxy_Authentication_Info;
+		//            break;
+
+		//        default:
+		//            throw new ArgumentException();
+		//    }
+
+		//    Write(name, C.HCOLON, C.SP, scheme == AuthSchemes.Ntlm ? C.NTLM : C.Kerberos, C.SP);
+
+		//    if (scheme == AuthSchemes.Kerberos)
+		//        Write(C.targetname, C.EQUAL, C.DQUOTE, C.sip, C.SLASH, targetname, C.DQUOTE, C.COMMA);
+		//    else
+		//        Write(C.targetname, C.EQUAL, C.DQUOTE, targetname, C.DQUOTE, C.COMMA);
+
+		//    Write(C.realm, C.EQUAL, C.DQUOTE, realm, C.DQUOTE);
+
+		//    if (version == true)
+		//        Write(C.COMMA, C.version, C.EQUAL, 3);
+
+		//    Write(crlf == true ? C.CRLF : C.COMMA);
+		//}
+
+		//public void WriteMsAuthenticationInfo(ByteArrayPart opaque, int snum, ByteArrayPart srand, ByteArrayPart rspauth)
+		//{
+		//    Write(C.opaque, C.EQUAL, C.DQUOTE, opaque, C.DQUOTE, C.COMMA);
+		//    Write(C.qop, C.EQUAL, C.DQUOTE, C.auth, C.DQUOTE, C.COMMA);
+		//    Write(C.snum, C.EQUAL, C.DQUOTE, snum, C.DQUOTE, C.COMMA);
+		//    Write(C.srand, C.EQUAL, C.DQUOTE, srand, C.DQUOTE, C.COMMA);
+		//    Write(C.rspauth, C.EQUAL, C.DQUOTE, rspauth, C.DQUOTE, C.CRLF);
+		//}
+
+		//public void WriteMsAuthentication(ByteArrayPart opaque, ByteArrayPart gssapiData)
+		//{
+		//    Write(C.opaque, C.EQUAL, C.DQUOTE, opaque, C.DQUOTE, C.COMMA);
+		//    Write(C.gssapi_data, C.EQUAL, C.DQUOTE, gssapiData, C.DQUOTE, C.CRLF);
+		//}
+
+		public void WriteAuthenticationInfo(bool proxy, AuthSchemes scheme, ByteArrayPart targetname, ByteArrayPart realm, int opaque, int snum, int srand, ArraySegment<byte> rspauth)
 		{
-			ByteArrayPart name;
-
-			switch (header)
-			{
-				case HeaderNames.ProxyAuthenticate:
-					name = C.Proxy_Authenticate;
-					break;
-
-				case HeaderNames.WwwAuthenticate:
-					name = C.WWW_Authenticate;
-					break;
-
-				case HeaderNames.AuthenticationInfo:
-					name = C.Authentication_Info;
-					break;
-
-				case HeaderNames.ProxyAuthenticationInfo:
-					name = C.Proxy_Authentication_Info;
-					break;
-
-				default:
-					throw new ArgumentException();
-			}
-
-			Write(name, C.HCOLON, C.SP, scheme == AuthSchemes.Ntlm ? C.NTLM : C.Kerberos, C.SP);
-
-			if (scheme == AuthSchemes.Kerberos)
-				Write(C.targetname, C.EQUAL, C.DQUOTE, C.sip, C.SLASH, targetname, C.DQUOTE, C.COMMA);
-			else
-				Write(C.targetname, C.EQUAL, C.DQUOTE, targetname, C.DQUOTE, C.COMMA);
-
-			Write(C.realm, C.EQUAL, C.DQUOTE, realm, C.DQUOTE);
-
-			if (version == true)
-				Write(C.COMMA, C.version, C.EQUAL, 3);
-
-			Write(crlf == true ? C.CRLF : C.COMMA);
-		}
-
-		public void WriteMsAuthenticationInfo(ByteArrayPart opaque, int snum, ByteArrayPart srand, ByteArrayPart rspauth)
-		{
-			Write(C.opaque, C.EQUAL, C.DQUOTE, opaque, C.DQUOTE, C.COMMA);
-			Write(C.qop, C.EQUAL, C.DQUOTE, C.auth, C.DQUOTE, C.COMMA);
-			Write(C.snum, C.EQUAL, C.DQUOTE, snum, C.DQUOTE, C.COMMA);
-			Write(C.srand, C.EQUAL, C.DQUOTE, srand, C.DQUOTE, C.COMMA);
-			Write(C.rspauth, C.EQUAL, C.DQUOTE, rspauth, C.DQUOTE, C.CRLF);
-		}
-
-		public void WriteMsAuthentication(ByteArrayPart opaque, ByteArrayPart gssapiData)
-		{
-			Write(C.opaque, C.EQUAL, C.DQUOTE, opaque, C.DQUOTE, C.COMMA);
-			Write(C.gssapi_data, C.EQUAL, C.DQUOTE, gssapiData, C.DQUOTE, C.CRLF);
-		}
-
-		public void WriteMsAuthentication(HeaderNames header, AuthSchemes scheme, ByteArrayPart targetname, ByteArrayPart realm, int opaque)
-		{
-			ByteArrayPart name;
-			switch (header)
-			{
-				case HeaderNames.ProxyAuthenticate:
-					name = C.Proxy_Authenticate;
-					break;
-
-				case HeaderNames.WwwAuthenticate:
-					name = C.WWW_Authenticate;
-					break;
-
-				default:
-					throw new ArgumentException();
-			}
-			Write(name, C.HCOLON, C.SP, scheme == AuthSchemes.Ntlm ? C.NTLM : C.Kerberos, C.SP);
+			Write(proxy ? C.Proxy_Authentication_Info : C.Authentication_Info, C.HCOLON, C.SP,
+				scheme == AuthSchemes.Ntlm ? C.NTLM : C.Kerberos, C.SP);
 
 			Write(C.targetname, C.EQUAL, C.DQUOTE);
 			if (scheme == AuthSchemes.Kerberos)
@@ -569,32 +556,46 @@ namespace Sip.Message
 			Write(targetname, C.DQUOTE, C.COMMA);
 
 			Write(C.realm, C.EQUAL, C.DQUOTE, realm, C.DQUOTE);
-			Write(C.COMMA, C.version, C.EQUAL, 3);
 
 			Write(C.COMMA, C.opaque, C.EQUAL, C.DQUOTE);
 			WriteAsHex8(opaque);
-			Write(C.DQUOTE, C.COMMA);
-			
+			Write(C.DQUOTE);
+
+			Write(C.COMMA, C.qop, C.EQUAL, C.DQUOTE, C.auth, C.DQUOTE);
+
+			Write(C._snum__, snum, C.DQUOTE);
+
+			Write(C._srand__);
+			WriteAsHex8(srand);
+			Write(C.DQUOTE);
+
+			Write(C._rspauth__);
+			WriteAsHex(rspauth);
+			Write(C.DQUOTE);
+
 			Write(C.CRLF);
 		}
 
-		public void WriteMsAuthentication(HeaderNames header, AuthSchemes scheme, ByteArrayPart targetname, ByteArrayPart realm, int opaque, ByteArrayPart gssapiData)
+		public void WriteAuthenticateMs(bool proxy, AuthSchemes scheme, ByteArrayPart targetname, ByteArrayPart realm, int opaque)
 		{
-			ByteArrayPart name;
-			switch (header)
-			{
-				case HeaderNames.ProxyAuthenticate:
-					name = C.Proxy_Authenticate;
-					break;
+			Write(proxy ? C.Proxy_Authenticate : C.WWW_Authenticate, C.HCOLON, C.SP, scheme == AuthSchemes.Ntlm ? C.NTLM : C.Kerberos, C.SP);
 
-				case HeaderNames.WwwAuthenticate:
-					name = C.WWW_Authenticate;
-					break;
+			Write(C.targetname, C.EQUAL, C.DQUOTE);
+			if (scheme == AuthSchemes.Kerberos)
+				Write(C.sip, C.SLASH);
+			Write(targetname, C.DQUOTE, C.COMMA);
 
-				default:
-					throw new ArgumentException();
-			}
-			Write(name, C.HCOLON, C.SP, scheme == AuthSchemes.Ntlm ? C.NTLM : C.Kerberos, C.SP);
+			Write(C.realm, C.EQUAL, C.DQUOTE, realm, C.DQUOTE);
+			Write(C.COMMA, C.version, C.EQUAL, 3);
+
+			Write(C.COMMA, C.opaque, C.EQUAL, C.DQUOTE);
+			WriteAsHex8(opaque);
+			Write(C.DQUOTE, C.CRLF);
+		}
+
+		public void WriteAuthenticateMs(bool proxy, AuthSchemes scheme, ByteArrayPart targetname, ByteArrayPart realm, int opaque, ArraySegment<byte> gssapiData)
+		{
+			Write(proxy ? C.Proxy_Authenticate : C.WWW_Authenticate, C.HCOLON, C.SP, scheme == AuthSchemes.Ntlm ? C.NTLM : C.Kerberos, C.SP);
 
 			Write(C.targetname, C.EQUAL, C.DQUOTE);
 			if (scheme == AuthSchemes.Kerberos)
@@ -608,7 +609,9 @@ namespace Sip.Message
 			WriteAsHex8(opaque);
 			Write(C.DQUOTE, C.COMMA);
 
-			Write(C.gssapi_data, C.EQUAL, C.DQUOTE, gssapiData, C.DQUOTE, C.CRLF);
+			Write(C.gssapi_data, C.EQUAL, C.DQUOTE);
+			WriteAsBase64(gssapiData);
+			Write(C.DQUOTE, C.CRLF);
 		}
 
 		public void WriteDate(DateTime date)

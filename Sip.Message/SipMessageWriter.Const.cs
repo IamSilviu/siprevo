@@ -112,8 +112,11 @@ namespace Sip.Message
 			public readonly static ByteArrayPart targetname = new ByteArrayPart(@"targetname");
 			public readonly static ByteArrayPart version = new ByteArrayPart(@"version");
 			public readonly static ByteArrayPart snum = new ByteArrayPart(@"snum");
+			public readonly static ByteArrayPart _snum__ = new ByteArrayPart(",snum=\"");
 			public readonly static ByteArrayPart srand = new ByteArrayPart(@"srand");
+			public readonly static ByteArrayPart _srand__ = new ByteArrayPart(",srand=\"");
 			public readonly static ByteArrayPart rspauth = new ByteArrayPart(@"rspauth");
+			public readonly static ByteArrayPart _rspauth__ = new ByteArrayPart(",rspauth=\"");
 			public readonly static ByteArrayPart gssapi_data = new ByteArrayPart(@"gssapi-data");
 			public readonly static ByteArrayPart lr = new ByteArrayPart(@"lr");
 			public readonly static ByteArrayPart branch = new ByteArrayPart(@"branch");
