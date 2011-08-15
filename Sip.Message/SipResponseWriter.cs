@@ -80,7 +80,7 @@ namespace Sip.Message
 								request.Headers[i].Value.Begin, request.From.Tag.Length);
 
 						if (request.From.Epid.IsValid)
-							epid = new Range(end + request.From.Epid.Begin -
+							fromEpid = new Range(end + request.From.Epid.Begin -
 								request.Headers[i].Value.Begin, request.From.Epid.Length);
 
 						Write(request.Headers[i].Value);

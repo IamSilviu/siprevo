@@ -53,7 +53,8 @@ namespace Sip.Message
 		protected Range fromTag;
 		protected Range toAddrspec;
 		protected Range toTag;
-		protected Range epid;
+		protected Range fromEpid;
+		protected Range toEpid;
 
 		public SipMessageWriter()
 			: base(128, 2048)
@@ -81,7 +82,8 @@ namespace Sip.Message
 			fromTag = new Range();
 			toAddrspec = new Range();
 			toTag = new Range();
-			epid = new Range();
+			fromEpid = new Range();
+			toEpid = new Range();
 		}
 
 		public Methods Method { get; protected set; }
@@ -124,9 +126,19 @@ namespace Sip.Message
 			get { return toTag.ToByteArrayPart(Buffer, Segment.Offset); }
 		}
 
+		public ByteArrayPart FromEpid
+		{
+			get { return fromEpid.ToByteArrayPart(Buffer, Segment.Offset); }
+		}
+
+		public ByteArrayPart ToEpid
+		{
+			get { return toEpid.ToByteArrayPart(Buffer, Segment.Offset); }
+		}
+
 		public ByteArrayPart Epid
 		{
-			get { return epid.ToByteArrayPart(Buffer, Segment.Offset); }
+			get { return IsRequest ? ToEpid : FromEpid; }
 		}
 
 		#endregion
@@ -165,12 +177,13 @@ namespace Sip.Message
 				case HeaderNames.From:
 					fromAddrspec = CreateRange(reader.From.AddrSpec.Value, headerBegin);
 					fromTag = CreateRange(reader.From.Tag, headerBegin);
-					epid = CreateRange(reader.From.Epid, headerBegin);
+					fromEpid = CreateRange(reader.From.Epid, headerBegin);
 					break;
 
 				case HeaderNames.To:
 					toAddrspec = CreateRange(reader.To.AddrSpec.Value, headerBegin);
 					toTag = CreateRange(reader.To.Tag, headerBegin);
+					toEpid = CreateRange(reader.To.Epid, headerBegin);
 					break;
 
 				case HeaderNames.CSeq:
@@ -180,6 +193,29 @@ namespace Sip.Message
 			}
 
 			Write(reader.Headers[index].Value, C.CRLF);
+		}
+
+		public void WriteToHeader(SipMessageReader reader, int index, ByteArrayPart epid1)
+		{
+			if (reader.To.Epid.IsNotEmpty || epid1.Length <= 0)
+				WriteHeader(reader, index);
+			else
+			{
+				Write(C.To, C.HCOLON);
+
+				int headerBegin = reader.Headers[index].Value.Begin;
+
+				toAddrspec = CreateRange(reader.To.AddrSpec.Value, headerBegin);
+				toTag = CreateRange(reader.To.Tag, headerBegin);
+
+				Write(reader.Headers[index].Value);
+
+				Write(C._epid_);
+				toEpid = new Range(end, epid1.Length);
+				Write(epid1);
+
+				Write(C.CRLF);
+			}
 		}
 
 		private Range CreateRange(ByteArrayPart part, int headerBegin)
@@ -411,7 +447,7 @@ namespace Sip.Message
 				if (epid1.IsValid == true)
 				{
 					Write(C.SEMI, C.epid, C.EQUAL);
-					epid = new Range(end, epid1.Length);
+					toEpid = new Range(end, epid1.Length);
 					Write(epid1);
 				}
 				Write(C.CRLF);
@@ -780,9 +816,14 @@ namespace Sip.Message
 			toAddrspec = new Range(end, uri.Length);
 			Write(uri, C.RAQUOT, C._tag_);
 			toTag = new Range(end, tag.Length);
-			Write(tag, C._epid_);
-			epid = new Range(end, epid1.Length);
-			Write(epid1, C.CRLF);
+			Write(tag);
+			if (epid1.IsNotEmpty)
+			{
+				Write(C._epid_);
+				toEpid = new Range(end, epid1.Length);
+				Write(epid1);
+			}
+			Write(C.CRLF);
 		}
 
 		public void WriteTo(ByteArrayPart uri)
