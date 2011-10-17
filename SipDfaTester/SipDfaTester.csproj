@@ -26,7 +26,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;OPTIMIZED</DefineConstants>
+    <DefineConstants>TRACE;OPTIMIZED2</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -48,14 +48,23 @@
     <Compile Include="..\Sip.Message\BeginEnd.cs">
       <Link>BeginEnd.cs</Link>
     </Compile>
+    <Compile Include="..\Sip.Message\BeginEndIndex.cs">
+      <Link>BeginEndIndex.cs</Link>
+    </Compile>
     <Compile Include="..\Sip.Message\ByteArrayPart.cs">
       <Link>ByteArrayPart.cs</Link>
+    </Compile>
+    <Compile Include="..\Sip.Message\SipMessageReaderOptimized2.NotGenerated.cs">
+      <Link>SipMessageReaderOptimized2.NotGenerated.cs</Link>
     </Compile>
     <Compile Include="..\SipDfaCompiler\bin\Debug\SipMessageReader.cs">
       <Link>SipMessageReader.cs</Link>
     </Compile>
     <Compile Include="..\SipDfaCompiler\bin\Debug\SipMessageReaderOptimized.cs">
       <Link>SipMessageReaderOptimized.cs</Link>
+    </Compile>
+    <Compile Include="..\SipDfaCompiler\bin\Debug\SipMessageReaderOptimized2.cs">
+      <Link>SipMessageReaderOptimized2.cs</Link>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

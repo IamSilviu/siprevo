@@ -3,6 +3,7 @@ using System.Threading;
 using System.Collections.Generic;
 using System.IO;
 using SocketServers;
+using System.Diagnostics;
 
 namespace Fsm
 {
@@ -194,6 +195,9 @@ namespace Fsm
 		{
 			DfaState dfaStart;
 
+			Stopwatch stopwatch = new Stopwatch();
+			stopwatch.Start();
+
 			if (showProgress)
 			{
 				Console.WriteLine("NFA to DFA v.3 Converting...");
@@ -223,7 +227,10 @@ namespace Fsm
 
 			dfaCount = dfaStates.Count;
 			if (showProgress)
-				Console.WriteLine("Done ({0})\t\t\t\t\t\t\t\t", dfaCount);
+			{
+				stopwatch.Stop();
+				Console.WriteLine("Done (States: {0}, Elapsed: {1})\t\t\t\t", dfaCount, stopwatch.Elapsed);
+			}
 
 			return dfaStart;
 		}

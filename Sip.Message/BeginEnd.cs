@@ -44,6 +44,11 @@ namespace Sip.Message
 			get { return Begin < 0 || End < 0; }
 		}
 
+		public bool IsNotEmpty
+		{
+			get { return Begin >= 0 && End >= 0 && Begin < End; }
+		}
+
 		public static implicit operator ByteArrayPart(BeginEnd be)
 		{
 			return new ByteArrayPart() { Bytes = be.Bytes, Begin = be.Begin, End = be.End, };
@@ -90,6 +95,20 @@ namespace Sip.Message
 
 			for (int i = Begin, j = startIndex; j < endIndex; i++, j++)
 				if (Bytes[i] != bytes[j])
+					return false;
+
+			return true;
+		}
+
+		public bool EndWith(ByteArrayPart part)
+		{
+			int length = part.Length;
+
+			if (Length < length)
+				return false;
+
+			for (int i = Begin + Length - part.Length, j = part.Begin; j < part.End; i++, j++)
+				if (Bytes[i] != part.Bytes[j])
 					return false;
 
 			return true;

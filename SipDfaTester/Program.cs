@@ -11,6 +11,9 @@ namespace SipDfaTester
 		{
 			Console.Write("Loading...");
 			int start = Environment.TickCount;
+
+			var dfaDummy = new SipMessageReader();
+	
 			var dfa = new SipMessageReader();
 			//dfa.LoadTables(@"..\..\..\Sip.Message\SipMessageReader.dfa");
 			dfa.LoadTables(@"..\..\..\SipDfaCompiler\bin\Debug\Sip.Message.dfa");
@@ -19,6 +22,11 @@ namespace SipDfaTester
 			dfa.SetDefaultValue();
 			dfa.Parse(new byte[] { 0 }, 0, 1);
 			Console.WriteLine("Done (LoadTables {0} ms + JIT {1} ms)", loadTablesDelay, Environment.TickCount - start);
+
+#if OPTIMIZED2
+			Console.WriteLine(dfa.Index);
+			dfaDummy.Dispose();
+#endif
 
 			int proccessed = -1;
 			var utf = new UTF8Encoding();

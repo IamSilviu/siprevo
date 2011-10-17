@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;OPTIMIZED</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;OPTIMIZED2</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -26,7 +26,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;OPTIMIZED_DISABLED</DefineConstants>
+    <DefineConstants>TRACE;OPTIMIZED2</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Include="Base64Encoding.cs" />
     <Compile Include="BeginEnd.cs" />
+    <Compile Include="BeginEndIndex.cs" />
     <Compile Include="BufferManager.cs" />
     <Compile Include="ByteArrayPart.cs" />
     <Compile Include="ByteArrayPartEqualityComparer.cs" />
@@ -51,6 +52,8 @@
     <Compile Include="SipMessageReader.Extension.cs" />
     <Compile Include="Converters.cs" />
     <Compile Include="SipMessageReaderOptimized.cs" />
+    <Compile Include="SipMessageReaderOptimized2.cs" />
+    <Compile Include="SipMessageReaderOptimized2.NotGenerated.cs" />
     <Compile Include="SipMessageWriter.Const.cs" />
     <Compile Include="SipMessageWriter.cs" />
     <Compile Include="SipResponseWriter.cs" />

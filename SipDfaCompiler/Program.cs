@@ -28,7 +28,7 @@ namespace SipDfaCompiler
 
 			if (args.Length == 0)
 			{
-				var generator = new Generator(false);
+				var generator = new Generator(OptimizationMode.NoOptimization);
 				generator.ParseDeclaration(_marks);
 				generator.Generate(className, className, namespace1, null, true);
 			}
@@ -36,10 +36,12 @@ namespace SipDfaCompiler
 			{
 				var dfa = CompileDfa();
 
-				var generator1 = new Generator(false);
+				var generator1 = new Generator(OptimizationMode.NoOptimization);
 				generator1.Generate(className, className, namespace1, dfa, true);
-				var generator2 = new Generator(true);
+				var generator2 = new Generator(OptimizationMode.SingleStatic);
 				generator2.Generate(className + "Optimized", className, namespace1, dfa, false);
+				var generator3 = new Generator(OptimizationMode.IndexedArray);
+				generator3.Generate(className + "Optimized2", className, namespace1, dfa, false);
 			}
 
 			return 0;

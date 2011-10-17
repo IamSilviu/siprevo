@@ -77,9 +77,10 @@ namespace SipDfaCompiler
 					if (nfa1.Mark == Marks.ResetRange)
 					{
 						var name = GetVarname(nfa1.Name, "");
-						// Do NOT use SetDefaultValue, it clears bytes too -> wrong!
-						// Should to create special method for this
-						_main.WriteLine("{0}.SetDefaultValue();", name);
+						// #1 Do NOT use SetDefaultValue, it clears bytes too -> wrong!
+						// #1 Should to create special method for this
+						// #2 Ok for IndexArray optimimized 
+						_main.WriteLine("{0}." + GetSetDefauleValueCall() + ";", name);
 					}
 
 					if (nfa1.Mark == Marks.ResetRangeIfInvalid)
