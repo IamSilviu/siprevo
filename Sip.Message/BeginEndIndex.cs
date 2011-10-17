@@ -62,24 +62,6 @@ namespace Sip.Message
 			return new ByteArrayPart() { Bytes = be.Bytes, Begin = be.Begin, End = be.End, };
 		}
 
-		public new string ToString()
-		{
-			if (Bytes == null || Begin < 0 || End < 0)
-				return null;
-
-			return Encoding.UTF8.GetString(Bytes, Offset, Length);
-		}
-
-		public IPAddress ToIpAddress()
-		{
-			IPAddress ip = IPAddress.None;
-
-			if (IsValid == true)
-				IPAddress.TryParse(ToString(), out ip);
-
-			return ip;
-		}
-
 		public void BlockCopyTo(byte[] bytes, int offset)
 		{
 			Buffer.BlockCopy(Bytes, Begin, bytes, offset, Length);
@@ -121,6 +103,50 @@ namespace Sip.Message
 
 			return true;
 		}
+
+		public ByteArrayPart DeepCopy()
+		{
+			if (IsInvalid)
+				return ByteArrayPart.Invalid;
+
+			var copy = new ByteArrayPart()
+			{
+				Bytes = new byte[Length],
+				Begin = 0,
+				End = Length,
+			};
+
+			Buffer.BlockCopy(Bytes, Offset, copy.Bytes, copy.Offset, Length);
+
+			return copy;
+		}
+
+		#region Convert To... methods
+
+		public new string ToString()
+		{
+			if (Bytes == null || Begin < 0 || End < 0)
+				return null;
+
+			return Encoding.UTF8.GetString(Bytes, Offset, Length);
+		}
+
+		public IPAddress ToIPAddress()
+		{
+			IPAddress ip = IPAddress.None;
+
+			if (IsValid == true)
+				IPAddress.TryParse(ToString(), out ip);
+
+			return ip;
+		}
+
+		public ArraySegment<byte> ToArraySegment()
+		{
+			return new ArraySegment<byte>(Bytes, Offset, Length);
+		}
+
+		#endregion
 
 		#region IEquatable<...>, GetHashCode()
 

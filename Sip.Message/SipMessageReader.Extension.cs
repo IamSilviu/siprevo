@@ -8,29 +8,29 @@ using System.Reflection;
 
 namespace Sip.Message
 {
-	public interface IRemovableParams
+	public enum AuthQops
 	{
-		bool IsRemoved
-		{
-			get;
-			set;
-		}
+		None,
+		Auth,
+		AuthInt,
+	}
 
-		ByteArrayPart Param
+	#region struct Addrspec {...}
+
+	public partial struct Addrspec
+	{
+		public bool IsValid
 		{
-			get;
+			get { return Hostport.Host.IsValid; }
 		}
 	}
 
+	#endregion
+
+	#region struct Fromto {...}
+
 	public partial struct Fromto
 	{
-		//public Addrspec AddrSpec;
-		// SetArray вызывается позже - AddrSpec остается без массива
-		//public void SetValidAddrspec()
-		//{
-		//    AddrSpec = (AddrSpec1.Hostport.Host.IsValid) ? AddrSpec1 : AddrSpec2;
-		//}
-
 		public Addrspec AddrSpec
 		{
 			get
@@ -40,77 +40,22 @@ namespace Sip.Message
 				return AddrSpec2;
 			}
 		}
-
-		public void PostParsing()
-		{
-			//	AddrSpec1 = AddrSpec;
-		}
 	}
 
-	public partial struct Addrspec
-	{
-		IPAddress _MaddrIP;
-		ByteArrayPart _MsReceivedCid;
+	#endregion
 
-		public IPAddress xMaddrIP
-		{
-			get
-			{
-				return _MaddrIP == IPAddress.None ? Maddr.ToIpAddress() : _MaddrIP;
-			}
-			set
-			{
-				_MaddrIP = value;
-			}
-		}
-
-		public ByteArrayPart xMsReceivedCid
-		{
-			get
-			{
-				return _MsReceivedCid.IsValid == false ? (ByteArrayPart)MsReceivedCid : _MsReceivedCid;
-			}
-			set
-			{
-				_MsReceivedCid = value;
-			}
-		}
-
-		public bool IsMsReceivedCidPresent
-		{
-			get
-			{
-				return xMsReceivedCid.IsValid;
-			}
-		}
-
-		partial void OnSetDefaultValue()
-		{
-			xMaddrIP = IPAddress.None;
-			_MsReceivedCid.SetDefaultValue();
-		}
-
-		public bool IsValid
-		{
-			get
-			{
-				return Hostport.Host.IsValid;
-			}
-		}
-	}
+	#region struct Hostport {...}
 
 	public partial struct Hostport
 	{
 		IPAddress ip;
-		int _Port;
-		IPAddress _HostIP;
 
-		public IPAddress Ip
+		public IPAddress IP
 		{
 			get
 			{
 				if (ip == IPAddress.None)
-					ip = Host.ToIpAddress();
+					ip = Host.ToIPAddress();
 
 				return ip;
 			}
@@ -121,75 +66,15 @@ namespace Sip.Message
 			}
 		}
 
-		public bool HasPort
-		{
-			get { return Port != int.MinValue; }
-		}
-
-		public int xPort
-		{
-			get
-			{
-				return _Port == int.MinValue ? Port : _Port;
-			}
-			set
-			{
-				_Port = value;
-			}
-		}
-
-		public IPAddress xHostIP
-		{
-			get
-			{
-				return _HostIP == IPAddress.None ? Host.ToIpAddress() : _HostIP;
-			}
-			set
-			{
-				_HostIP = value;
-			}
-		}
-
 		partial void OnSetDefaultValue()
 		{
 			ip = IPAddress.None;
-			xPort = int.MinValue;
-			xHostIP = IPAddress.None;
 		}
 	}
 
-	public partial struct Header : IRemovableParams
-	{
-		#region IRemovableParams
+	#endregion
 
-		private bool isRemoved;
-
-		public bool IsRemoved
-		{
-			get { return isRemoved; }
-			set { isRemoved = value; }
-		}
-
-		public ByteArrayPart Param
-		{
-			get
-			{
-				return new ByteArrayPart()
-				{
-					Bytes = Name.Bytes,
-					Begin = Name.Begin,
-					End = Value.End + 2
-				};
-			}
-		}
-
-		#endregion
-
-		partial void OnSetDefaultValue()
-		{
-			isRemoved = false;
-		}
-	}
+	#region class SipMessageReader {...}
 
 	public partial class SipMessageReader
 	{
@@ -202,174 +87,6 @@ namespace Sip.Message
 			return 3600;
 		}
 
-		public partial struct ContactStruct
-		{
-			public bool _RemoveProxy;
-
-			public Addrspec AddrSpec
-			{
-				get
-				{
-					if (AddrSpec1.Hostport.Host.IsValid)
-						return AddrSpec1;
-					return AddrSpec2;
-				}
-			}
-
-			public bool HasProxyReplace
-			{
-				get { return ProxyReplace.IsValid; }
-			}
-
-			public void PostParsing()
-			{
-				AddrSpec1 = AddrSpec;
-			}
-
-			public void RemoveProxy()
-			{
-				_RemoveProxy = true;
-			}
-
-			partial void OnSetDefaultValue()
-			{
-				_RemoveProxy = false;
-			}
-		}
-
-		public partial struct ViaStruct : IRemovableParams
-		{
-			#region IRemovableParams
-
-			public bool IsRemoved
-			{
-				get;
-				set;
-			}
-
-			public ByteArrayPart Param
-			{
-				get
-				{
-					return CommaAndValue;
-				}
-			}
-
-			#endregion
-
-			public IPAddress ReceivedIP
-			{
-				get;
-				set;
-			}
-
-			public int MsReceivedPort
-			{
-				get;
-				set;
-			}
-
-			public ByteArrayPart MsReceivedCid
-			{
-				get;
-				set;
-			}
-
-			partial void OnSetDefaultValue()
-			{
-				IsRemoved = false;
-				ReceivedIP = IPAddress.None;
-				MsReceivedPort = int.MinValue;
-				MsReceivedCid.SetDefaultValue();
-			}
-		}
-
-		//public partial struct CSeqStruct
-		//{
-		//    Methods _Method;
-
-		//    public Methods xMethod
-		//    {
-		//        get
-		//        {
-		//            return _Method == Methods.None ? Method : _Method;
-		//        }
-		//        set
-		//        {
-		//            _Method = value;
-		//        }
-		//    }
-
-		//    partial void OnSetDefaultValue()
-		//    {
-		//        _Method = Methods.None;
-		//    }
-		//}
-
-		public partial struct RouteStruct : IRemovableParams
-		{
-			#region IRemovableParams
-
-			public bool IsRemoved
-			{
-				get;
-				set;
-			}
-
-			public ByteArrayPart Param
-			{
-				get
-				{
-					return CommaAndValue;
-				}
-			}
-
-			#endregion
-
-			partial void OnSetDefaultValue()
-			{
-				IsRemoved = false;
-			}
-		}
-
-		public partial struct RecordRouteStruct : IRemovableParams
-		{
-			#region IRemovableParams
-
-			public bool IsRemoved
-			{
-				get;
-				set;
-			}
-
-			public ByteArrayPart Param
-			{
-				get
-				{
-					return CommaAndValue;
-				}
-			}
-
-			#endregion
-
-			partial void OnSetDefaultValue()
-			{
-				IsRemoved = false;
-			}
-		}
-	}
-
-	public enum AuthQops
-	{
-		None,
-		Auth,
-		AuthInt,
-	}
-
-	#region class SipMessageReader {...}
-
-	public partial class SipMessageReader
-	{
 		public static void InitializeAsync(Action<int> callback)
 		{
 			var reader = new SipMessageReader();
@@ -640,6 +357,31 @@ namespace Sip.Message
 			TryGetCredentialsByTargetname(scheme, targetname, out credentials, out proxy);
 
 			return credentials;
+		}
+	}
+
+	#endregion
+
+	#region struct SipMessageReader.ContactStruct {...}
+
+	public partial class SipMessageReader
+	{
+		public partial struct ContactStruct
+		{
+			public Addrspec AddrSpec
+			{
+				get
+				{
+					if (AddrSpec1.Hostport.Host.IsValid)
+						return AddrSpec1;
+					return AddrSpec2;
+				}
+			}
+
+			public bool HasProxyReplace
+			{
+				get { return ProxyReplace.IsValid; }
+			}
 		}
 	}
 

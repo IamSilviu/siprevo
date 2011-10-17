@@ -158,7 +158,7 @@ namespace Sip.Message
 
 		public void WriteHeader(Header header)
 		{
-			if (header.IsRemoved == false)
+			//if (header.IsRemoved == false)
 				Write(header.Name, C.HCOLON, header.Value, C.CRLF);
 		}
 
@@ -274,11 +274,11 @@ namespace Sip.Message
 		{
 			Write(C.CRLF);
 		}
-		public void WriteContacts(SipMessageReader reader)
-		{
-			for (int i = 0; i < reader.Count.ContactCount; i++)
-				WriteContact(reader.Contact[i]);
-		}
+		//public void WriteContacts(SipMessageReader reader)
+		//{
+		//    for (int i = 0; i < reader.Count.ContactCount; i++)
+		//        WriteContact(reader.Contact[i]);
+		//}
 
 		public void WriteContact(ByteArrayPart addrSpec, ByteArrayPart sipInstance, int expires)
 		{
@@ -291,55 +291,55 @@ namespace Sip.Message
 			Write(C.CRLF);
 		}
 
-		public void WriteContact(SipMessageReader.ContactStruct contact)
-		{
-			Write(C.Contact, C.HCOLON, new ByteArrayPart()
-			{
-				Bytes = contact.Value.Bytes,
-				Begin = contact.Value.Begin,
-				End = contact.AddrSpec1.Value.End
-			});
-			if ((contact.AddrSpec1.Maddr.IsValid == false) && (contact.AddrSpec1.xMaddrIP != IPAddress.None))
-			{
-				Write(C.SEMI, C.maddr, C.EQUAL, contact.AddrSpec1.xMaddrIP);
-			}
-			if ((contact.AddrSpec1.MsReceivedCid.IsValid == false) && (contact.AddrSpec1.xMsReceivedCid.IsValid == true))
-			{
-				Write(C.SEMI, C.ms_received_cid, C.EQUAL);
-				Write(contact.AddrSpec1.xMsReceivedCid);
-			}
+		//public void WriteContact(SipMessageReader.ContactStruct contact)
+		//{
+		//    Write(C.Contact, C.HCOLON, new ByteArrayPart()
+		//    {
+		//        Bytes = contact.Value.Bytes,
+		//        Begin = contact.Value.Begin,
+		//        End = contact.AddrSpec1.Value.End
+		//    });
+		//    if ((contact.AddrSpec1.Maddr.IsValid == false) && (contact.AddrSpec1.xMaddrIP != IPAddress.None))
+		//    {
+		//        Write(C.SEMI, C.maddr, C.EQUAL, contact.AddrSpec1.xMaddrIP);
+		//    }
+		//    if ((contact.AddrSpec1.MsReceivedCid.IsValid == false) && (contact.AddrSpec1.xMsReceivedCid.IsValid == true))
+		//    {
+		//        Write(C.SEMI, C.ms_received_cid, C.EQUAL);
+		//        Write(contact.AddrSpec1.xMsReceivedCid);
+		//    }
 
-			if ((contact._RemoveProxy == true) && (contact.ProxyReplace.IsValid == true))
-			{
-				Write(new ByteArrayPart()
-				{
-					Bytes = contact.Value.Bytes,
-					Begin = contact.AddrSpec1.Value.End,
-					End = contact.ProxyReplace.Begin
-				}, new ByteArrayPart()
-				{
-					Bytes = contact.Value.Bytes,
-					Begin = contact.ProxyReplace.End,
-					End = contact.Value.End
-				});
-			}
-			else
-			{
-				Write(new ByteArrayPart()
-				{
-					Bytes = contact.Value.Bytes,
-					Begin = contact.AddrSpec1.Value.End,
-					End = contact.Value.End
-				});
-			}
+		//    if ((contact._RemoveProxy == true) && (contact.ProxyReplace.IsValid == true))
+		//    {
+		//        Write(new ByteArrayPart()
+		//        {
+		//            Bytes = contact.Value.Bytes,
+		//            Begin = contact.AddrSpec1.Value.End,
+		//            End = contact.ProxyReplace.Begin
+		//        }, new ByteArrayPart()
+		//        {
+		//            Bytes = contact.Value.Bytes,
+		//            Begin = contact.ProxyReplace.End,
+		//            End = contact.Value.End
+		//        });
+		//    }
+		//    else
+		//    {
+		//        Write(new ByteArrayPart()
+		//        {
+		//            Bytes = contact.Value.Bytes,
+		//            Begin = contact.AddrSpec1.Value.End,
+		//            End = contact.Value.End
+		//        });
+		//    }
 
-			if (contact.Expires != int.MinValue)
-			{
-				Write(C.SEMI, C.expires, C.EQUAL);
-				Write(contact.Expires);
-			}
-			Write(C.CRLF);
-		}
+		//    if (contact.Expires != int.MinValue)
+		//    {
+		//        Write(C.SEMI, C.expires, C.EQUAL);
+		//        Write(contact.Expires);
+		//    }
+		//    Write(C.CRLF);
+		//}
 
 		public void WriteContact(ByteArrayPart hostport, Transports transport)
 		{
@@ -454,28 +454,28 @@ namespace Sip.Message
 			}
 		}
 
-		public void WriteVia(Header header, SipMessageReader.ViaStruct via)
-		{
-			if (header.Name.IsValid == true)
-			{
-				Write(header.Name, C.HCOLON, header.Value);
-				if (via.ReceivedIP != IPAddress.None)
-				{
-					Write(C.SEMI, C.received, C.EQUAL, via.ReceivedIP);
-				}
-				if (via.MsReceivedPort != int.MinValue)
-				{
-					Write(C.SEMI, C.ms_received_port, C.EQUAL);
-					Write(via.MsReceivedPort);
-				}
-				if (via.MsReceivedCid.IsValid == true && via.MsReceivedCid.Bytes != null)
-				{
-					Write(C.SEMI, C.ms_received_cid, C.EQUAL);
-					Write(via.MsReceivedCid);
-				}
-				Write(C.CRLF);
-			}
-		}
+		//public void WriteVia(Header header, SipMessageReader.ViaStruct via)
+		//{
+		//    if (header.Name.IsValid == true)
+		//    {
+		//        Write(header.Name, C.HCOLON, header.Value);
+		//        if (via.ReceivedIP != IPAddress.None)
+		//        {
+		//            Write(C.SEMI, C.received, C.EQUAL, via.ReceivedIP);
+		//        }
+		//        if (via.MsReceivedPort != int.MinValue)
+		//        {
+		//            Write(C.SEMI, C.ms_received_port, C.EQUAL);
+		//            Write(via.MsReceivedPort);
+		//        }
+		//        if (via.MsReceivedCid.IsValid == true && via.MsReceivedCid.Bytes != null)
+		//        {
+		//            Write(C.SEMI, C.ms_received_cid, C.EQUAL);
+		//            Write(via.MsReceivedCid);
+		//        }
+		//        Write(C.CRLF);
+		//    }
+		//}
 
 		public void WriteVia(Transports transport, ByteArrayPart host, int port, ByteArrayPart branch)
 		{

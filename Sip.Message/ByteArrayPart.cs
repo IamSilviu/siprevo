@@ -261,6 +261,11 @@ namespace Sip.Message
 			return Encoding.UTF8.GetString(Bytes, Offset, Length);
 		}
 
+		public ArraySegment<byte> ToArraySegment()
+		{
+			return new ArraySegment<byte>(Bytes, Offset, Length);
+		}
+
 		public void BlockCopyTo(byte[] bytes, int offset)
 		{
 			Buffer.BlockCopy(Bytes, Begin, bytes, offset, Length);
