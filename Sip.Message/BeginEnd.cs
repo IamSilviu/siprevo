@@ -4,7 +4,11 @@ using System;
 using System.Text;
 using System.Net;
 
+#if HTTPMESSAGE
+namespace Http.Message
+#else
 namespace Sip.Message
+#endif
 {
 	public partial struct BeginEnd
 		: IEquatable<BeginEnd>, IEquatable<ByteArrayPart>

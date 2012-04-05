@@ -2,7 +2,11 @@
 using System.Text;
 using System.Net;
 
+#if HTTPMESSAGE
+namespace Http.Message
+#else
 namespace Sip.Message
+#endif
 {
 	public struct ByteArrayPart
 		: IEquatable<ByteArrayPart>

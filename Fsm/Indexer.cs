@@ -42,6 +42,11 @@ namespace Fsm
 			get { return idCount; }
 		}
 
+		public static T Get(int id)
+		{
+			return states[id];
+		}
+
 		public class Array
 		{
 			private Int32[] ids;

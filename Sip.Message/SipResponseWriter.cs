@@ -99,7 +99,7 @@ namespace Sip.Message
 
 						Write(request.Headers[i].Value);
 
-						if (request.To.Tag.IsInvalid && statusCode != StatusCodes.Trying && request.Method != Methods.Cancelm)
+						if (request.To.Tag.IsInvalid && localTag.IsValid && statusCode != StatusCodes.Trying && request.Method != Methods.Cancelm)
 						{
 							Write(C._tag_);
 							toTag = new Range(end, localTag.Length);

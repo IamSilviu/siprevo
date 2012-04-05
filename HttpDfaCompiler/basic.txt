@@ -1,0 +1,102 @@
+﻿
+/**************************************************************************************************/
+/* Basic Rules */
+/*
+alphanum  =  ALPHA / DIGIT;
+
+reserved    =  ";" / "/" / "?" / ":" / "@" / "&" / "=" / "+"
+                     / "$" / ",";
+unreserved  =  alphanum / mark;
+mark        =  "-" / "_" / "." / "!" / "~" / "*" / "'"
+                     / "(" / ")";
+escaped     =  "%" HEXDIG HEXDIG;
+
+LWS  =  [*WSP CRLF] 1*WSP; /* linear whitespace */
+SWS  =  [LWS]; /* sep whitespace */
+HCOLON  =  *( SP / HTAB ) ":" SWS;
+
+TEXT-UTF8-TRIM  =  1*TEXT-UTF8char *(*LWS TEXT-UTF8char);
+TEXT-UTF8char   =  %x21-7E / UTF8-NONASCII;
+UTF8-NONASCII   =  %xC0-0DF 1 UTF8-CONT
+                /  %xE0-0EF 2 UTF8-CONT
+                /  %xF0-0F7 3 UTF8-CONT
+                /  %xF8-0FB 4 UTF8-CONT
+                /  %xFC-0FD 5 UTF8-CONT;
+
+UTF8-CONT       =  %x80-0BF;
+
+LHEX  =  DIGIT / %x61-66; /* lowercase a-f */
+
+token       =  1*(alphanum / "-" / "." / "!" / "%" / "*"
+               / "_" / "+" / "`" / "'" / "~" );
+
+separators  =  "(" / ")" / "<" / ">" / "@" /
+               "," / ";" / ":" / "\" / DQUOTE /
+               "/" / "[" / "]" / "?" / "=" /
+               "{" / "}" / SP / HTAB;
+
+word        =  1*(alphanum / "-" / "." / "!" / "%" / "*" /
+               "_" / "+" / "`" / "'" / "~" /
+               "(" / ")" / "<" / ">" /
+               ":" / "\" / DQUOTE /
+               "/" / "[" / "]" / "?" /
+               "{" / "}" );
+
+STAR    =  SWS "*" SWS; /* asterisk */
+SLASH   =  SWS "/" SWS; /* slash */
+EQUAL   =  SWS "=" SWS; /* equal */
+LPAREN  =  SWS "(" SWS; /* left parenthesis */
+RPAREN  =  SWS ")" SWS; /* right parenthesis */
+RAQUOT  =  ">" SWS; /* right angle quote */
+LAQUOT  =  SWS "<"; /* left angle quote */
+COMMA   =  SWS "," SWS; /* comma */
+SEMI    =  SWS ";" SWS; /* semicolon */
+COLON   =  SWS ":" SWS; /* colon */
+LDQUOT  =  SWS DQUOTE; /* open double quotation mark */
+RDQUOT  =  DQUOTE SWS; /* close double quotation mark */
+
+comment  =  LPAREN *(ctext / quoted-pair) RPAREN; /* vf: remove comment from () */
+ctext    =  %x21-27 / %x2A-5B / %x5D-7E / UTF8-NONASCII
+            / LWS;
+
+quoted-string  =  SWS DQUOTE *(qdtext / quoted-pair ) DQUOTE;
+qdtext         =  LWS / %x21 / %x23-5B / %x5D-7E
+                  / UTF8-NONASCII;
+*/
+/**************************************************************************************************/
+/* RFC 3334 */
+/*
+ALPHA          =  %x41-5A / %x61-7A;
+                          /* A-Z / a-z */
+BIT            =  "0" / "1";
+CHAR           =  %x01-7F;
+                          /* any 7-bit US-ASCII character, */
+                          /*   excluding NUL */
+CR             =  %x0D;
+                          /* carriage return */
+CRLF           =  CR LF;
+                          /* Internet standard newline */
+CTL            =  %x00-1F / %x7F;
+                          /* controls */
+DIGIT          =  %x30-39;
+                          /* 0-9 */
+DQUOTE         =  %x22;
+                          /* " (Double Quote) */
+HEXDIG         =  DIGIT / "A" / "B" / "C" / "D" / "E" / "F";
+HTAB           =  %x09;
+                          /* horizontal tab */
+LF             =  %x0A;
+                          /* linefeed */
+LWSP           =  *(WSP / CRLF WSP);
+                          /* linear white space (past newline) */
+OCTET          =  %x00-0FF;
+                          /* 8 bits of data */
+SP             =  %x20;
+                          /* space */
+VCHAR          =  %x21-7E;
+                          /* visible (printing) characters */
+WSP            =  SP / HTAB;
+                          /* white space */
+quoted-pair  =  "\" (%x00-09 / %x0B-0C
+                / %x0E-7F);
+*/

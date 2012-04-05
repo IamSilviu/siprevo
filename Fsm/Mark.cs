@@ -24,6 +24,8 @@ namespace Fsm
 		Group,
 		Final,
 		Custom,
+		Service1,
+		Service2,
 	}
 
 	public interface IMark
@@ -80,6 +82,17 @@ namespace Fsm
 		public MarkImpl(IMark mark)
 		{
 			CopyFrom(mark);
+		}
+
+		public MarkImpl(Marks mark)
+		{
+			Mark = mark;
+		}
+
+		public MarkImpl(Marks mark, string name)
+		{
+			Mark = mark;
+			Name = name;
 		}
 
 		public Marks Mark

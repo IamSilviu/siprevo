@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{5D6AD8A0-E6D7-4734-A8A8-AEA64FB90BEA}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{65CFD1C3-F5A0-4E90-9E92-6842F9D7DADD}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SipDfaCompiler</RootNamespace>
-    <AssemblyName>SipDfaCompiler</AssemblyName>
+    <RootNamespace>Http.Message</RootNamespace>
+    <AssemblyName>Http.Message</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -21,7 +21,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -46,33 +45,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Generator.cs" />
-    <None Include="ActionsDescription.cs" />
-    <None Include="Generator.Helpers.cs" />
-    <None Include="Generator.Switch.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="..\HttpDfaCompiler\bin\Release\HttpMessageReader.cs">
+      <Link>HttpMessageReader.cs</Link>
+    </Compile>
+    <Compile Include="..\HttpDfaCompiler\bin\Release\HttpMessageReaderOptimized.cs">
+      <Link>HttpMessageReaderOptimized.cs</Link>
+    </Compile>
+    <Compile Include="..\HttpDfaCompiler\bin\Release\HttpMessageReaderOptimized2.cs">
+      <Link>HttpMessageReaderOptimized2.cs</Link>
+    </Compile>
+    <Compile Include="..\Sip.Message\BeginEnd.cs">
+      <Link>BeginEnd.cs</Link>
+    </Compile>
+    <Compile Include="..\Sip.Message\BeginEndIndex.cs">
+      <Link>BeginEndIndex.cs</Link>
+    </Compile>
+    <Compile Include="..\Sip.Message\ByteArrayPart.cs">
+      <Link>ByteArrayPart.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SipXbnf2.cs" />
-    <None Include="VariableTreeItem.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DfaCompiler\DfaCompiler.csproj">
-      <Project>{C174DC33-9B00-4AD1-BCCE-58856F18682B}</Project>
-      <Name>DfaCompiler</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Fsm\Fsm.csproj">
-      <Project>{EB73E534-0377-4329-85CF-141F9433EC1E}</Project>
-      <Name>Fsm</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="sip.marks.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="sip.xbnf.txt" />
-    <None Include="suppress.warning.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Compile Include="HttpMessageReader.Extension.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -82,7 +74,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <PropertyGroup>
-    <PreBuildEvent>$(SolutionDir)XbnfParser\$(OutDir)XbnfParser.exe "$(ProjectDir)\sip.xbnf.txt" "$(ProjectDir)\SipXbnf2.cs"</PreBuildEvent>
-  </PropertyGroup>
 </Project>

@@ -8,16 +8,21 @@ namespace Sip.Message
 	{
 		private static readonly byte[][] lowerTransport;
 		private static readonly byte[][] authSchemes;
+		private static readonly byte[][] headerNames;
 
 		static Converters()
 		{
 			lowerTransport = new byte[Enum.GetValues(typeof(Transports)).Length][];
-			InitializeLowerTransport();
-			Verify(lowerTransport, typeof(Transports));
-
 			authSchemes = new byte[Enum.GetValues(typeof(AuthSchemes)).Length][];
+			headerNames = new byte[Enum.GetValues(typeof(HeaderNames)).Length][];
+
+			InitializeLowerTransport();
 			InitializeAuthSchemes();
+			InitializeHeaderNames();
+
+			Verify(lowerTransport, typeof(Transports));
 			Verify(authSchemes, typeof(AuthSchemes));
+			Verify(headerNames, typeof(HeaderNames));
 		}
 
 		public static ByteArrayPart ToByteArrayPart(this Methods method)
@@ -143,6 +148,11 @@ namespace Sip.Message
 			return authSchemes[(int)schemes];
 		}
 
+		public static byte[] ToUtf8Bytes(this HeaderNames headerName)
+		{
+			return headerNames[(int)headerName];
+		}
+
 		public static ByteArrayPart ToByteArrayPart(this string text)
 		{
 			return new ByteArrayPart(text);
@@ -182,6 +192,61 @@ namespace Sip.Message
 			authSchemes[(int)AuthSchemes.Kerberos] = Encoding.UTF8.GetBytes(@"Kerberos");
 			authSchemes[(int)AuthSchemes.Ntlm] = Encoding.UTF8.GetBytes(@"NTLM");
 			authSchemes[(int)AuthSchemes.TlsDsk] = Encoding.UTF8.GetBytes(@"TLS-DSK");
+		}
+
+		private static void InitializeHeaderNames()
+		{
+			headerNames[(int)HeaderNames.None] = new byte[0];
+			headerNames[(int)HeaderNames.Extension] = Encoding.UTF8.GetBytes(@"Extension");
+			headerNames[(int)HeaderNames.ContentType] = Encoding.UTF8.GetBytes(@"Content-Type");
+			headerNames[(int)HeaderNames.ContentEncoding] = Encoding.UTF8.GetBytes(@"Content-Encoding");
+			headerNames[(int)HeaderNames.From] = Encoding.UTF8.GetBytes(@"From");
+			headerNames[(int)HeaderNames.CallId] = Encoding.UTF8.GetBytes(@"CallId");
+			headerNames[(int)HeaderNames.Supported] = Encoding.UTF8.GetBytes(@"Supported");
+			headerNames[(int)HeaderNames.ContentLength] = Encoding.UTF8.GetBytes(@"Content-Length");
+			headerNames[(int)HeaderNames.Contact] = Encoding.UTF8.GetBytes(@"Contact");
+			headerNames[(int)HeaderNames.Event] = Encoding.UTF8.GetBytes(@"Event");
+			headerNames[(int)HeaderNames.Subject] = Encoding.UTF8.GetBytes(@"Subject");
+			headerNames[(int)HeaderNames.To] = Encoding.UTF8.GetBytes(@"To");
+			headerNames[(int)HeaderNames.AllowEvents] = Encoding.UTF8.GetBytes(@"Allow-Events");
+			headerNames[(int)HeaderNames.Via] = Encoding.UTF8.GetBytes(@"Via");
+			headerNames[(int)HeaderNames.CSeq] = Encoding.UTF8.GetBytes(@"CSeq");
+			headerNames[(int)HeaderNames.Date] = Encoding.UTF8.GetBytes(@"Date");
+			headerNames[(int)HeaderNames.Allow] = Encoding.UTF8.GetBytes(@"Allow");
+			headerNames[(int)HeaderNames.Route] = Encoding.UTF8.GetBytes(@"Route");
+			headerNames[(int)HeaderNames.Accept] = Encoding.UTF8.GetBytes(@"Accept");
+			headerNames[(int)HeaderNames.Server] = Encoding.UTF8.GetBytes(@"Server");
+			headerNames[(int)HeaderNames.Require] = Encoding.UTF8.GetBytes(@"Require");
+			headerNames[(int)HeaderNames.Warning] = Encoding.UTF8.GetBytes(@"Warning");
+			headerNames[(int)HeaderNames.Priority] = Encoding.UTF8.GetBytes(@"Priority");
+			headerNames[(int)HeaderNames.ReplyTo] = Encoding.UTF8.GetBytes(@"ReplyTo");
+			headerNames[(int)HeaderNames.SipEtag] = Encoding.UTF8.GetBytes(@"Sip-Etag");
+			headerNames[(int)HeaderNames.CallInfo] = Encoding.UTF8.GetBytes(@"Call-Info");
+			headerNames[(int)HeaderNames.Timestamp] = Encoding.UTF8.GetBytes(@"Timestamp");
+			headerNames[(int)HeaderNames.AlertInfo] = Encoding.UTF8.GetBytes(@"Alert-Info");
+			headerNames[(int)HeaderNames.ErrorInfo] = Encoding.UTF8.GetBytes(@"Error-Info");
+			headerNames[(int)HeaderNames.UserAgent] = Encoding.UTF8.GetBytes(@"User-Agent");
+			headerNames[(int)HeaderNames.InReplyTo] = Encoding.UTF8.GetBytes(@"In-Reply-To");
+			headerNames[(int)HeaderNames.MinExpires] = Encoding.UTF8.GetBytes(@"Min-Expires");
+			headerNames[(int)HeaderNames.RetryAfter] = Encoding.UTF8.GetBytes(@"Retry-After");
+			headerNames[(int)HeaderNames.Unsupported] = Encoding.UTF8.GetBytes(@"Unsupported");
+			headerNames[(int)HeaderNames.MaxForwards] = Encoding.UTF8.GetBytes(@"Max-Forwards");
+			headerNames[(int)HeaderNames.MimeVersion] = Encoding.UTF8.GetBytes(@"Mime-Version");
+			headerNames[(int)HeaderNames.Organization] = Encoding.UTF8.GetBytes(@"Organization");
+			headerNames[(int)HeaderNames.RecordRoute] = Encoding.UTF8.GetBytes(@"Record-Route");
+			headerNames[(int)HeaderNames.SipIfMatch] = Encoding.UTF8.GetBytes(@"Sip-If-Match");
+			headerNames[(int)HeaderNames.Authorization] = Encoding.UTF8.GetBytes(@"Authorization");
+			headerNames[(int)HeaderNames.ProxyRequire] = Encoding.UTF8.GetBytes(@"Proxy-Require");
+			headerNames[(int)HeaderNames.AcceptEncoding] = Encoding.UTF8.GetBytes(@"Accept-Encoding");
+			headerNames[(int)HeaderNames.AcceptLanguage] = Encoding.UTF8.GetBytes(@"Accept-Language");
+			headerNames[(int)HeaderNames.ContentLanguage] = Encoding.UTF8.GetBytes(@"Content-Language");
+			headerNames[(int)HeaderNames.WwwAuthenticate] = Encoding.UTF8.GetBytes(@"WWW-Authenticate");
+			headerNames[(int)HeaderNames.ProxyAuthenticate] = Encoding.UTF8.GetBytes(@"Proxy-Authenticate");
+			headerNames[(int)HeaderNames.SubscriptionState] = Encoding.UTF8.GetBytes(@"Subscription-State");
+			headerNames[(int)HeaderNames.AuthenticationInfo] = Encoding.UTF8.GetBytes(@"Authentication-Info");
+			headerNames[(int)HeaderNames.ContentDisposition] = Encoding.UTF8.GetBytes(@"Content-Disposition");
+			headerNames[(int)HeaderNames.ProxyAuthorization] = Encoding.UTF8.GetBytes(@"Proxy-Authorization");
+			headerNames[(int)HeaderNames.ProxyAuthenticationInfo] = Encoding.UTF8.GetBytes(@"Proxy-Authentication-Info");
 		}
 
 		private static void Verify(byte[][] values, Type type)

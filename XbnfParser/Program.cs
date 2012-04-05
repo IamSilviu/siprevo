@@ -15,8 +15,10 @@ namespace XbnfParser
 		{
 			try
 			{
+				bool mode2 = (((args.Length >= 3) ? args[2] : "") == "mode2");
+
 				Console.WriteLine("Create grammar");
-				var grammar = new XbnfGrammar();
+				var grammar = new XbnfGrammar(mode2 ? XbnfGrammar.Mode.HttpCompatible : XbnfGrammar.Mode.Strict);
 
 				Console.WriteLine("Create parser");
 				var parser = new Parser(grammar);
@@ -46,7 +48,7 @@ namespace XbnfParser
 
 		static string Optimize(string xbnf)
 		{
-			var repeatBy = new Regex(@"(?<item>[A-Za-z0-9\-]+)\s+\*\((?<separator>[A-Za-z0-9\-]+)\s+\k<item>\)");
+			var repeatBy = new Regex(@"(?<item>[A-Za-z0-9\-_]+)\s+\*\((?<separator>[A-Za-z0-9\-_]+)\s+\k<item>\)");
 
 			return repeatBy.Replace(xbnf, "{State.NoCloneRepeatBy, ${item}, ${separator}}");
 		}
@@ -58,29 +60,44 @@ namespace XbnfParser
 				"using System.Collections.Generic;\r\n" +
 				"using Fsm;\r\n" +
 				"\r\n" +
-				"namespace SipDfaCompiler\r\n" +
+				"namespace DfaCompiler\r\n" +
 				"{\r\n" +
-				"	class MarkRuleEventArgs: EventArgs\r\n" +
-				"	{\r\n" +
-				"		public MarkRuleEventArgs(State start, List<string> rulenames)\r\n" +
-				"		{\r\n" +
-				"			Start = start;\r\n" +
-				"			Rulenames = rulenames;\r\n" +
-				"		}\r\n" +
-				"		public State Start { get; set; }\r\n" +
-				"		public List<string> Rulenames { get; private set; }\r\n" +
-				"	}\r\n" +
-				"	class ChangeRuleEventArgs: EventArgs\r\n" +
-				"	{\r\n" +
-				"		public ChangeRuleEventArgs(State[] states, List<string> rulenames)\r\n" +
-				"		{\r\n" +
-				"			States = states;\r\n" +
-				"			Rulenames = rulenames;\r\n" +
-				"		}\r\n" +
-				"		public State[] States { get; set; }\r\n" +
-				"		public List<string> Rulenames { get; private set; }\r\n" +
-				"	}\r\n" +
-				"	class SipXbnf\r\n" +
+				//"	class MarkRuleEventArgs: EventArgs\r\n" +
+				//"	{\r\n" +
+				//"		public MarkRuleEventArgs(State start, List<string> rulenames)\r\n" +
+				//"		{\r\n" +
+				//"			Start = start;\r\n" +
+				//"			Rulenames = rulenames;\r\n" +
+				//"		}\r\n" +
+				//"		public State Start { get; set; }\r\n" +
+				//"		public List<string> Rulenames { get; private set; }\r\n" +
+				//"		public string GetRulesPath(string separator)\r\n" +
+				//"		{\r\n" +
+				//"			string result = \"\";\r\n" +
+				//"			for (int i = Rulenames.Count - 1; i >= 0; i--)\r\n" +
+				//"			{\r\n" +
+				//"				if (result != \"\")\r\n" +
+				//"					result += separator;\r\n" +
+				//"				result += Rulenames[i];\r\n" +
+				//"			}\r\n" +
+				//"			return result;\r\n" +
+				//"		}\r\n" +
+				//"		public string GetRulesPath()\r\n" +
+				//"		{\r\n" +
+				//"			return GetRulesPath(\".\");\r\n" +
+				//"		}\r\n" +
+				//"	}\r\n" +
+				//"	class ChangeRuleEventArgs: EventArgs\r\n" +
+				//"	{\r\n" +
+				//"		public ChangeRuleEventArgs(State[] states, List<string> rulenames)\r\n" +
+				//"		{\r\n" +
+				//"			States = states;\r\n" +
+				//"			Rulenames = rulenames;\r\n" +
+				//"		}\r\n" +
+				//"		public State[] States { get; set; }\r\n" +
+				//"		public List<string> Rulenames { get; private set; }\r\n" +
+				//"	}\r\n" +
+				"	class GeneratedXbnf\r\n" +
 				"	{\r\n" +
 				"		public event EventHandler<MarkRuleEventArgs> MarkRule;\r\n" +
 				"		public event EventHandler<ChangeRuleEventArgs> ChangeConcatanation;\r\n" +

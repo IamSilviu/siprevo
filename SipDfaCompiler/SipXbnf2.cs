@@ -2,29 +2,9 @@ using System;
 using System.Collections.Generic;
 using Fsm;
 
-namespace SipDfaCompiler
+namespace DfaCompiler
 {
-	class MarkRuleEventArgs: EventArgs
-	{
-		public MarkRuleEventArgs(State start, List<string> rulenames)
-		{
-			Start = start;
-			Rulenames = rulenames;
-		}
-		public State Start { get; set; }
-		public List<string> Rulenames { get; private set; }
-	}
-	class ChangeRuleEventArgs: EventArgs
-	{
-		public ChangeRuleEventArgs(State[] states, List<string> rulenames)
-		{
-			States = states;
-			Rulenames = rulenames;
-		}
-		public State[] States { get; set; }
-		public List<string> Rulenames { get; private set; }
-	}
-	class SipXbnf
+	class GeneratedXbnf
 	{
 		public event EventHandler<MarkRuleEventArgs> MarkRule;
 		public event EventHandler<ChangeRuleEventArgs> ChangeConcatanation;
@@ -1913,7 +1893,7 @@ namespace SipDfaCompiler
 		}
 		public State Getmessage_headerZ0(List<string> rulenames)
 		{
-			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(GetAuthorization(rulenames)),GetCRLF(rulenames)));
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(State.NoCloneAlternation(GetAccept(rulenames),GetContent_Type(rulenames),GetVia(rulenames))),GetCRLF(rulenames)));
 			return rule;
 		}
 		public State Getmessage_headerZ1(List<string> rulenames)

@@ -1,0 +1,62 @@
+﻿
+//
+// -------------------------------------------------------------------------------[ .METHOD
+//
+.METHOD.OPTIONS -> Const = ?Method;
+.METHOD.GET -> Const = ?Method;
+.METHOD.HEAD -> Const = ?Method;
+.METHOD.POST -> Const = ?Method;
+.METHOD.PUT -> Const = ?Method;
+.METHOD.DELETE -> Const = ?Method;
+.METHOD.TRACE -> Const = ?Method;
+.METHOD.CONNECT -> Const = ?Method;
+.METHOD.extension-method -> Const = ?Method, Extension, 20;
+
+//
+// -------------------------------------------------------------------------------[ .PRODUCT
+//
+.PRODUCT -> LookupRange = ?<Product>.Value;
+.PRODUCT.token -> LookupRange = ?<Product>.Name;
+.PRODUCT.product-version.token -> LookupRange = ?<Product>.Version;
+
+//
+// -------------------------------------------------------------------------------[ Request-Line
+//
+req.Request-Line.Method -> Group = , METHOD;
+req.Request-Line.Request-URI -> LookupRange = RequestUri;
+req.Request-Line.HTTP-Version.DIGIT -> Decimal = HttpVersion;
+
+//
+// -------------------------------------------------------------------------------[ Host
+//
+req.request-header.Host.host -> LookupRange = Host;
+
+//
+// -------------------------------------------------------------------------------[ Content-Type
+//
+req.entity-header.Content-Type.media-type.type -> LookupRange = ContentType.Type;
+req.entity-header.Content-Type.media-type.subtype -> LookupRange = ContentType.Subtype;
+req.entity-header.Content-Type.media-type -> LookupRange = ContentType.Value;
+
+//
+// -------------------------------------------------------------------------------[ Content-Length
+//
+req.entity-header.Content-Length.DIGIT -> Decimal = ContentLength;
+
+//
+// -------------------------------------------------------------------------------[ Referer
+//
+req.request-header.Referer.absoluteURI -> LookupRange = Referer;
+req.request-header.Referer.relativeURI -> LookupRange = Referer;
+
+//
+// -------------------------------------------------------------------------------[ Upgrade
+//
+req.general-header.Upgrade.product -> Group = Upgrades[UpgradeCount], PRODUCT;
+req.general-header.Upgrade.HCOLON.: -> Count = UpgradeCount, 8, -1;
+req.general-header.Upgrade.COMMA., -> Count = UpgradeCount, 8, -1;
+
+//
+//
+//
+//////////////////////////////////////////////////////////////////////////////////[...............]

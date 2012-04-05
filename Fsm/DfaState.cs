@@ -35,12 +35,12 @@ namespace Fsm
 
 		#endregion
 
-		public IEnumerable<State> NfaStates
+		internal IEnumerable<State> NfaStates
 		{
 			get { return _nfaStates.Items; }
 		}
 
-		public int[] NfaIds
+		internal int[] NfaIds
 		{
 			get { return _nfaStates.Ids; }
 		}
@@ -61,7 +61,7 @@ namespace Fsm
 			_trasition[char1] = state;
 		}
 
-		public Indexer<DfaState>.Array Transition 
+		public Indexer<DfaState>.Array Transition
 		{
 			get { return _trasition; }
 		}
@@ -165,7 +165,7 @@ namespace Fsm
 			{
 				if (_marks != null)
 					return _marks.Count > 0;
-				foreach (var state in NfaStates)
+				foreach (var state in AllMarks)//NfaStates)
 					if (state.Mark != Marks.None)
 						return true;
 				return false;
@@ -178,8 +178,16 @@ namespace Fsm
 			{
 				if (_marks == null)
 				{
+					var allMarks = new List<IMark>();
+					//allMarks.AddRange(NfaStates.Cast<IMark>());
+					foreach (var nfaState in NfaStates)
+						allMarks.AddRange(nfaState.AllMarks);
+					////foreach (var id in nfaState.PackedStates)
+					////allMarks.Add(Indexer<State>.Get(id));
+
+
 					var priorities = new Dictionary<string, int>();
-					foreach (var mark in NfaStates)
+					foreach (var mark in allMarks)//NfaStates)
 					{
 						if (mark.Mark != Marks.None)
 						{
@@ -192,19 +200,20 @@ namespace Fsm
 					}
 
 
-					_marks = NfaStates
-						.Cast<IMark>()
+
+					_marks = allMarks//NfaStates
+						//.Cast<IMark>()
 						.Where<IMark>((mark) => { return mark.Mark != Marks.None; })
 						.Where<IMark>((mark) =>
 							{ return priorities[mark.Mark + ":" + mark.Name] == mark.Priority; })
 						.OrderBy<IMark, string>((mark) => { return mark.Mark + ":" + mark.Name; })
 						.Distinct<IMark>(new MarkEqualityComparer())
-						.Select<IMark, IMark>((mark) =>
-							{
-								var state = new State();
-								state.CopyIMarkFrom(mark);
-								return state;
-							})
+						//.Select<IMark, IMark>((mark) =>
+						//    {
+						//        var state = new State();
+						//        state.CopyIMarkFrom(mark);
+						//        return state;
+						//    })
 						.ToList<IMark>();
 				}
 
@@ -232,30 +241,64 @@ namespace Fsm
 			{
 				var priority = new Dictionary<string, int>();
 
-				foreach (var nfaState in NfaStates)
-					if (nfaState.IsConst)
+				foreach (var mark in AllMarks)
+					if (mark.Mark == Marks.Const)
 					{
-						if (priority.ContainsKey(nfaState.ConstName))
+						if (priority.ContainsKey(mark.Name))
 						{
-							if (priority[nfaState.ConstName] > nfaState.ConstPriority)
-								priority[nfaState.ConstName] = nfaState.ConstPriority;
+							if (priority[mark.Name] > mark.Priority)
+								priority[mark.Name] = mark.Priority;
 						}
 						else
-							priority[nfaState.ConstName] = nfaState.ConstPriority;
+							priority[mark.Name] = mark.Priority;
 					}
 
 				var result = new List<KeyValuePair<string, string>>();
 
-				foreach (var nfaState in NfaStates)
-					if (nfaState.IsConst)
+				foreach (var mark in AllMarks)
+					if (mark.Mark == Marks.Const)
 					{
-						if (priority[nfaState.ConstName] == nfaState.ConstPriority)
-							result.Add(new KeyValuePair<string, string>(nfaState.ConstName, nfaState.ConstValue));
+						if (priority[mark.Name] == mark.Priority)
+							result.Add(new KeyValuePair<string, string>(mark.Name, mark.Value));
 					}
 
 				return result;
+
+				//var priority = new Dictionary<string, int>();
+
+				//foreach (var nfaState in NfaStates)
+				//    if (nfaState.IsConst)
+				//    {
+				//        if (priority.ContainsKey(nfaState.ConstName))
+				//        {
+				//            if (priority[nfaState.ConstName] > nfaState.ConstPriority)
+				//                priority[nfaState.ConstName] = nfaState.ConstPriority;
+				//        }
+				//        else
+				//            priority[nfaState.ConstName] = nfaState.ConstPriority;
+				//    }
+
+				//var result = new List<KeyValuePair<string, string>>();
+
+				//foreach (var nfaState in NfaStates)
+				//    if (nfaState.IsConst)
+				//    {
+				//        if (priority[nfaState.ConstName] == nfaState.ConstPriority)
+				//            result.Add(new KeyValuePair<string, string>(nfaState.ConstName, nfaState.ConstValue));
+				//    }
+
+				//return result;
 			}
 		}
+
+		#region Intersection
+
+		public static DfaState Intersect(DfaState start1, DfaState start2)
+		{
+			throw new NotImplementedException();
+		}
+
+		#endregion
 
 		#region SetId - for DFA minimize
 

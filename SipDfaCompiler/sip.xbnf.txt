@@ -855,7 +855,7 @@ message-headerX =  (Accept
                 /  extension-header) CRLF;
 
 
-message-headerZ =  (Authorization) CRLF;
+message-headerZ =  (Accept / Content-Type / Via) CRLF;
 
 
 message-headerZ =  (extension-header) CRLF;

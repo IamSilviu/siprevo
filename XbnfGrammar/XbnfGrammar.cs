@@ -8,13 +8,29 @@ namespace XbnfGrammar1
 	public class XbnfGrammar
 		: Grammar
 	{
+		public enum Mode
+		{
+			Strict,
+			HttpCompatible,
+		}
+
 		private Dictionary<string, int> _partNumber;
+		private Mode mode;
 
 		public XbnfGrammar()
+			: this(Mode.HttpCompatible)
 		{
-			var rulename = new IdentifierTerminal("rulename", "-", null);
+		}
+
+		public XbnfGrammar(Mode mode)
+		{
+			this.mode = mode;
+
+			var alternationChar = (mode == Mode.Strict) ? "/" : "|";
+
+			var rulename = new IdentifierTerminal("rulename", "-_", null);
 			var funcname = new IdentifierTerminal("funcname", ".", null);
-			var newrulename = new IdentifierTerminal("newrulename", "-", null);
+			var newrulename = new IdentifierTerminal("newrulename", "-_", null);
 			var comment = new CommentTerminal("comment", "/*", "*/");
 			var bindig1 = new NumberLiteral("bindig", NumberOptions.Binary | NumberOptions.IntOnly);
 			var bindig2 = new NumberLiteral("bindig", NumberOptions.Binary | NumberOptions.IntOnly);
@@ -37,7 +53,7 @@ namespace XbnfGrammar1
 
 			// NON TERMINALS
 			var numval = new NonTerminal("numval");
-			
+
 			var hexval = new NonTerminal("hexval");
 			var hexvalp = new NonTerminal("hexvalpoint");
 			var hexvalps = new NonTerminal("hexvalpointstar");
@@ -54,6 +70,7 @@ namespace XbnfGrammar1
 			var rulelist = new NonTerminal("rulelist");
 			var alternation = new NonTerminal("alternation");
 			var concatenation = new NonTerminal("concatenation");
+			var substraction = new NonTerminal("substraction");
 			var repetition = new NonTerminal("repetition");
 			var repeat = new NonTerminal("repeat");
 			var element = new NonTerminal("element");
@@ -63,6 +80,7 @@ namespace XbnfGrammar1
 			var func = new NonTerminal("func");
 			var funcarg = new NonTerminal("funcarg");
 			var funcargs = new NonTerminal("funcargs");
+
 
 
 			// RULES
@@ -80,7 +98,11 @@ namespace XbnfGrammar1
 
 			numval.Rule = ToTerm("%") + (binval | hexval | decval);
 
-			repeat.Rule = ((repeat1) | ((repeat1 | Empty) + "*" + (repeat2 | Empty)));
+			BnfExpression rp = ToTerm("*");
+			if (mode == Mode.HttpCompatible)
+				rp = rp | "#";
+
+			repeat.Rule = ((repeat1) | ((repeat1 | Empty) + rp + (repeat2 | Empty)));
 			group.Rule = ToTerm("(") + alternation + ")";
 			option.Rule = ToTerm("[") + alternation + "]";
 
@@ -88,14 +110,18 @@ namespace XbnfGrammar1
 			funcargs.Rule = MakePlusRule(funcargs, ToTerm(","), funcarg);
 			func.Rule = ToTerm("{") + funcname + "," + funcargs + "}";
 
-			alternation.Rule = MakePlusRule(alternation, ToTerm("/"), concatenation);
+			//alternation.Rule = MakePlusRule(alternation, ToTerm(alternationChar), concatenation);
+			//concatenation.Rule = MakePlusRule(concatenation, repetition);
+			alternation.Rule = MakePlusRule(alternation, ToTerm(alternationChar), substraction);
+			substraction.Rule = MakePlusRule(substraction, ToTerm("&!"), concatenation);
+			//concatenation + ((ToTerm("--") + concatenation) | Empty);
 			concatenation.Rule = MakePlusRule(concatenation, repetition);
 
 			repetition.Rule = (Empty | repeat) + element;
 			element.Rule = rulename | group | option | numval | charval | func;
 
 			elements.Rule = alternation;
-			rule.Rule = newrulename + (ToTerm("=") | ToTerm("=/")) + elements + ";";
+			rule.Rule = newrulename + (ToTerm("=") | ToTerm("=" + alternationChar)) + elements + ";";
 			rulelist.Rule = MakeStarRule(rulelist, rule);
 
 			base.Root = rulelist;
@@ -201,11 +227,12 @@ namespace XbnfGrammar1
 		{
 			int count = 0;
 			string result = "";
-			foreach(var child in node.ChildNodes)
+			foreach (var child in node.ChildNodes)
 			{
 				if (result != "")
 					result += ",";
-				result += CreateConcatanation(child, change);
+				//result += CreateConcatanation(child, change);
+				result += CreateSubstraction(child, change);
 				count++;
 			}
 
@@ -221,6 +248,22 @@ namespace XbnfGrammar1
 			public List<string> Rulenames = new List<string>();
 		}
 
+		public string CreateSubstraction(ParseTreeNode node, bool change)
+		{
+			List<string> items = new List<string>();
+			foreach (var child in node.ChildNodes)
+				items.Add(CreateConcatanation(child, change));
+
+			if (items.Count == 1)
+				return items[0];
+
+			if (items.Count == 2)
+				return "State.Substract(" + items[0] + "," + items[1] + ")";
+
+			throw new NotImplementedException();
+			//return CreateConcatanation(node.FirstChild, change);
+		}
+
 		public string CreateConcatanation(ParseTreeNode node, bool change)
 		{
 			List<string> items = new List<string>();
@@ -229,7 +272,7 @@ namespace XbnfGrammar1
 				items.Add(CreateRepeation(child));
 
 			string result = "";
-			foreach(var item in items)
+			foreach (var item in items)
 			{
 				if (result != "")
 					result += ",";
@@ -257,6 +300,7 @@ namespace XbnfGrammar1
 
 		public string CreateRepeat(ParseTreeNode node)
 		{
+			string repeatChar = "*";
 			int repeat1 = -1, repeat2 = -1;
 			var repeat = node.ChildNodes[0].ChildNodes[0];
 
@@ -269,11 +313,34 @@ namespace XbnfGrammar1
 				if (repeat.ChildNodes[0].ChildNodes.Count != 0)
 					repeat1 = int.Parse(repeat.ChildNodes[0].FindTokenAndGetText());
 
+				repeatChar = repeat.ChildNodes[1].FindTokenAndGetText();
+
 				if (repeat.ChildNodes[2].ChildNodes.Count != 0)
 					repeat2 = int.Parse(repeat.ChildNodes[2].FindTokenAndGetText());
 			}
 
-			return "State.Repeat(" + repeat1 + "," + repeat2 + "," + CreateElement(node.ChildNodes[1]) + ")";
+			string result = null;
+			if (repeatChar == "*")
+			{
+				result = "State.Repeat(" + repeat1 + "," + repeat2 + "," + CreateElement(node.ChildNodes[1]) + ")";
+			}
+			else if (repeatChar == "#")
+			{
+				if (repeat2 != -1)
+					throw new NotImplementedException();
+
+				result = "State.NoCloneRepeatBy(" + CreateElement(node.ChildNodes[1]) + ", GetCOMMA(rulenames))";
+
+				if (repeat1 <= 0)
+					result = "State.NoCloneOption(" + result + ")";
+
+				if (repeat1 > 1)
+					result = "State.Repeat(" + repeat1 + "," + repeat2 + "," + result + ")";
+			}
+			else
+				throw new NotImplementedException();
+
+			return result;
 		}
 
 		public string CreateElement(ParseTreeNode node)
@@ -310,7 +377,7 @@ namespace XbnfGrammar1
 				var op = hexval.ChildNodes[1].FindTokenAndGetText();
 
 				if (op == "-")
-					return "(" + hexdig1 + ".To(0x" + 
+					return "(" + hexdig1 + ".To(0x" +
 						hexval.ChildNodes[1].LastChild.FindTokenAndGetText() + "))";
 
 				if (op == ".")
@@ -394,7 +461,7 @@ namespace XbnfGrammar1
 		{
 			foreach (var child in node.ChildNodes)
 				ValidateXbnf(child);
-			
+
 			return "Ok";
 		}
 	}

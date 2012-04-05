@@ -23,7 +23,8 @@ namespace Fsm
 		public DfaState GetFirst(int setId)
 		{
 			if (setId < _sets.Count)
-				return _sets[setId].First.Value;
+				if (_sets[setId].First != null)
+					return _sets[setId].First.Value;
 
 			return null;
 		}
@@ -32,7 +33,7 @@ namespace Fsm
 		{
 			if (setId < _sets.Count)
 			{
-				for (LinkedListNode<DfaState> next, current = _sets[setId].First; 
+				for (LinkedListNode<DfaState> next, current = _sets[setId].First;
 					current != null; current = next)
 				{
 					next = current.Next;

@@ -29,6 +29,26 @@ namespace Fsm
 			return move;
 		}
 
+		public static int[] GetSortedMoveEclosureIds(this IEnumerable<State> states, byte? ch)
+		{
+			var eclosure = new HashSet<int>();
+
+			foreach (var state in states)
+				foreach (var move in state.Transition.Get(ch))
+					move.GetEclosureId(eclosure);
+
+
+			var ids = new int[eclosure.Count];
+
+			int i = 0;
+			foreach (var id in eclosure)
+				ids[i++] = id;
+
+			Array.Sort<int>(ids);
+
+			return ids;
+		}
+
 		//public static DfaState ToDfa(this State start, out int dfaCount, bool showProgress)
 		//{
 		//    if (showProgress)
@@ -218,12 +238,25 @@ namespace Fsm
 			for (int i = 0; i < threads.Length; i++)
 			{
 				threads[i] = new Thread(ToDfaThread);
-				threads[i].Start(new ThreadParams((i == 0) && showProgress, dfaStates, 
+				threads[i].Start(new ThreadParams(i == 0, showProgress, dfaStates,
 					dfaStatesSync, notMarkedStates, notMarkedSync));
+
+				if (i == 0)
+				{
+					for (int j = 0; j < 10; j++)
+					{
+						Thread.Sleep(1000);
+						if (threads[0].IsAlive == false)
+							break;
+					}
+					if (threads[0].IsAlive == false)
+						break;
+				}
 			}
 
 			for (int i = 0; i < threads.Length; i++)
-				threads[i].Join();
+				if (threads[i] != null)
+					threads[i].Join();
 
 			dfaCount = dfaStates.Count;
 			if (showProgress)
@@ -237,9 +270,10 @@ namespace Fsm
 
 		private class ThreadParams
 		{
-			public ThreadParams(bool main, Dictionary<int[], DfaState> dfaStates, object dfaStatesSync, Queue<DfaState> notMarkedStates, object notMarkedSync)
+			public ThreadParams(bool main, bool showProgress, Dictionary<int[], DfaState> dfaStates, object dfaStatesSync, Queue<DfaState> notMarkedStates, object notMarkedSync)
 			{
 				this.Main = main;
+				this.ShowProgress = main && showProgress;
 				this.DfaStates = dfaStates;
 				this.DfaStatesSync = dfaStatesSync;
 				this.NotMarkedStates = notMarkedStates;
@@ -247,6 +281,7 @@ namespace Fsm
 			}
 
 			public bool Main;
+			public bool ShowProgress;
 			public Dictionary<int[], DfaState> DfaStates;
 			public object DfaStatesSync;
 			public Queue<DfaState> NotMarkedStates;
@@ -285,7 +320,7 @@ namespace Fsm
 					t = p.NotMarkedStates.Dequeue();
 				}
 
-				if (p.Main &&  (i % 100) == 0)
+				if (p.ShowProgress && (i % 100) == 0)
 				{
 					if ((i % 25000) == 0 && i > 0)
 						memPerState = (int)((GC.GetTotalMemory(true) - memStart) / (long)p.DfaStates.Count);
@@ -308,9 +343,7 @@ namespace Fsm
 						{
 							byte char1 = (byte)j;
 
-							var states = t.NfaStates.GetMove2(char1).GetEclosure();
-
-							var uUnique = DfaState.GetNfaIds(states);
+							var uUnique = t.NfaStates.GetSortedMoveEclosureIds(char1);
 
 							DfaState u;
 							lock (p.DfaStatesSync)
@@ -340,5 +373,95 @@ namespace Fsm
 				}
 			}
 		}
+
+		/////////////////////////////////////////////////////////////////original v.3 //////////////////////////////////////////
+
+		//private static void ToDfaThread(Object stateInfo)
+		//{
+		//    var p = stateInfo as ThreadParams;
+
+		//    int i = 0;
+		//    int time = Environment.TickCount;
+		//    var allChars = new bool[byte.MaxValue + 1];
+
+		//    long memStart = 0;
+		//    if (p.Main)
+		//    {
+		//        GC.Collect();
+		//        GC.WaitForFullGCComplete();
+		//        GC.WaitForPendingFinalizers();
+		//        memStart = GC.GetTotalMemory(true);
+		//    }
+		//    else
+		//    {
+		//        Thread.Sleep(20000);
+		//    }
+
+		//    int memPerState = 0;
+		//    for (; ; i++)
+		//    {
+		//        DfaState t = null;
+		//        lock (p.NotMarkedSync)
+		//        {
+		//            if (p.NotMarkedStates.Count <= 0)
+		//                break;
+		//            t = p.NotMarkedStates.Dequeue();
+		//        }
+
+		//        if (p.Main &&  (i % 100) == 0)
+		//        {
+		//            if ((i % 25000) == 0 && i > 0)
+		//                memPerState = (int)((GC.GetTotalMemory(true) - memStart) / (long)p.DfaStates.Count);
+		//            int time1 = Environment.TickCount;
+		//            Console.Write("{2}\t({3} ms)\t\t{0} ({4} b)\t\t{1}  ", p.DfaStates.Count, p.NotMarkedStates.Count, p.DfaStates.Count - p.NotMarkedStates.Count, time1 - time, memPerState);
+		//            Console.Write("\r");
+		//            time = time1;
+		//        }
+
+		//        if (t != null)
+		//        {
+		//            for (int j = 0; j <= byte.MaxValue; j++)
+		//                allChars[j] = false;
+		//            foreach (var nfaState in t.NfaStates)
+		//                nfaState.Transition.ForEachNotNullKeys((nb) => { allChars[(int)nb] = true; });
+
+		//            for (int j = 0; j <= byte.MaxValue; j++)
+		//            {
+		//                if (allChars[j])
+		//                {
+		//                    byte char1 = (byte)j;
+
+		//                    var states = t.NfaStates.GetMove2(char1).GetEclosure();
+
+		//                    var uUnique = DfaState.GetNfaIds(states);
+
+		//                    DfaState u;
+		//                    lock (p.DfaStatesSync)
+		//                    {
+		//                        if (p.DfaStates.TryGetValue(uUnique, out u) == false)
+		//                        {
+		//                            u = new DfaState(uUnique);
+		//                            p.DfaStates.Add(uUnique, u);
+		//                            lock (p.NotMarkedSync)
+		//                                p.NotMarkedStates.Enqueue(u);
+		//                        }
+		//                    }
+
+		//                    t.AddTransition(char1, u);
+		//                }
+		//            }
+
+		//            if (p.Main)
+		//            {
+		//                if (i % 10000 == 0)
+		//                {
+		//                    GC.Collect();
+		//                    GC.WaitForFullGCComplete();
+		//                    GC.WaitForPendingFinalizers();
+		//                }
+		//            }
+		//        }
+		//    }
+		//}
 	}
 }

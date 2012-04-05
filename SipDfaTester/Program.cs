@@ -13,7 +13,7 @@ namespace SipDfaTester
 			int start = Environment.TickCount;
 
 			var dfaDummy = new SipMessageReader();
-	
+
 			var dfa = new SipMessageReader();
 			//dfa.LoadTables(@"..\..\..\Sip.Message\SipMessageReader.dfa");
 			dfa.LoadTables(@"..\..\..\SipDfaCompiler\bin\Debug\Sip.Message.dfa");
@@ -313,8 +313,13 @@ namespace SipDfaTester
 
 			var message8 = utf.GetBytes(
 				"REGISTER sip:officesip.local SIP/2.0\r\n" +
-				"Authorization: Kerberos qop=\"auth\", realm=\"OfficeSIP Server\", opaque=\"028da4af\", targetname=\"sip/officesip.local\", version=3, gssapi-data=\"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" +
-				"Authorization: NTLM qop=\"auth\", realm=\"OfficeSIP Server\", opaque=\"05cee767\", targetname=\"officesip.local\", crand=\"3c1c4c7b\", cnum=\"1234567\", response=\"0100000061646d69de3324fd36334466\"\r\n" +
+				"Accept: image/text1\r\n" +
+				"Accept: application/text2\r\n" +
+				"Content-Type:    application/text2\r\n" +
+				"Via: SIP/2.0/TCP 127.0.0.1:1800,    SIP/2.0/TCP 127.0.0.2:1800\r\n" +
+				"Via:     SIP/2.0/UDP 127.0.0.3:1800,    SIP/2.0/TCP 127.0.0.4:1800\r\n" +
+				//"Authorization: Kerberos qop=\"auth\", realm=\"OfficeSIP Server\", opaque=\"028da4af\", targetname=\"sip/officesip.local\", version=3, gssapi-data=\"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" +
+				//"Authorization: NTLM qop=\"auth\", realm=\"OfficeSIP Server\", opaque=\"05cee767\", targetname=\"officesip.local\", crand=\"3c1c4c7b\", cnum=\"1234567\", response=\"0100000061646d69de3324fd36334466\"\r\n" +
 				//	Authorization: Digest username="proxy", realm="officesip.local", qop=auth, algorithm=MD5, uri="sip:officesip.local", nonce="d44b4f96b00841f9cada22d5cc678d94", nc=1, cnonce="0084800a", opaque="00000001", response="c07d8fc21bcf4ced9b45414f3d10a498"
 				//"WWW-Authenticate: Digest realm=\"o1fficesip.local\",nonce=\"189396c747dedfc87fbe5deb420db5ca\",qop=\"auth\",algorithm=MD5,stale=false,opaque=\"abc00000001\"\r\n" +
 				//"WWW-Authenticate: Digest realm=\"o2fficesip.local\",nonce=\"289396c747dedfc87fbe5deb420db5ca\",qop=\"auth\",algorithm=MD5,stale=true,opaque=\"def00000001\"\r\n" +
@@ -324,11 +329,26 @@ namespace SipDfaTester
 				"\r\n"
 				);
 
+			//discrete - type = "text" / "image" / "audio" / "video"
+			//                    / "application" / extension - token;
+			//composite - type = "message" / "multipart" / extension - token;
+
 			dfa.SetDefaultValue();
 			int parsed8 = dfa.Parse(message8, 0, message8.Length);
 			dfa.SetArray(message8);
 			Console.WriteLine("Final : {0}", dfa.Final);
 			Console.WriteLine("Parsed: {0} ({1})", parsed8, message8.Length);
+
+			for (int i = 0; i < dfa.Count.AcceptCount + 1; i++)
+			{
+				//Console.WriteLine("Accept: {0} {1}/{2}", dfa.Accept[i].MediaType.ToString(), dfa.Accept[i].Type.ToString(), dfa.Accept[i].Subtype.ToString());
+				Console.WriteLine("Accept: |{0}| {1}/{2}", dfa.Accept[i].Value.ToString(), dfa.Accept[i].Type.ToString(), dfa.Accept[i].Subtype.ToString());
+			}
+
+			Console.WriteLine("Content-Type: |{0}|", dfa.ContentType.Value.ToString());
+
+			for (int i = 0; i < dfa.Count.ViaCount + 1; i++)
+				Console.WriteLine("Via.ValueAndComma: |{0}|", dfa.Via[i].ValueAndComma.ToString());
 
 			//Console.WriteLine("www Count: {0}", dfa.Count.WwwAuthenticateCount);
 			//Console.WriteLine("proxy Count: {0}", dfa.Count.ProxyAuthenticateCount);
@@ -347,11 +367,11 @@ namespace SipDfaTester
 			//    Console.WriteLine("Stale: {0}", www.Stale);
 			//}
 
-			Console.WriteLine("Scheme: {0}", dfa.Authorization[0].AuthScheme);
-			Console.WriteLine("targetname: {0}", dfa.Authorization[0].Targetname.ToString());
-			Console.WriteLine("Crand: {0:x8}", dfa.Authorization[0].Crand);
-			Console.WriteLine("Cnum: {0}", dfa.Authorization[0].Cnum);
-			Console.WriteLine("Response: {0}", dfa.Authorization[0].Response.ToString());
+			//Console.WriteLine("Scheme: {0}", dfa.Authorization[0].AuthScheme);
+			//Console.WriteLine("targetname: {0}", dfa.Authorization[0].Targetname.ToString());
+			//Console.WriteLine("Crand: {0:x8}", dfa.Authorization[0].Crand);
+			//Console.WriteLine("Cnum: {0}", dfa.Authorization[0].Cnum);
+			//Console.WriteLine("Response: {0}", dfa.Authorization[0].Response.ToString());
 
 			Console.WriteLine("--");
 

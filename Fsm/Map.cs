@@ -36,6 +36,25 @@ namespace Fsm
 			return set.Add(value);
 		}
 
+		public void AddAll(K key, IEnumerable<T> values)
+		{
+			foreach (var value in values)
+				Add(key, value);
+		}
+
+		public void Remove(K key, T value)
+		{
+			HashSet<T> set = null;
+
+			if (key == null)
+				set = _null;
+			else
+				_map.TryGetValue(key, out set);
+
+			if (set != null)
+				set.Remove(value);
+		}
+
 		public T GetOne(K key)
 		{
 			var set = Get(key);
@@ -64,6 +83,18 @@ namespace Fsm
 
 				return _emptySet;
 			}
+		}
+
+		public bool IsEmpty(K key)
+		{
+			if (key == null)
+				return _null.Count == 0;
+
+			HashSet<T> set;
+			if (_map.TryGetValue(key, out set))
+				return set == null || set.Count == 0;
+
+			return true;
 		}
 
 		public HashSet<NK> GetNotNullKeys<NK>(Func<K, NK> convert)
@@ -129,7 +160,7 @@ namespace Fsm
 						if (_mapenumerator.Current.Value.Count > 0)
 						{
 							_mapitemenumerator = _mapenumerator.Current.Value.GetEnumerator();
-							
+
 							if (_mapitemenumerator.MoveNext())
 								return true;
 						}
@@ -141,7 +172,7 @@ namespace Fsm
 				return _nullenumerator.MoveNext();
 			}
 
-			Object IEnumerator.Current 
+			Object IEnumerator.Current
 			{
 				get
 				{
@@ -149,7 +180,7 @@ namespace Fsm
 				}
 			}
 
-			public KeyValuePair<K, T> Current 
+			public KeyValuePair<K, T> Current
 			{
 				get
 				{

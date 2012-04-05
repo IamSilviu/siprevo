@@ -238,8 +238,19 @@ namespace Fsm
 				}
 			}
 
+			// create 0 set if absent
+			if (sets.GetFirst(0) == null)
+			{
+				id--;
+				foreach (var state in sets.GetSet(id))
+					sets.MoveToSet(state, 0);
+			}
+
 			if (showProgress)
+			{
 				Console.WriteLine("Marks: {0}\t\t", DateTime.Now - startTime2);
+				Console.WriteLine("Splitted by marks to {0} sets", sets.Count);
+			}
 
 			for (int xid = 0; xid < id; )
 			{

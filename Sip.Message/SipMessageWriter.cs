@@ -159,7 +159,7 @@ namespace Sip.Message
 		public void WriteHeader(Header header)
 		{
 			//if (header.IsRemoved == false)
-				Write(header.Name, C.HCOLON, header.Value, C.CRLF);
+			Write(header.Name, C.HCOLON, header.Value, C.CRLF);
 		}
 
 		public void WriteHeader(SipMessageReader reader, int index)
@@ -356,16 +356,41 @@ namespace Sip.Message
 
 		public void WriteContact(IPEndPoint endPoint, Transports transport, ByteArrayPart sipInstance)
 		{
+			WriteContact(ByteArrayPart.Invalid, endPoint, transport, sipInstance);
+
+			//Write(C.Contact, C.HCOLON, C.SP, C.LAQUOT, C.sip, C.HCOLON);
+			//Write(endPoint);
+			//if (transport != Transports.None)
+			//{
+			//    Write(C.SEMI, C.transport, C.EQUAL);
+			//    Write(transport.ToLowerUtf8Bytes());
+			//}
+			//Write(C.RAQUOT);
+			//if (sipInstance.IsValid)
+			//    Write(C.__sip_instance___, sipInstance, C.RAQUOT, C.DQUOTE);
+			//Write(C.CRLF);
+		}
+
+		public void WriteContact(ByteArrayPart user, IPEndPoint endPoint, Transports transport, ByteArrayPart sipInstance)
+		{
 			Write(C.Contact, C.HCOLON, C.SP, C.LAQUOT, C.sip, C.HCOLON);
+
+			if (user.IsValid)
+				Write(user, C.At);
+
 			Write(endPoint);
+
 			if (transport != Transports.None)
 			{
 				Write(C.SEMI, C.transport, C.EQUAL);
 				Write(transport.ToLowerUtf8Bytes());
 			}
+
 			Write(C.RAQUOT);
+
 			if (sipInstance.IsValid)
 				Write(C.__sip_instance___, sipInstance, C.RAQUOT, C.DQUOTE);
+
 			Write(C.CRLF);
 		}
 
@@ -786,6 +811,17 @@ namespace Sip.Message
 		public void WriteXErrorDetails(ByteArrayPart details)
 		{
 			Write(C.x_Error_Details, C.HCOLON, C.SP, details, C.CRLF);
+		}
+
+		public void WriteXErrorDetails(ByteArrayPart details1, byte[] details2)
+		{
+			Write(C.x_Error_Details, C.HCOLON, C.SP, details1);
+			if (details2 != null && details2.Length > 0)
+			{
+				Write(C.CommaSpace);
+				Write(details2);
+			}
+			Write(C.CRLF);
 		}
 
 		public void WriteTo(ByteArrayPart uri, ByteArrayPart tag)

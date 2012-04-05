@@ -372,8 +372,8 @@ SIP-messageX.message-headerX.Date.SIP-date.rfc1123-date.time.DIGIT -> Decimal = 
 // -------------------------------------------------------------------------------[ Via
 //
 SIP-messageX.message-headerX.Via.HCOLON.: -> Count = ViaCount, 25, -1; BeginRange = Via[ViaCount].CommaAndValue, AtEnd, 0;
-SIP-messageX.message-headerX.Via.COMMA., -> Count = ViaCount, 25, -1; BeginRange = Via[ViaCount].CommaAndValue, AtEnd, -1;
-SIP-messageX.message-headerX.Via.via-parm -> EndRange = Via[ViaCount].CommaAndValue;
+SIP-messageX.message-headerX.Via.COMMA., -> Count = ViaCount, 25, -1; BeginRange = Via[ViaCount].CommaAndValue, AtEnd, -1; Custom = Via[ViaCount].ValueAndComma, End, "if(Count.ViaCount>0&&Count.ViaCount<Max.ViaCount) Via[Count.ViaCount-1].ValueAndComma.End=i;";
+SIP-messageX.message-headerX.Via.via-parm -> EndRange = Via[ViaCount].CommaAndValue; LookupRange = Via[ViaCount].Value; Range = Via[ViaCount].ValueAndComma;
 SIP-messageX.message-headerX.Via.via-parm.sent-by.host -> Range = Via[ViaCount].SentBy.Host;
 SIP-messageX.message-headerX.Via.via-parm.sent-by.port.DIGIT -> Decimal = Via[ViaCount].SentBy.Port;
 SIP-messageX.message-headerX.Via.via-parm.via-params.via-ttl.ttl.DIGIT -> Decimal = Via[ViaCount].Ttl;
@@ -394,6 +394,16 @@ SIP-messageX.message-headerX.Via.via-parm.via-params.via-ms-received-cid.token -
 //
 SIP-messageX.message-headerX.Content-Type.media-type.m-type -> LookupRange = ContentType.Type;
 SIP-messageX.message-headerX.Content-Type.media-type.m-subtype -> LookupRange = ContentType.Subtype;
+SIP-messageX.message-headerX.Content-Type.media-type -> LookupRange = ContentType.Value;
+
+//
+// -------------------------------------------------------------------------------[ Accept
+//
+SIP-messageX.message-headerX.Accept.HCOLON.: -> Count = AcceptCount, 8, -1;
+SIP-messageX.message-headerX.Accept.COMMA., -> Count = AcceptCount, 8, -1;
+SIP-messageX.message-headerX.Accept.accept-range.media-range.m-type -> LookupRange = Accept[AcceptCount].Type;
+SIP-messageX.message-headerX.Accept.accept-range.media-range.m-subtype -> LookupRange = Accept[AcceptCount].Subtype;
+SIP-messageX.message-headerX.Accept.accept-range.media-range -> LookupRange = Accept[AcceptCount].Value;
 
 //
 // -------------------------------------------------------------------------------[ Content-Length
