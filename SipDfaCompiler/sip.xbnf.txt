@@ -135,9 +135,9 @@ port           =  1*DIGIT;
 uri-parameters    =  *( ";" uri-parameter);
 uri-parameter     =  transport-param / user-param / method-param
                      / ttl-param / maddr-param / lr-param / other-param;
-transport-param   =  "transport="
-                     ( "udp" / "tcp" / "sctp" / "tls"
-                     / other-transport);
+transport-param  =  "transport="
+                     ( "udp" / "tcp" / "sctp" / "tls" / "ws"
+                     / other-transport );
 other-transport   =  token;
 user-param        =  "user=" ( "phone" / "ip" / other-user);
 other-user        =  token;
@@ -561,8 +561,7 @@ sent-protocol     =  protocol-name SLASH protocol-version
                      SLASH transport;
 protocol-name     =  "SIP" / token;
 protocol-version  =  token;
-transport         =  "UDP" / "TCP" / "TLS" / "SCTP"
-                     / other-transport;
+transport         =  "UDP" / "TCP" / "TLS" / "SCTP" / "TLS-SCTP" / "WS" / "WSS" / other-transport;
 sent-by           =  host [ COLON port ];
 ttl               =  1*3 DIGIT; /* 0 to 255 */
 
@@ -621,8 +620,6 @@ event-reason-value   =   "deactivated"
                       / event-reason-extension;
 event-reason-extension = token;
 
-extension-header  =/ Event / Allow-Events / Subscription-State; /* vf: link to rfc3261 */
-
 /**************************************************************************************************/
 /* RFC 3903 */
 
@@ -632,8 +629,6 @@ extension-method   = PUBLISHm / token;
 SIP-ETag           = "SIP-ETag" HCOLON entity-tag;
 SIP-If-Match       = "SIP-If-Match" HCOLON entity-tag;
 entity-tag         = token;
-
-extension-header   =/ SIP-ETag / SIP-If-Match; /* vf: link to rfc3261 */
 
 /**************************************************************************************************/
 /* SERVICEm, BENOTIFYm, MESSAGEm, INFOm, REFERm */
@@ -784,28 +779,120 @@ snum-value          = 1*DIGIT / DQUOTE 1*DIGIT DQUOTE;
 srand               = "srand" EQUAL srand-value;
 srand-value         = 8 LHEX / DQUOTE 8 LHEX DQUOTE;
 
-extension-header    =/ Proxy-Authentication-Info; /* vf: link to rfc3261 */
-
 /**************************************************************************************************/
 
-/*
-message-header  =/ "www";
-message-header  =/ "www1";
-message-header  =/ "www2";
-*/
+msg   =  (Request-Line / Status-Line)
+         *( message-header-all )
+         CRLF;
+
+message-header-all  =  (Accept
+                     /  Accept-Encoding
+                     /  Accept-Language
+                     /  Alert-Info
+                     /  Allow
+                     /  Authentication-Info
+                     /  Authorization
+                     /  Call-ID
+                     /  Call-Info
+                     /  Contact
+                     /  Content-Disposition
+                     /  Content-Encoding
+                     /  Content-Language
+                     /  Content-Length
+                     /  Content-Type
+                     /  CSeq
+                     /  Date
+                     /  Error-Info
+                     /  Expires
+                     /  From
+                     /  In-Reply-To
+                     /  Max-Forwards
+                     /  MIME-Version
+                     /  Min-Expires
+                     /  Organization
+                     /  Priority
+                     /  Proxy-Authenticate
+                     /  Proxy-Authorization
+                     /  Proxy-Require
+                     /  Record-Route
+                     /  Reply-To
+                     /  Require
+                     /  Retry-After
+                     /  Route
+                     /  Server
+                     /  Subject
+                     /  Supported
+                     /  Timestamp
+                     /  To
+                     /  Unsupported
+                     /  User-Agent
+                     /  Via
+                     /  Warning
+                     /  WWW-Authenticate
+                     /  Event
+                     /  Allow-Events
+                     /  Subscription-State
+                     /  SIP-ETag
+                     /  SIP-If-Match
+                     /  Proxy-Authentication-Info
+                     /  corrected-extension-header) CRLF;
+                     
+/*corrected-extension-header = header-name HCOLON header-value;*/
+                     
+
+corrected-extension-header = (header-name &! ( "Accept"
+                                             /  "Accept-Encoding"
+                                             /  "Accept-Language"
+                                             /  "Alert-Info"
+                                             /  "Allow"
+                                             /  "Authentication-Info"
+                                             /  "Authorization"
+                                             /  "Call-ID" / "i"
+                                             /  "Call-Info"
+                                             /  "Contact" / "m"
+                                             /  "Content-Disposition"
+                                             /  "Content-Encoding" / "e"
+                                             /  "Content-Language"
+                                             /  "Content-Length" / "l"
+                                             /  "Content-Type" / "c"
+                                             /  "CSeq"
+                                             /  "Date"
+                                             /  "Error-Info"
+                                             /  "Expires"
+                                             /  "From"
+                                             /  "In-Reply-To"
+                                             /  "Max-Forwards"
+                                             /  "MIME-Version"
+                                             /  "Min-Expires"
+                                             /  "Organization"
+                                             /  "Priority"
+                                             /  "Proxy-Authenticate"
+                                             /  "Proxy-Authorization"
+                                             /  "Proxy-Require"
+                                             /  "Record-Route"
+                                             /  "Reply-To"
+                                             /  "Require"
+                                             /  "Retry-After"
+                                             /  "Route"
+                                             /  "Server"
+                                             /  "Subject" / "s"
+                                             /  "Supported"
+                                             /  "Timestamp"
+                                             /  "To" / "t"
+                                             /  "Unsupported"
+                                             /  "User-Agent"
+                                             /  "Via" / "v"
+                                             /  "Warning"
+                                             /  "WWW-Authenticate"
+                                             /  "Event"
+                                             /  "Allow-Events"
+                                             /  "Subscription-State"
+                                             /  "SIP-ETag"
+                                             /  "SIP-If-Match"
+                                             /  "Proxy-Authentication-Info" )) HCOLON header-value;
+
 
 /*
-ContactX       =  ("Contact" / "m" ) HCOLON
-                  ( STAR / (contact-param [COMMAX]));
-COMMAX         =  COMMA;
-
-ContactY       =  ("Contact" / "m" ) HCOLON
-                  ( STAR / (contact-paramY *(COMMAX contact-paramY)));
-contact-paramY =  (name-addr / addr-spec) *(SEMI contact-params);
-name-addrY     =  [ display-nameY ] LAQUOT addr-spec RAQUOT;
-display-nameY  =  *(alphanum LWS) / quoted-string;
-*/
-
 message-headerX =  (Accept
                 /  Accept-Encoding
                 /  Accept-Language
@@ -853,6 +940,9 @@ message-headerX =  (Accept
                 /  Via
                                 
                 /  extension-header) CRLF;
+*/
+
+/**************************************************************************************************/
 
 
 message-headerZ =  (Accept / Content-Type / Via) CRLF;
@@ -861,16 +951,25 @@ message-headerZ =  (Accept / Content-Type / Via) CRLF;
 message-headerZ =  (extension-header) CRLF;
 
 /*
+message-header  =/ "www";
+message-header  =/ "www1";
+message-header  =/ "www2";
+
+ContactX       =  ("Contact" / "m" ) HCOLON
+                  ( STAR / (contact-param [COMMAX]));
+COMMAX         =  COMMA;
+
+ContactY       =  ("Contact" / "m" ) HCOLON
+                  ( STAR / (contact-paramY *(COMMAX contact-paramY)));
+contact-paramY =  (name-addr / addr-spec) *(SEMI contact-params);
+name-addrY     =  [ display-nameY ] LAQUOT addr-spec RAQUOT;
+display-nameY  =  *(alphanum LWS) / quoted-string;
 
 ViaX              =  ( "Via" / "v" ) HCOLON via-parm *(COMMA via-parm);
 
 test              =  {State.NoCloneRepeatBy, via-parm, COMMA};
-*/
 
-SIP-messageX   =  (Request-Line / Status-Line)
-                  *( message-headerX )
-                  CRLF;
-/*
+
 RequestX       =  Request-Line
                   *( message-headerX )
                   CRLF;

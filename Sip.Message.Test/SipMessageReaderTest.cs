@@ -78,7 +78,7 @@ namespace SipMessageTest
 		public void It_should_parse_Contact_star()
 		{
 			Assert.IsTrue(ParseAll("ACK sip:domain SIP/2.0\r\nContact: *\r\n\r\n").Contact[0].IsStar);
-			Assert.False(ParseAll("ACK sip:domain SIP/2.0\r\nContact: abc\r\n\r\n").Contact[0].IsStar);
+			Assert.False(ParseAll("ACK sip:domain SIP/2.0\r\nContact: sip:abc\r\n\r\n").Contact[0].IsStar);
 		}
 
 		[Test]

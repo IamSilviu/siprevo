@@ -3,12 +3,9 @@
 using System;
 using System.Text;
 using System.Net;
+using Base.Message;
 
-#if HTTPMESSAGE
-namespace Http.Message
-#else
 namespace Sip.Message
-#endif
 {
 	public partial struct BeginEndIndex
 		: IEquatable<BeginEndIndex>, IEquatable<ByteArrayPart>

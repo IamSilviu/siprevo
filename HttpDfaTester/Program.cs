@@ -25,11 +25,15 @@ namespace HttpDfaTester
 			var message0 = utf.GetBytes(
 				"POST /enlighten/calais.asmx/Enlighten HTTP/1.1\r\n" +
 				"Test: test\r\n" +
-				"Host: api.opencalais.com\r\n" +
+				"Host: api.opencalais.com:9000\r\n" +
 				"Content-Type: application/x-www-form-urlencoded\r\n" +
 				"Content-Length: 123\r\n" +
-				"Upgrade: first, second/567,     third\r\n" +
+				"Upgrade: first, websocket, websocketex, websocket/v15, second/567,     third\r\n" +
 				"Referer: referer.com\r\n" +
+				"Origin: http://example.com\r\n" +
+				"Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n" +
+				"Sec-WebSocket-Protocol: chat  ,   superchat\r\n" +
+				"Sec-WebSocket-Version: 13\r\n" +
 				"\r\n");
 
 			dfa.SetDefaultValue();
@@ -43,14 +47,26 @@ namespace HttpDfaTester
 
 			Console.WriteLine("Method: {0}", dfa.Method);
 			Console.WriteLine("Request-URI: |{0}|", dfa.RequestUri.ToString());
-			Console.WriteLine("Host: |{0}|", dfa.Host.ToString());
+			Console.WriteLine("Host: |{0}| : {1}", dfa.Host.Host.ToString(), dfa.Host.Port);
 			Console.WriteLine("Content-Type: |{0}|", dfa.ContentType.Value.ToString());
 			Console.WriteLine("Content-Length: {0}", dfa.ContentLength);
 			Console.WriteLine("Referer: |{0}|", dfa.Referer.ToString());
 
-			Console.WriteLine("Upgrade");
-			for (int i = 0; i < dfa.Count.UpgradeCount; i++)
-				Console.WriteLine("  #{0} |{1}| + |{2}| = |{3}|", i, dfa.Upgrades[i].Name.ToString(), dfa.Upgrades[i].Version.ToString(), dfa.Upgrades[i].Value.ToString());
+			//Console.WriteLine("Upgrade");
+			//for (int i = 0; i < dfa.Count.UpgradeCount; i++)
+			//    Console.WriteLine("  #{0} |{1}| + |{2}| = |{3}| ({4})", i, dfa.Upgrades[i].Name.ToString(), dfa.Upgrades[i].Version.ToString(), dfa.Upgrades[i].Value.ToString(), dfa.Upgrades[i].Upgrate);
+
+			Console.Write("Upgrade: ");
+			for (int i = 0; i < dfa.Count.Upgrade; i++)
+				Console.Write("{0}, ", dfa.Upgrade[i]);
+			Console.WriteLine();
+
+			Console.WriteLine("Sec-WebSocket-Key: |{0}|", dfa.SecWebSocketKey.ToString());
+			Console.Write("Sec-WebSocket-Protocol: ");
+			for (int i = 0; i < dfa.Count.SecWebSocketProtocol; i++)
+				Console.Write("|{0}|, ", dfa.SecWebSocketProtocol[i].ToString());
+			Console.WriteLine();
+			Console.WriteLine("Sec-WebSocket-Version: {0}", dfa.SecWebSocketVersion);
 
 			TestSpeed(dfa, message0);
 		}

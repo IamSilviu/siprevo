@@ -142,7 +142,7 @@ namespace DfaCompiler
 			var dfa = nfa.ToDfa3(out count, true);
 			Console.WriteLine("DFA Complied States: {0}", count);
 
-			var minCount = dfa.Minimize4(true);
+			var minCount = dfa.Minimize(true);
 			Console.WriteLine("Minimized DFA States: {0}", minCount);
 
 			nfaGenerator.MarkRule -= MarkRuleHandler;

@@ -15,7 +15,7 @@ namespace SipDfaCompiler
 		{
 			var compiler = new Compiler(new SipNfaGenerator());
 
-			var command = "compile";
+			var command = (args.Length > 0) ? args[0] : "compile";
 
 			var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\";
 
@@ -36,7 +36,7 @@ namespace SipDfaCompiler
 		{
 			State INfaGenerator.GetNfaRoot()
 			{
-				return GetSIP_messageX(new List<string>());
+				return Getmsg(new List<string>());
 			}
 
 			event EventHandler<MarkRuleEventArgs> INfaGenerator.MarkRule

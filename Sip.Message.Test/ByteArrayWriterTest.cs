@@ -2,6 +2,7 @@
 using System.Net;
 using System.Text;
 using Sip.Message;
+using Base.Message;
 using NUnit.Framework;
 
 namespace SipMessageTest
@@ -9,10 +10,39 @@ namespace SipMessageTest
 	[TestFixture]
 	public class ByteArrayWriterTest
 	{
+		class ByteArrayWriterImplementaion
+			: ByteArrayWriter
+		{
+			public ByteArrayWriterImplementaion(int reservAtBegin, ArraySegment<byte> segment)
+				: base(reservAtBegin, segment)
+			{
+			}
+
+			protected override void Reallocate(ref ArraySegment<byte> segment, int extraSize)
+			{
+				int newLength = segment.Array.Length + extraSize;
+				var array = segment.Array;
+
+				Array.Resize<byte>(ref array, newLength);
+
+				segment = new ArraySegment<byte>(array, 0, newLength);
+			}
+		}
+
+		private ByteArrayWriter CreateWriter(int size)
+		{
+			return CreateWriter(0, size);
+		}
+
+		private ByteArrayWriter CreateWriter(int reservAtBegin, int size)
+		{
+			return new ByteArrayWriterImplementaion(reservAtBegin, new ArraySegment<byte>(new byte[size], 0, size));
+		}
+
 		[Test]
 		public void It_should_write_byte_array()
 		{
-			var writer = new ByteArrayWriter(2);
+			var writer = CreateWriter(2);
 
 			var block1 = new byte[] { 0, 1, };
 			writer.Write(block1);
@@ -27,7 +57,7 @@ namespace SipMessageTest
 		[Test]
 		public void It_should_write_ByteArrayPart()
 		{
-			var writer = new ByteArrayWriter(2);
+			var writer = CreateWriter(2);
 
 			writer.Write(new ByteArrayPart(new byte[] { 0, 1, 2, 3, 4, 5, }, 2, 2));
 
@@ -38,7 +68,7 @@ namespace SipMessageTest
 		[Test]
 		public void It_should_write_UInt32()
 		{
-			var writer = new ByteArrayWriter(11);
+			var writer = CreateWriter(11);
 
 			writer.Write(UInt32.MinValue);
 			writer.Write(UInt32.MaxValue);
@@ -46,7 +76,7 @@ namespace SipMessageTest
 			var actual = GetWritedArrayPart(writer);
 			Assert.AreEqual(new byte[] { 48, 52, 50, 57, 52, 57, 54, 55, 50, 57, 53, }, actual);
 
-			var writer2 = new ByteArrayWriter(11);
+			var writer2 = CreateWriter(11);
 			writer2.Write(100);
 			Assert.AreEqual(new byte[] { 49, 48, 48, }, GetWritedArrayPart(writer2));
 		}
@@ -56,7 +86,7 @@ namespace SipMessageTest
 		{
 			var expeted = Encoding.UTF8.GetBytes("-214748364802147483647-1234567890");
 
-			var writer = new ByteArrayWriter(expeted.Length);
+			var writer = CreateWriter(expeted.Length);
 
 			writer.Write(Int32.MinValue);
 			writer.Write(0);
@@ -72,7 +102,7 @@ namespace SipMessageTest
 		{
 			var expeted = Encoding.UTF8.GetBytes("80000000ffffffff000000007fffffff1234567800abcdef");
 
-			var writer = new ByteArrayWriter(expeted.Length);
+			var writer = CreateWriter(expeted.Length);
 
 			writer.WriteAsHex8(Int32.MinValue);
 			writer.WriteAsHex8(-1);
@@ -90,7 +120,7 @@ namespace SipMessageTest
 		{
 			var expeted = Encoding.UTF8.GetBytes("-214748364802147483647-1234567890");
 
-			var writer = new ByteArrayWriter(256, 1024);
+			var writer = CreateWriter(256, 1024);
 
 			writer.WriteToTop(-1234567890);
 			writer.WriteToTop(Int32.MaxValue);
@@ -106,7 +136,7 @@ namespace SipMessageTest
 		{
 			var expeted = Encoding.UTF8.GetBytes("192.168.1.2");
 
-			var writer = new ByteArrayWriter(expeted.Length);
+			var writer = CreateWriter(expeted.Length);
 
 			writer.Write(IPAddress.Parse("192.168.1.2"));
 
@@ -119,7 +149,7 @@ namespace SipMessageTest
 		{
 			var expeted = Encoding.UTF8.GetBytes("fe80::202:b3ff:fe1e:8329");
 
-			var writer = new ByteArrayWriter(expeted.Length);
+			var writer = CreateWriter(expeted.Length);
 
 			writer.Write(IPAddress.Parse("fe80::202:b3ff:fe1e:8329"));
 
@@ -132,7 +162,7 @@ namespace SipMessageTest
 		{
 			var expeted = Encoding.UTF8.GetBytes("0123255");
 
-			var writer = new ByteArrayWriter(1024);
+			var writer = CreateWriter(1024);
 
 			writer.Write((byte)byte.MinValue);
 			writer.Write((byte)123);
@@ -145,7 +175,7 @@ namespace SipMessageTest
 		[Test]
 		public void It_should_increase_size_of_buffer()
 		{
-			var writer = new ByteArrayWriter(1);
+			var writer = CreateWriter(1);
 
 			var block1 = new byte[] { 1, };
 			var block2 = new byte[] { 2, };

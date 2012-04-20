@@ -35,14 +35,6 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\HttpDfaCompiler\bin\Release\HttpMessageReader.cs">
@@ -54,17 +46,45 @@
     <Compile Include="..\HttpDfaCompiler\bin\Release\HttpMessageReaderOptimized2.cs">
       <Link>HttpMessageReaderOptimized2.cs</Link>
     </Compile>
+    <Compile Include="..\Sip.Message\Base64Encoding.cs">
+      <Link>Base.Message\Base64Encoding.cs</Link>
+    </Compile>
     <Compile Include="..\Sip.Message\BeginEnd.cs">
-      <Link>BeginEnd.cs</Link>
+      <Link>Base.Message\BeginEnd.cs</Link>
     </Compile>
     <Compile Include="..\Sip.Message\BeginEndIndex.cs">
-      <Link>BeginEndIndex.cs</Link>
+      <Link>Base.Message\BeginEndIndex.cs</Link>
+    </Compile>
+    <Compile Include="..\Sip.Message\BufferManager.cs">
+      <Link>Base.Message\BufferManager.cs</Link>
     </Compile>
     <Compile Include="..\Sip.Message\ByteArrayPart.cs">
-      <Link>ByteArrayPart.cs</Link>
+      <Link>Base.Message\ByteArrayPart.cs</Link>
     </Compile>
+    <Compile Include="..\Sip.Message\ByteArrayWriter.cs">
+      <Link>Base.Message\ByteArrayWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\Sip.Message\IBufferManager.cs">
+      <Link>Base.Message\IBufferManager.cs</Link>
+    </Compile>
+    <Compile Include="HttpMessage.cs" />
+    <Compile Include="HttpMessageWriter.C.cs" />
+    <Compile Include="HttpMessageWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HttpMessageReader.Extension.cs" />
+    <Compile Include="StatusCodes.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\HttpDfaCompiler\bin\Release\Http.Message.dfa">
+      <Link>Http.Message.dfa</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sip.Message\Sip.Message.csproj">
+      <Project>{33B6452A-AEFF-4DA5-84EE-B0652E09C0DB}</Project>
+      <Name>Sip.Message</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

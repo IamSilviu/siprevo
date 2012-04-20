@@ -1,6 +1,7 @@
-﻿using System;
+﻿#if BASEMESSAGE
+using System;
 
-namespace Sip.Message
+namespace Base.Message
 {
 	public interface IBufferManager
 	{
@@ -9,3 +10,5 @@ namespace Sip.Message
 		void Free(ref ArraySegment<byte> segment);
 	}
 }
+
+#endif

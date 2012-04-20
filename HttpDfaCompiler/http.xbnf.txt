@@ -478,7 +478,7 @@ Content-Location = "Content-Location" HCOLON
 
                          
 Content-MD5   = "Content-MD5" HCOLON md5-digest;
-md5-digest    = base64;
+md5-digest    = base64-value-non-empty;
                 /* <base64 of 128 bit MD5 digest as per RFC 1864> */
 
 
@@ -588,7 +588,8 @@ Trailer  = "Trailer" HCOLON 1#field-name;
 Transfer-Encoding       = "Transfer-Encoding" HCOLON 1#transfer-coding;
 
 
-Upgrade        = "Upgrade" HCOLON 1#product;
+/* vf: original -> Upgrade        = "Upgrade" HCOLON 1#product; */
+Upgrade        = "Upgrade" HCOLON 1#(product | "websocket" ["/" product-version]);
 
 
 User-Agent     = "User-Agent" HCOLON 1*( product | comment );
@@ -639,7 +640,7 @@ credentials = "Basic" basic-credentials;
 
 
 basic-credentials = base64-user-pass;
-base64-user-pass  = base64;
+base64-user-pass  = base64-value-non-empty;
                     /* <base64 [4] encoding of user-pass,
                         except not limited to 76 char/line> */
 user-pass   = userid ":" password;
@@ -698,7 +699,41 @@ nextnonce          = "nextnonce" "=" nonce-value;
 response-auth      = "rspauth" "=" response-digest;
 response-digest    = DQUOTE *LHEX DQUOTE;
 
-                    
+
+/**************************************************************************************************/
+/* FROM RFC 6455 */
+
+Sec-WebSocket-Key = "Sec-WebSocket-Key" HCOLON base64-value-non-empty;
+Sec-WebSocket-Extensions = "Sec-WebSocket-Extensions" HCOLON extension-list;
+Sec-WebSocket-Protocol-Client = "Sec-WebSocket-Protocol" HCOLON 1#token;
+Sec-WebSocket-Version-Client = "Sec-WebSocket-Version" HCOLON version;
+
+base64-value-non-empty = (1*base64-data [ base64-padding ]) | base64-padding;
+base64-data      = 4*4 base64-character;
+base64-padding   = (2*2 base64-character "==") | (3*3 base64-character "=");
+base64-character = ALPHA | DIGIT | "+" | "/";
+extension-list = 1#extension;
+extension = extension-token *( ";" extension-param );
+extension-token = registered-token;
+registered-token = token;
+
+extension-param = token [ "=" (token | quoted-string) ];
+           /* When using the quoted-string syntax variant, the value
+              after quoted-string unescaping MUST conform to the
+              'token' ABNF. */
+NZDIGIT       =  "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
+version = DIGIT | (NZDIGIT DIGIT) | ("1" DIGIT DIGIT) | ("2" DIGIT DIGIT);
+           /* Limited to 0-255 range, with no leading zeros */
+
+Sec-WebSocket-Accept     = "Sec-WebSocket-Accept" HCOLON base64-value-non-empty;
+Sec-WebSocket-Protocol-Server = "Sec-WebSocket-Protocol" HCOLON token;
+Sec-WebSocket-Version-Server = "Sec-WebSocket-Version" HCOLON 1#version;
+
+request-header =| Sec-WebSocket-Key
+                | Sec-WebSocket-Extensions
+                | Sec-WebSocket-Protocol-Client
+                | Sec-WebSocket-Version-Client;
+
 /**************************************************************************************************/
 /* FROM RFC 1123 */
 
@@ -748,8 +783,6 @@ RDQUOT  =  DQUOTE SWS; /* close double quotation mark */
 
 HEXDIG         =  DIGIT | "A" | "B" | "C" | "D" | "E" | "F";
 
-base64 = alphanum | "-" | "_" | "=";
-
 HTAB    =  %x09;
 HCOLON  =  *( SP | HTAB ) ":" SWS;
 
@@ -784,7 +817,11 @@ extension-header-marked-only = (token &! ( "Host"
                                          | "Content-Type"
                                          | "Content-Length"
                                          | "Upgrade"
-                                         | "Referer" )) HCOLON [ field-value ];
+                                         | "Referer"
+                                         | "Sec-WebSocket-Key"
+                                         | "Sec-WebSocket-Extensions"
+                                         | "Sec-WebSocket-Protocol"
+                                         | "Sec-WebSocket-Version" )) HCOLON [ field-value ];
 
 
 extension-header-for-request = (token &! (general-header-names 

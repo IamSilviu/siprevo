@@ -335,7 +335,7 @@ namespace Fsm
 			}
 			else
 			{
-				begin1.AddMark(new MarkImpl(mark, name) { Offset = offset, });
+				begin1.FindEnd().AddMark(new MarkImpl(mark, name) { Offset = offset, });
 
 				//var end2 = new State()
 				//{
@@ -397,31 +397,18 @@ namespace Fsm
 			MarkEach(name, Marks.ContinueRange);
 		}
 
-		//public void InverseMark(Marks mark)
-		//{
-		//    ForEach((state) =>
-		//        {
-		//            if (state.RemoveAllMarks((item) => item.Mark == mark) == 0)
-		//                state.AddMark(new MarkImpl(mark));
-		//        });
-		//}
-
 		public static State Substract(State nfa1, State nfa2)
 		{
 			nfa1.FindEnd().AddMark(Marks.Service1);
 			nfa2.FindEnd().AddMark(Marks.Service2);
-			//nfa2.InverseMark(Marks.Service2);
 
 			int count;
 			var dfa1 = nfa1.ToDfa3(out count, false);
 			var dfa2 = nfa2.ToDfa3(out count, false);
 
-			dfa1.Minimize4(false);
-			dfa2.Minimize4(false);
+			dfa1.Minimize(false);
+			dfa2.Minimize(false);
 
-			//var nfaError = new State();
-			//nfaError.AddMark(Marks.Service2);
-			//var error = new DfaState(new[] { nfaError.Id, });
 			var error = new DfaState(new[] { new State().Id, });
 			for (int i = 0; i <= 255; i++)
 				error.AddTransition((byte)i, error);

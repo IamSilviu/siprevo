@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using Base.Message;
 
 namespace Sip.Message
 {
@@ -12,7 +13,9 @@ namespace Sip.Message
 
 	public partial class SipMessageWriter
 		: ByteArrayWriter
+		, IDisposable
 	{
+
 		#region struct Range {...}
 
 		protected struct Range
@@ -57,15 +60,36 @@ namespace Sip.Message
 		protected Range toEpid;
 
 		public SipMessageWriter()
-			: base(128, 2048)
+			: this(128, 2048)
+		{
+		}
+
+		public SipMessageWriter(int size)
+			: this(128, size)
+		{
+		}
+
+		public SipMessageWriter(int reservAtBegin, int size)
+			: base(reservAtBegin, SipMessage.BufferManager.Allocate(size))
 		{
 			InitializeProperties();
 		}
 
-		public SipMessageWriter(int size)
-			: base(128, size)
+		// temporary - should be removed for optimization
+		~SipMessageWriter()
 		{
-			InitializeProperties();
+			SipMessage.BufferManager.Free(ref segment);
+		}
+
+		public void Dispose()
+		{
+			SipMessage.BufferManager.Free(ref segment);
+			GC.SuppressFinalize(this);
+		}
+
+		protected override void Reallocate(ref ArraySegment<byte> segment, int extraSize)
+		{
+			SipMessage.BufferManager.Reallocate(ref segment, extraSize);
 		}
 
 		#region Properties
@@ -266,7 +290,7 @@ namespace Sip.Message
 			Write(method.ToByteArrayPart(), C.SP, C.sip, C.HCOLON);
 			Write(endPoint);
 			Write(C.SEMI, C.transport, C.EQUAL);
-			Write(transport.ToLowerUtf8Bytes());
+			Write(transport.ToTransportParamUtf8Bytes());
 			Write(C.SP, C.SIP_2_0, C.CRLF);
 		}
 
@@ -383,7 +407,7 @@ namespace Sip.Message
 			if (transport != Transports.None)
 			{
 				Write(C.SEMI, C.transport, C.EQUAL);
-				Write(transport.ToLowerUtf8Bytes());
+				Write(transport.ToTransportParamUtf8Bytes());
 			}
 
 			Write(C.RAQUOT);

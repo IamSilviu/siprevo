@@ -1,8 +1,9 @@
-﻿using System;
+﻿#if BASEMESSAGE
+using System;
 
-namespace Sip.Message
+namespace Base.Message
 {
-	class BufferManager
+	public class BufferManager
 		: IBufferManager
 	{
 		public ArraySegment<byte> Allocate(int size)
@@ -25,3 +26,5 @@ namespace Sip.Message
 		}
 	}
 }
+
+#endif

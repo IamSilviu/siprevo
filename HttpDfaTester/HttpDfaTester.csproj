@@ -53,6 +53,10 @@
       <Project>{65CFD1C3-F5A0-4E90-9E92-6842F9D7DADD}</Project>
       <Name>Http.Message</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Sip.Message\Sip.Message.csproj">
+      <Project>{33B6452A-AEFF-4DA5-84EE-B0652E09C0DB}</Project>
+      <Name>Sip.Message</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

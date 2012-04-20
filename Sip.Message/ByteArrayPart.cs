@@ -1,12 +1,9 @@
-﻿using System;
+﻿#if BASEMESSAGE
+using System;
 using System.Text;
 using System.Net;
 
-#if HTTPMESSAGE
-namespace Http.Message
-#else
-namespace Sip.Message
-#endif
+namespace Base.Message
 {
 	public struct ByteArrayPart
 		: IEquatable<ByteArrayPart>
@@ -282,3 +279,5 @@ namespace Sip.Message
 		}
 	}
 }
+
+#endif

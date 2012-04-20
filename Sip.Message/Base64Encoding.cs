@@ -1,6 +1,7 @@
-﻿using System;
+﻿#if BASEMESSAGE
+using System;
 
-namespace Sip.Message
+namespace Base.Message
 {
 	/// <summary>
 	/// based on Org.BouncyCastle.Utilities.Encoders from http://www.bouncycastle.org/
@@ -92,3 +93,5 @@ namespace Sip.Message
 		}
 	}
 }
+
+#endif

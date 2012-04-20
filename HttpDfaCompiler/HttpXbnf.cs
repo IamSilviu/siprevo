@@ -758,7 +758,7 @@ namespace DfaCompiler
 		}
 		public State Getmd5_digest0(List<string> rulenames)
 		{
-			State rule = Getbase64(rulenames);
+			State rule = Getbase64_value_non_empty(rulenames);
 			return rule;
 		}
 		public State GetContent_Range0(List<string> rulenames)
@@ -983,7 +983,7 @@ namespace DfaCompiler
 		}
 		public State GetUpgrade0(List<string> rulenames)
 		{
-			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("Upgrade",rulenames),GetHCOLON(rulenames),State.NoCloneRepeatBy(Getproduct(rulenames), GetCOMMA(rulenames))));
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("Upgrade",rulenames),GetHCOLON(rulenames),State.NoCloneRepeatBy((State.NoCloneAlternation(Getproduct(rulenames),State.NoCloneConcatanation(FromString("websocket",rulenames),State.NoCloneOption(State.NoCloneConcatanation(FromString("/",rulenames),Getproduct_version(rulenames)))))), GetCOMMA(rulenames))));
 			return rule;
 		}
 		public State GetUser_Agent0(List<string> rulenames)
@@ -1103,7 +1103,7 @@ namespace DfaCompiler
 		}
 		public State Getbase64_user_pass0(List<string> rulenames)
 		{
-			State rule = Getbase64(rulenames);
+			State rule = Getbase64_value_non_empty(rulenames);
 			return rule;
 		}
 		public State Getuser_pass0(List<string> rulenames)
@@ -1271,6 +1271,101 @@ namespace DfaCompiler
 			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,GetDQUOTE(rulenames),State.Repeat(-1,-1,GetLHEX(rulenames)),GetDQUOTE(rulenames)));
 			return rule;
 		}
+		public State GetSec_WebSocket_Key0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("Sec-WebSocket-Key",rulenames),GetHCOLON(rulenames),Getbase64_value_non_empty(rulenames)));
+			return rule;
+		}
+		public State GetSec_WebSocket_Extensions0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("Sec-WebSocket-Extensions",rulenames),GetHCOLON(rulenames),Getextension_list(rulenames)));
+			return rule;
+		}
+		public State GetSec_WebSocket_Protocol_Client0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("Sec-WebSocket-Protocol",rulenames),GetHCOLON(rulenames),State.NoCloneRepeatBy(Gettoken(rulenames), GetCOMMA(rulenames))));
+			return rule;
+		}
+		public State GetSec_WebSocket_Version_Client0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("Sec-WebSocket-Version",rulenames),GetHCOLON(rulenames),Getversion(rulenames)));
+			return rule;
+		}
+		public State Getbase64_value_non_empty0(List<string> rulenames)
+		{
+			State rule = State.NoCloneAlternation((State.NoCloneConcatanation(State.Repeat(1,-1,Getbase64_data(rulenames)),State.NoCloneOption(Getbase64_padding(rulenames)))),Getbase64_padding(rulenames));
+			return rule;
+		}
+		public State Getbase64_data0(List<string> rulenames)
+		{
+			State rule = State.Repeat(4,4,Getbase64_character(rulenames));
+			return rule;
+		}
+		public State Getbase64_padding0(List<string> rulenames)
+		{
+			State rule = State.NoCloneAlternation((State.NoCloneConcatanation(State.Repeat(2,2,Getbase64_character(rulenames)),FromString("==",rulenames))),(State.NoCloneConcatanation(State.Repeat(3,3,Getbase64_character(rulenames)),FromString("=",rulenames))));
+			return rule;
+		}
+		public State Getbase64_character0(List<string> rulenames)
+		{
+			State rule = State.NoCloneAlternation(GetALPHA(rulenames),GetDIGIT(rulenames),FromString("+",rulenames),FromString("/",rulenames));
+			return rule;
+		}
+		public State Getextension_list0(List<string> rulenames)
+		{
+			State rule = State.NoCloneRepeatBy(Getextension(rulenames), GetCOMMA(rulenames));
+			return rule;
+		}
+		public State Getextension0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,Getextension_token(rulenames),State.Repeat(-1,-1,(State.NoCloneConcatanation(FromString(";",rulenames),Getextension_param(rulenames))))));
+			return rule;
+		}
+		public State Getextension_token0(List<string> rulenames)
+		{
+			State rule = Getregistered_token(rulenames);
+			return rule;
+		}
+		public State Getregistered_token0(List<string> rulenames)
+		{
+			State rule = Gettoken(rulenames);
+			return rule;
+		}
+		public State Getextension_param0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,Gettoken(rulenames),State.NoCloneOption(State.NoCloneConcatanation(FromString("=",rulenames),(State.NoCloneAlternation(Gettoken(rulenames),Getquoted_string(rulenames)))))));
+			return rule;
+		}
+		public State GetNZDIGIT0(List<string> rulenames)
+		{
+			State rule = State.NoCloneAlternation(FromString("1",rulenames),FromString("2",rulenames),FromString("3",rulenames),FromString("4",rulenames),FromString("5",rulenames),FromString("6",rulenames),FromString("7",rulenames),FromString("8",rulenames),FromString("9",rulenames));
+			return rule;
+		}
+		public State Getversion0(List<string> rulenames)
+		{
+			State rule = State.NoCloneAlternation(GetDIGIT(rulenames),(State.NoCloneConcatanation(GetNZDIGIT(rulenames),GetDIGIT(rulenames))),(State.NoCloneConcatanation(FromString("1",rulenames),GetDIGIT(rulenames),GetDIGIT(rulenames))),(State.NoCloneConcatanation(FromString("2",rulenames),GetDIGIT(rulenames),GetDIGIT(rulenames))));
+			return rule;
+		}
+		public State GetSec_WebSocket_Accept0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("Sec-WebSocket-Accept",rulenames),GetHCOLON(rulenames),Getbase64_value_non_empty(rulenames)));
+			return rule;
+		}
+		public State GetSec_WebSocket_Protocol_Server0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("Sec-WebSocket-Protocol",rulenames),GetHCOLON(rulenames),Gettoken(rulenames)));
+			return rule;
+		}
+		public State GetSec_WebSocket_Version_Server0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("Sec-WebSocket-Version",rulenames),GetHCOLON(rulenames),State.NoCloneRepeatBy(Getversion(rulenames), GetCOMMA(rulenames))));
+			return rule;
+		}
+		public State Getrequest_header1(List<string> rulenames)
+		{
+			State rule = State.NoCloneAlternation(GetSec_WebSocket_Key(rulenames),GetSec_WebSocket_Extensions(rulenames),GetSec_WebSocket_Protocol_Client(rulenames),GetSec_WebSocket_Version_Client(rulenames));
+			return rule;
+		}
 		public State Getmailbox0(List<string> rulenames)
 		{
 			State rule = State.NoCloneAlternation(Getaddr_spec(rulenames),State.NoCloneConcatanation(OnChangeConcatanation(rulenames,State.NoCloneOption(Getphrase(rulenames)),Getroute_addr(rulenames))));
@@ -1401,11 +1496,6 @@ namespace DfaCompiler
 			State rule = State.NoCloneAlternation(GetDIGIT(rulenames),FromString("A",rulenames),FromString("B",rulenames),FromString("C",rulenames),FromString("D",rulenames),FromString("E",rulenames),FromString("F",rulenames));
 			return rule;
 		}
-		public State Getbase640(List<string> rulenames)
-		{
-			State rule = State.NoCloneAlternation(Getalphanum(rulenames),FromString("-",rulenames),FromString("_",rulenames),FromString("=",rulenames));
-			return rule;
-		}
 		public State GetHTAB0(List<string> rulenames)
 		{
 			State rule = 0x09;
@@ -1478,7 +1568,7 @@ namespace DfaCompiler
 		}
 		public State Getextension_header_marked_only0(List<string> rulenames)
 		{
-			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(State.Substract(Gettoken(rulenames),(State.NoCloneAlternation(FromString("Host",rulenames),FromString("Content-Type",rulenames),FromString("Content-Length",rulenames),FromString("Upgrade",rulenames),FromString("Referer",rulenames))))),GetHCOLON(rulenames),State.NoCloneOption(Getfield_value(rulenames))));
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(State.Substract(Gettoken(rulenames),(State.NoCloneAlternation(FromString("Host",rulenames),FromString("Content-Type",rulenames),FromString("Content-Length",rulenames),FromString("Upgrade",rulenames),FromString("Referer",rulenames),FromString("Sec-WebSocket-Key",rulenames),FromString("Sec-WebSocket-Extensions",rulenames),FromString("Sec-WebSocket-Protocol",rulenames),FromString("Sec-WebSocket-Version",rulenames))))),GetHCOLON(rulenames),State.NoCloneOption(Getfield_value(rulenames))));
 			return rule;
 		}
 		public State Getextension_header_for_request0(List<string> rulenames)
@@ -2360,7 +2450,7 @@ namespace DfaCompiler
 		public State Getrequest_header(List<string> rulenames)
 		{
 			rulenames.Insert(0, "request-header");
-			State rule = State.NoCloneAlternation(Getrequest_header0(rulenames));
+			State rule = State.NoCloneAlternation(Getrequest_header0(rulenames), Getrequest_header1(rulenames));
 			rule = OnMarkRule(rule, rulenames);
 			rulenames.RemoveAt(0);
 			return rule;
@@ -3445,6 +3535,150 @@ namespace DfaCompiler
 			rulenames.RemoveAt(0);
 			return rule;
 		}
+		public State GetSec_WebSocket_Key(List<string> rulenames)
+		{
+			rulenames.Insert(0, "Sec-WebSocket-Key");
+			State rule = State.NoCloneAlternation(GetSec_WebSocket_Key0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State GetSec_WebSocket_Extensions(List<string> rulenames)
+		{
+			rulenames.Insert(0, "Sec-WebSocket-Extensions");
+			State rule = State.NoCloneAlternation(GetSec_WebSocket_Extensions0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State GetSec_WebSocket_Protocol_Client(List<string> rulenames)
+		{
+			rulenames.Insert(0, "Sec-WebSocket-Protocol-Client");
+			State rule = State.NoCloneAlternation(GetSec_WebSocket_Protocol_Client0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State GetSec_WebSocket_Version_Client(List<string> rulenames)
+		{
+			rulenames.Insert(0, "Sec-WebSocket-Version-Client");
+			State rule = State.NoCloneAlternation(GetSec_WebSocket_Version_Client0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getbase64_value_non_empty(List<string> rulenames)
+		{
+			rulenames.Insert(0, "base64-value-non-empty");
+			State rule = State.NoCloneAlternation(Getbase64_value_non_empty0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getbase64_data(List<string> rulenames)
+		{
+			rulenames.Insert(0, "base64-data");
+			State rule = State.NoCloneAlternation(Getbase64_data0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getbase64_padding(List<string> rulenames)
+		{
+			rulenames.Insert(0, "base64-padding");
+			State rule = State.NoCloneAlternation(Getbase64_padding0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getbase64_character(List<string> rulenames)
+		{
+			rulenames.Insert(0, "base64-character");
+			State rule = State.NoCloneAlternation(Getbase64_character0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getextension_list(List<string> rulenames)
+		{
+			rulenames.Insert(0, "extension-list");
+			State rule = State.NoCloneAlternation(Getextension_list0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getextension(List<string> rulenames)
+		{
+			rulenames.Insert(0, "extension");
+			State rule = State.NoCloneAlternation(Getextension0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getextension_token(List<string> rulenames)
+		{
+			rulenames.Insert(0, "extension-token");
+			State rule = State.NoCloneAlternation(Getextension_token0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getregistered_token(List<string> rulenames)
+		{
+			rulenames.Insert(0, "registered-token");
+			State rule = State.NoCloneAlternation(Getregistered_token0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getextension_param(List<string> rulenames)
+		{
+			rulenames.Insert(0, "extension-param");
+			State rule = State.NoCloneAlternation(Getextension_param0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State GetNZDIGIT(List<string> rulenames)
+		{
+			rulenames.Insert(0, "NZDIGIT");
+			State rule = State.NoCloneAlternation(GetNZDIGIT0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getversion(List<string> rulenames)
+		{
+			rulenames.Insert(0, "version");
+			State rule = State.NoCloneAlternation(Getversion0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State GetSec_WebSocket_Accept(List<string> rulenames)
+		{
+			rulenames.Insert(0, "Sec-WebSocket-Accept");
+			State rule = State.NoCloneAlternation(GetSec_WebSocket_Accept0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State GetSec_WebSocket_Protocol_Server(List<string> rulenames)
+		{
+			rulenames.Insert(0, "Sec-WebSocket-Protocol-Server");
+			State rule = State.NoCloneAlternation(GetSec_WebSocket_Protocol_Server0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State GetSec_WebSocket_Version_Server(List<string> rulenames)
+		{
+			rulenames.Insert(0, "Sec-WebSocket-Version-Server");
+			State rule = State.NoCloneAlternation(GetSec_WebSocket_Version_Server0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
 		public State Getmailbox(List<string> rulenames)
 		{
 			rulenames.Insert(0, "mailbox");
@@ -3633,14 +3867,6 @@ namespace DfaCompiler
 		{
 			rulenames.Insert(0, "HEXDIG");
 			State rule = State.NoCloneAlternation(GetHEXDIG0(rulenames));
-			rule = OnMarkRule(rule, rulenames);
-			rulenames.RemoveAt(0);
-			return rule;
-		}
-		public State Getbase64(List<string> rulenames)
-		{
-			rulenames.Insert(0, "base64");
-			State rule = State.NoCloneAlternation(Getbase640(rulenames));
 			rule = OnMarkRule(rule, rulenames);
 			rulenames.RemoveAt(0);
 			return rule;

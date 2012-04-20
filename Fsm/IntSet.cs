@@ -53,6 +53,28 @@ namespace Fsm
 			_sets[current.Value.SetId].AddFirst(current);
 		}
 
+		public void MoveToNewSet(LinkedListNode<DfaState> current)
+		{
+			MoveToSet(current, NewSetId);
+		}
+
+		public int NewSetId
+		{
+			get { return _sets.Count; }
+		}
+
+		public void RemoveEmpty()
+		{
+			_sets.RemoveAll((set) => (set.Count == 0));
+
+			for (int i = 0; i < _sets.Count; i++)
+			{
+				foreach (var state in _sets[i])
+					state.SetId = i;
+			}
+
+		}
+
 		public int Count
 		{
 			get { return _sets.Count; }

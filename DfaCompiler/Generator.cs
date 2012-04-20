@@ -222,9 +222,7 @@ namespace DfaCompiler
 				_main.WriteLine("using System.Text;");
 				_main.WriteLine("using System.IO;");
 				_main.WriteLine("using System.IO.Compression;");
-				_main.WriteLine("#if !{0}", namespace1.Replace(".", "").ToUpper());
-				_main.WriteLine("using Sip.Message;");
-				_main.WriteLine("#endif");
+				_main.WriteLine("using Base.Message;");
 				if (_optimized == OptimizationMode.IndexedArray)
 					_main.WriteLine("using System.Threading;");
 				_main.WriteLine();

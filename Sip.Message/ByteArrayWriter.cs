@@ -1,39 +1,41 @@
-﻿using System;
+﻿#if BASEMESSAGE
+using System;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Sip.Message
+namespace Base.Message
 {
-	public class ByteArrayWriter
-		: IDisposable
+	public abstract class ByteArrayWriter
 	{
 		protected int end;
 		protected int begin;
-		private ArraySegment<byte> segment;
+		protected ArraySegment<byte> segment;
 
-		public ByteArrayWriter(int size)
-			: this(0, size)
+		public ByteArrayWriter(ArraySegment<byte> segment)
+			: this(0, segment)
 		{
 		}
 
-		public ByteArrayWriter(int reservAtBegin, int size)
+		public ByteArrayWriter(int reservAtBegin, ArraySegment<byte> segment)
 		{
-			end = begin = reservAtBegin;
-			segment = SipMessage.BufferManager.Allocate(size);
+			this.end = this.begin = reservAtBegin;
+			this.segment = segment;
 		}
 
-		// temporary - should be removed for optimization
-		~ByteArrayWriter()
-		{
-			SipMessage.BufferManager.Free(ref segment);
-		}
+		protected abstract void Reallocate(ref ArraySegment<byte> segment, int extraSize);
 
-		public void Dispose()
-		{
-			SipMessage.BufferManager.Free(ref segment);
-			GC.SuppressFinalize(this);
-		}
+		//// temporary - should be removed for optimization
+		//~ByteArrayWriter()
+		//{
+		//    SipMessage.BufferManager.Free(ref segment);
+		//}
+
+		//public void Dispose()
+		//{
+		//    SipMessage.BufferManager.Free(ref segment);
+		//    GC.SuppressFinalize(this);
+		//}
 
 		public ArraySegment<byte> Detach()
 		{
@@ -55,6 +57,11 @@ namespace Sip.Message
 		public int Offset
 		{
 			get { return segment.Offset + begin; }
+		}
+
+		public int OffsetOffset
+		{
+			get { return begin; }
 		}
 
 		public byte[] Buffer
@@ -223,7 +230,7 @@ namespace Sip.Message
 		public void ValidateCapacity(int extraSize)
 		{
 			if ((end + extraSize) > segment.Count)
-				SipMessage.BufferManager.Reallocate(ref segment, extraSize);
+				Reallocate(ref segment, extraSize);
 		}
 
 		public static byte GetLowerHexChar(byte digit)
@@ -482,3 +489,5 @@ namespace Sip.Message
 		}
 	}
 }
+
+#endif

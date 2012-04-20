@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+using Base.Message;
 
 namespace Sip.Message
 {
@@ -152,6 +154,11 @@ namespace Sip.Message
 			public readonly static ByteArrayPart __boundary_OFFICESIP2011VITALIFOMINE__ = new ByteArrayPart("\";boundary=OFFICESIP2011VITALIFOMINE\r\n");
 			public readonly static ByteArrayPart __OFFICESIP2011VITALIFOMINE__1 = new ByteArrayPart("--OFFICESIP2011VITALIFOMINE\r\n");
 			public readonly static ByteArrayPart __OFFICESIP2011VITALIFOMINE__2 = new ByteArrayPart("--OFFICESIP2011VITALIFOMINE--");
+
+			public static byte[] Create(string text)
+			{
+				return Encoding.UTF8.GetBytes(text);
+			}
 		}
 	}
 }

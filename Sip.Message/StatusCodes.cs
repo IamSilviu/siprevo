@@ -1,4 +1,5 @@
 ﻿using System;
+using Base.Message;
 
 namespace Sip.Message
 {

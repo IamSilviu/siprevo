@@ -383,7 +383,7 @@ namespace DfaCompiler
 		}
 		public State Gettransport_param0(List<string> rulenames)
 		{
-			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("transport=",rulenames),(State.NoCloneAlternation(FromString("udp",rulenames),FromString("tcp",rulenames),FromString("sctp",rulenames),FromString("tls",rulenames),Getother_transport(rulenames)))));
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("transport=",rulenames),(State.NoCloneAlternation(FromString("udp",rulenames),FromString("tcp",rulenames),FromString("sctp",rulenames),FromString("tls",rulenames),FromString("ws",rulenames),Getother_transport(rulenames)))));
 			return rule;
 		}
 		public State Getother_transport0(List<string> rulenames)
@@ -1458,7 +1458,7 @@ namespace DfaCompiler
 		}
 		public State Gettransport0(List<string> rulenames)
 		{
-			State rule = State.NoCloneAlternation(FromString("UDP",rulenames),FromString("TCP",rulenames),FromString("TLS",rulenames),FromString("SCTP",rulenames),Getother_transport(rulenames));
+			State rule = State.NoCloneAlternation(FromString("UDP",rulenames),FromString("TCP",rulenames),FromString("TLS",rulenames),FromString("SCTP",rulenames),FromString("TLS-SCTP",rulenames),FromString("WS",rulenames),FromString("WSS",rulenames),Getother_transport(rulenames));
 			return rule;
 		}
 		public State Getsent_by0(List<string> rulenames)
@@ -1606,11 +1606,6 @@ namespace DfaCompiler
 			State rule = Gettoken(rulenames);
 			return rule;
 		}
-		public State Getextension_header1(List<string> rulenames)
-		{
-			State rule = State.NoCloneAlternation(GetEvent(rulenames),GetAllow_Events(rulenames),GetSubscription_State(rulenames));
-			return rule;
-		}
 		public State GetPUBLISHm0(List<string> rulenames)
 		{
 			State rule = (State)(new byte[] {0x50,0x55,0x42,0x4C,0x49,0x53,0x48,});
@@ -1634,11 +1629,6 @@ namespace DfaCompiler
 		public State Getentity_tag0(List<string> rulenames)
 		{
 			State rule = Gettoken(rulenames);
-			return rule;
-		}
-		public State Getextension_header2(List<string> rulenames)
-		{
-			State rule = State.NoCloneAlternation(GetSIP_ETag(rulenames),GetSIP_If_Match(rulenames));
 			return rule;
 		}
 		public State GetSERVICEm0(List<string> rulenames)
@@ -1881,14 +1871,19 @@ namespace DfaCompiler
 			State rule = State.NoCloneAlternation(State.Repeat(8,-1,GetLHEX(rulenames)),State.NoCloneConcatanation(OnChangeConcatanation(rulenames,GetDQUOTE(rulenames),State.Repeat(8,-1,GetLHEX(rulenames)),GetDQUOTE(rulenames))));
 			return rule;
 		}
-		public State Getextension_header3(List<string> rulenames)
+		public State Getmsg0(List<string> rulenames)
 		{
-			State rule = GetProxy_Authentication_Info(rulenames);
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(State.NoCloneAlternation(GetRequest_Line(rulenames),GetStatus_Line(rulenames))),State.Repeat(-1,-1,(Getmessage_header_all(rulenames))),GetCRLF(rulenames)));
 			return rule;
 		}
-		public State Getmessage_headerX0(List<string> rulenames)
+		public State Getmessage_header_all0(List<string> rulenames)
 		{
-			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(State.NoCloneAlternation(GetAccept(rulenames),GetAccept_Encoding(rulenames),GetAccept_Language(rulenames),GetAlert_Info(rulenames),GetAllow(rulenames),GetAuthentication_Info(rulenames),GetAuthorization(rulenames),GetCall_ID(rulenames),GetCall_Info(rulenames),GetContent_Disposition(rulenames),GetContent_Encoding(rulenames),GetContent_Language(rulenames),GetContent_Length(rulenames),GetContent_Type(rulenames),GetCSeq(rulenames),GetDate(rulenames),GetError_Info(rulenames),GetExpires(rulenames),GetIn_Reply_To(rulenames),GetMax_Forwards(rulenames),GetMIME_Version(rulenames),GetMin_Expires(rulenames),GetOrganization(rulenames),GetPriority(rulenames),GetProxy_Authenticate(rulenames),GetProxy_Authorization(rulenames),GetProxy_Require(rulenames),GetReply_To(rulenames),GetRequire(rulenames),GetRetry_After(rulenames),GetServer(rulenames),GetSubject(rulenames),GetSupported(rulenames),GetTimestamp(rulenames),GetUnsupported(rulenames),GetUser_Agent(rulenames),GetWarning(rulenames),GetWWW_Authenticate(rulenames),GetContact(rulenames),GetFrom(rulenames),GetRecord_Route(rulenames),GetRoute(rulenames),GetTo(rulenames),GetVia(rulenames),Getextension_header(rulenames))),GetCRLF(rulenames)));
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(State.NoCloneAlternation(GetAccept(rulenames),GetAccept_Encoding(rulenames),GetAccept_Language(rulenames),GetAlert_Info(rulenames),GetAllow(rulenames),GetAuthentication_Info(rulenames),GetAuthorization(rulenames),GetCall_ID(rulenames),GetCall_Info(rulenames),GetContact(rulenames),GetContent_Disposition(rulenames),GetContent_Encoding(rulenames),GetContent_Language(rulenames),GetContent_Length(rulenames),GetContent_Type(rulenames),GetCSeq(rulenames),GetDate(rulenames),GetError_Info(rulenames),GetExpires(rulenames),GetFrom(rulenames),GetIn_Reply_To(rulenames),GetMax_Forwards(rulenames),GetMIME_Version(rulenames),GetMin_Expires(rulenames),GetOrganization(rulenames),GetPriority(rulenames),GetProxy_Authenticate(rulenames),GetProxy_Authorization(rulenames),GetProxy_Require(rulenames),GetRecord_Route(rulenames),GetReply_To(rulenames),GetRequire(rulenames),GetRetry_After(rulenames),GetRoute(rulenames),GetServer(rulenames),GetSubject(rulenames),GetSupported(rulenames),GetTimestamp(rulenames),GetTo(rulenames),GetUnsupported(rulenames),GetUser_Agent(rulenames),GetVia(rulenames),GetWarning(rulenames),GetWWW_Authenticate(rulenames),GetEvent(rulenames),GetAllow_Events(rulenames),GetSubscription_State(rulenames),GetSIP_ETag(rulenames),GetSIP_If_Match(rulenames),GetProxy_Authentication_Info(rulenames),Getcorrected_extension_header(rulenames))),GetCRLF(rulenames)));
+			return rule;
+		}
+		public State Getcorrected_extension_header0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(State.Substract(Getheader_name(rulenames),(State.NoCloneAlternation(FromString("Accept",rulenames),FromString("Accept-Encoding",rulenames),FromString("Accept-Language",rulenames),FromString("Alert-Info",rulenames),FromString("Allow",rulenames),FromString("Authentication-Info",rulenames),FromString("Authorization",rulenames),FromString("Call-ID",rulenames),FromString("i",rulenames),FromString("Call-Info",rulenames),FromString("Contact",rulenames),FromString("m",rulenames),FromString("Content-Disposition",rulenames),FromString("Content-Encoding",rulenames),FromString("e",rulenames),FromString("Content-Language",rulenames),FromString("Content-Length",rulenames),FromString("l",rulenames),FromString("Content-Type",rulenames),FromString("c",rulenames),FromString("CSeq",rulenames),FromString("Date",rulenames),FromString("Error-Info",rulenames),FromString("Expires",rulenames),FromString("From",rulenames),FromString("In-Reply-To",rulenames),FromString("Max-Forwards",rulenames),FromString("MIME-Version",rulenames),FromString("Min-Expires",rulenames),FromString("Organization",rulenames),FromString("Priority",rulenames),FromString("Proxy-Authenticate",rulenames),FromString("Proxy-Authorization",rulenames),FromString("Proxy-Require",rulenames),FromString("Record-Route",rulenames),FromString("Reply-To",rulenames),FromString("Require",rulenames),FromString("Retry-After",rulenames),FromString("Route",rulenames),FromString("Server",rulenames),FromString("Subject",rulenames),FromString("s",rulenames),FromString("Supported",rulenames),FromString("Timestamp",rulenames),FromString("To",rulenames),FromString("t",rulenames),FromString("Unsupported",rulenames),FromString("User-Agent",rulenames),FromString("Via",rulenames),FromString("v",rulenames),FromString("Warning",rulenames),FromString("WWW-Authenticate",rulenames),FromString("Event",rulenames),FromString("Allow-Events",rulenames),FromString("Subscription-State",rulenames),FromString("SIP-ETag",rulenames),FromString("SIP-If-Match",rulenames),FromString("Proxy-Authentication-Info",rulenames))))),GetHCOLON(rulenames),Getheader_value(rulenames)));
 			return rule;
 		}
 		public State Getmessage_headerZ0(List<string> rulenames)
@@ -1899,11 +1894,6 @@ namespace DfaCompiler
 		public State Getmessage_headerZ1(List<string> rulenames)
 		{
 			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(Getextension_header(rulenames)),GetCRLF(rulenames)));
-			return rule;
-		}
-		public State GetSIP_messageX0(List<string> rulenames)
-		{
-			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(State.NoCloneAlternation(GetRequest_Line(rulenames),GetStatus_Line(rulenames))),State.Repeat(-1,-1,(Getmessage_headerX(rulenames))),GetCRLF(rulenames)));
 			return rule;
 		}
 		public State Getalphanum(List<string> rulenames)
@@ -4261,7 +4251,7 @@ namespace DfaCompiler
 		public State Getextension_header(List<string> rulenames)
 		{
 			rulenames.Insert(0, "extension-header");
-			State rule = State.NoCloneAlternation(Getextension_header0(rulenames), Getextension_header1(rulenames), Getextension_header2(rulenames), Getextension_header3(rulenames));
+			State rule = State.NoCloneAlternation(Getextension_header0(rulenames));
 			rule = OnMarkRule(rule, rulenames);
 			rulenames.RemoveAt(0);
 			return rule;
@@ -4754,10 +4744,26 @@ namespace DfaCompiler
 			rulenames.RemoveAt(0);
 			return rule;
 		}
-		public State Getmessage_headerX(List<string> rulenames)
+		public State Getmsg(List<string> rulenames)
 		{
-			rulenames.Insert(0, "message-headerX");
-			State rule = State.NoCloneAlternation(Getmessage_headerX0(rulenames));
+			rulenames.Insert(0, "msg");
+			State rule = State.NoCloneAlternation(Getmsg0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getmessage_header_all(List<string> rulenames)
+		{
+			rulenames.Insert(0, "message-header-all");
+			State rule = State.NoCloneAlternation(Getmessage_header_all0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getcorrected_extension_header(List<string> rulenames)
+		{
+			rulenames.Insert(0, "corrected-extension-header");
+			State rule = State.NoCloneAlternation(Getcorrected_extension_header0(rulenames));
 			rule = OnMarkRule(rule, rulenames);
 			rulenames.RemoveAt(0);
 			return rule;
@@ -4766,14 +4772,6 @@ namespace DfaCompiler
 		{
 			rulenames.Insert(0, "message-headerZ");
 			State rule = State.NoCloneAlternation(Getmessage_headerZ0(rulenames), Getmessage_headerZ1(rulenames));
-			rule = OnMarkRule(rule, rulenames);
-			rulenames.RemoveAt(0);
-			return rule;
-		}
-		public State GetSIP_messageX(List<string> rulenames)
-		{
-			rulenames.Insert(0, "SIP-messageX");
-			State rule = State.NoCloneAlternation(GetSIP_messageX0(rulenames));
 			rule = OnMarkRule(rule, rulenames);
 			rulenames.RemoveAt(0);
 			return rule;

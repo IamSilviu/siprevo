@@ -1,26 +1,27 @@
 ﻿using System;
 using System.Net;
 using System.Text;
+using Base.Message;
 
 namespace Sip.Message
 {
 	public static class Converters
 	{
-		private static readonly byte[][] lowerTransport;
+		private static readonly byte[][] transportParams;
 		private static readonly byte[][] authSchemes;
 		private static readonly byte[][] headerNames;
 
 		static Converters()
 		{
-			lowerTransport = new byte[Enum.GetValues(typeof(Transports)).Length][];
+			transportParams = new byte[Enum.GetValues(typeof(Transports)).Length][];
 			authSchemes = new byte[Enum.GetValues(typeof(AuthSchemes)).Length][];
 			headerNames = new byte[Enum.GetValues(typeof(HeaderNames)).Length][];
 
-			InitializeLowerTransport();
+			InitializeTransportParams();
 			InitializeAuthSchemes();
 			InitializeHeaderNames();
 
-			Verify(lowerTransport, typeof(Transports));
+			Verify(transportParams, typeof(Transports));
 			Verify(authSchemes, typeof(AuthSchemes));
 			Verify(headerNames, typeof(HeaderNames));
 		}
@@ -138,9 +139,9 @@ namespace Sip.Message
 			}
 		}
 
-		public static byte[] ToLowerUtf8Bytes(this Transports transport)
+		public static byte[] ToTransportParamUtf8Bytes(this Transports transport)
 		{
-			return lowerTransport[(int)transport];
+			return transportParams[(int)transport];
 		}
 
 		public static byte[] ToUtf8Bytes(this AuthSchemes schemes)
@@ -175,14 +176,19 @@ namespace Sip.Message
 			}
 		}
 
-		private static void InitializeLowerTransport()
+		private static void InitializeTransportParams()
 		{
-			lowerTransport[(int)Transports.None] = new byte[0];
-			lowerTransport[(int)Transports.Other] = new byte[0];
-			lowerTransport[(int)Transports.Sctp] = Encoding.UTF8.GetBytes(@"sctp");
-			lowerTransport[(int)Transports.Tcp] = Encoding.UTF8.GetBytes(@"tcp");
-			lowerTransport[(int)Transports.Tls] = Encoding.UTF8.GetBytes(@"tls");
-			lowerTransport[(int)Transports.Udp] = Encoding.UTF8.GetBytes(@"udp");
+			transportParams[(int)Transports.None] = new byte[0];
+			transportParams[(int)Transports.Other] = new byte[0];
+			transportParams[(int)Transports.Tcp] = Encoding.UTF8.GetBytes(@"tcp");
+			transportParams[(int)Transports.Tls] = Encoding.UTF8.GetBytes(@"tls");
+			transportParams[(int)Transports.Udp] = Encoding.UTF8.GetBytes(@"udp");
+			transportParams[(int)Transports.Ws] = Encoding.UTF8.GetBytes(@"ws");
+			// ws transport parameter used for wss transport
+			// http://tools.ietf.org/html/draft-ibc-sipcore-sip-websocket-01
+			transportParams[(int)Transports.Wss] = Encoding.UTF8.GetBytes(@"ws");
+			transportParams[(int)Transports.Sctp] = Encoding.UTF8.GetBytes(@"sctp");
+			transportParams[(int)Transports.TlsSctp] = Encoding.UTF8.GetBytes(@"sctp");
 		}
 
 		private static void InitializeAuthSchemes()

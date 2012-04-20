@@ -4,11 +4,7 @@ using System;
 using System.Text;
 using System.Net;
 
-#if HTTPMESSAGE
-namespace Http.Message
-#else
-namespace Sip.Message
-#endif
+namespace Base.Message
 {
 	public partial struct BeginEnd
 		: IEquatable<BeginEnd>, IEquatable<ByteArrayPart>
@@ -19,7 +15,7 @@ namespace Sip.Message
 
 		public byte[] Bytes
 		{
-			get { return SipMessageReader.Bytes; }
+			get { return Sip.Message.SipMessageReader.Bytes; }
 		}
 
 		public int Offset

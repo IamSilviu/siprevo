@@ -1,7 +1,8 @@
-﻿using System;
+﻿#if BASEMESSAGE
+using System;
 using System.Collections.Generic;
 
-namespace Sip.Message
+namespace Base.Message
 {
 	public sealed class ByteArrayPartEqualityComparer
 		: IEqualityComparer<ByteArrayPart>
@@ -29,3 +30,5 @@ namespace Sip.Message
 		}
 	}
 }
+
+#endif

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.IO;
 using System.Reflection;
+using Base.Message;
 
 namespace Sip.Message
 {
