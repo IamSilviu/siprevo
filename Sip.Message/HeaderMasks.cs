@@ -54,6 +54,7 @@ namespace Sip.Message
 		public const ulong ProxyAuthenticationInfo = 0x0000800000000000;
 		public const ulong SipEtag = 0x0001000000000000;
 		public const ulong SipIfMatch = 0x0002000000000000;
+		public const ulong Expires = 0x0004000000000000;
 	}
 
 	static class HeaderMasksHelper
@@ -118,6 +119,7 @@ namespace Sip.Message
 				case HeaderNames.ProxyAuthenticationInfo: return HeaderMasks.ProxyAuthenticationInfo;
 				case HeaderNames.SipEtag: return HeaderMasks.SipEtag;
 				case HeaderNames.SipIfMatch: return HeaderMasks.SipIfMatch;
+				case HeaderNames.Expires: return HeaderMasks.Expires;
 
 				default:
 					throw new ArgumentOutOfRangeException(name.ToString());

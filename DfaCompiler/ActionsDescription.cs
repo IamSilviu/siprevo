@@ -13,11 +13,16 @@ namespace DfaCompiler
 
 		public static ActionsDescription TryParse(string description, string path)
 		{
+			return TryParse(description, path, null);
+		}
+
+		public static ActionsDescription TryParse(string description, string path, Action[] extraActions)
+		{
 			if (description != "" && description.TrimEnd().EndsWith(";") == false)
 				description += ";";
 
 			var reservArgs = path.Split('.');
-			var actions = new List<Action>();
+			var actions = new List<Action>(extraActions ?? new Action[0]);
 
 			var match = _regex.Match(description);
 			while (match.Success)

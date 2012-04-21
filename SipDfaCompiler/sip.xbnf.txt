@@ -837,8 +837,6 @@ message-header-all  =  (Accept
                      /  Proxy-Authentication-Info
                      /  corrected-extension-header) CRLF;
                      
-/*corrected-extension-header = header-name HCOLON header-value;*/
-                     
 
 corrected-extension-header = (header-name &! ( "Accept"
                                              /  "Accept-Encoding"
@@ -892,6 +890,14 @@ corrected-extension-header = (header-name &! ( "Accept"
                                              /  "Proxy-Authentication-Info" )) HCOLON header-value;
 
 
+
+/**************************************************************************************************/
+
+message-headerZ =  (Accept / Content-Type / Via) CRLF;
+
+
+message-headerZ =  (extension-header) CRLF;
+
 /*
 message-headerX =  (Accept
                 /  Accept-Encoding
@@ -942,13 +948,6 @@ message-headerX =  (Accept
                 /  extension-header) CRLF;
 */
 
-/**************************************************************************************************/
-
-
-message-headerZ =  (Accept / Content-Type / Via) CRLF;
-
-
-message-headerZ =  (extension-header) CRLF;
 
 /*
 message-header  =/ "www";

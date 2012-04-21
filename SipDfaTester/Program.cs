@@ -33,7 +33,7 @@ namespace SipDfaTester
 
 			var message0 = utf.GetBytes(
 				"REGISTER sip:officesip.local;ms-received-cid=A123F;lrwrong;transport=tcp SIP/2.0\r\n" +
-				"Accept: media/submedis\r\n" +
+				"Accept: media/submedia\r\n" +
 				"Via: SIP/2.0/WS 127.0.0.1:1800, SIP/2.0/TCP 127.0.0.2:1800, SIP/2.0/TCP 127.0.0.3:1800\r\n" +
 				"Max-Forwards: 70\r\n" +
 				"From: <sip:a@officesip.local;maddr=123.123.123.123>;tag=566ec054f8;epid=aaa6ef05f4\r\n" +
@@ -82,6 +82,12 @@ namespace SipDfaTester
 			Console.WriteLine("Method: {0}", dfa.Method);
 			Console.WriteLine("SipVersion: {0}", dfa.SipVersion);
 
+			Console.WriteLine();
+			Console.WriteLine("Headers: {0}", dfa.Count.HeaderCount);
+			for (int i = 0; i < dfa.Count.HeaderCount; i++)
+				Console.WriteLine("{0}-|{1}| : |{2}|", dfa.Headers[i].HeaderName, dfa.Headers[i].Name.ToString(), dfa.Headers[i].Value.ToString());
+			Console.WriteLine();
+
 			//////Console.WriteLine("AuthCount: {0}", dfa.Count.AuthorizationCount);
 
 			//////Console.WriteLine("Auth #0: {0}, {1}", dfa.Authorization[0].Username.ToString(), dfa.Authorization[0].NonceCountBytes.ToString());
@@ -108,37 +114,37 @@ namespace SipDfaTester
 			//Console.WriteLine("AddrSpec #2: |{0}| : {1}", dfa.Contact[2].AddrSpec2.Hostport.Host.ToString(), dfa.Contact[2].AddrSpec2.Hostport.Port);
 			//Console.WriteLine("AddrSpec #3: |{0}| : {1}", dfa.Contact[3].AddrSpec2.Hostport.Host.ToString(), dfa.Contact[3].AddrSpec2.Hostport.Port);
 
-			Console.WriteLine("RequestUri: |{0}|", dfa.RequestUri.Hostport.Host.ToString());
-			Console.WriteLine("ContactCount: {0}", dfa.Count.ContactCount);
-			Console.WriteLine("AddrSpec #0: |{0}| : {1}", dfa.Contact[0].AddrSpec2.Hostport.Host.ToString(), dfa.Contact[0].AddrSpec2.Hostport.Port);
-			Console.WriteLine("AddrSpec #1: |{0}| : {1}", dfa.Contact[1].AddrSpec2.Hostport.Host.ToString(), dfa.Contact[1].AddrSpec2.Hostport.Port);
-			Console.WriteLine("AddrSpec #2: |{0}| : {1}", dfa.Contact[2].AddrSpec2.Hostport.Host.ToString(), dfa.Contact[2].AddrSpec2.Hostport.Port);
-			Console.WriteLine("AddrSpec #3: |{0}| : {1}", dfa.Contact[3].AddrSpec2.Hostport.Host.ToString(), dfa.Contact[3].AddrSpec2.Hostport.Port);
-			Console.WriteLine("Expires 1: {0}", dfa.Contact[0].Expires);
-			Console.WriteLine("Expires 2: {0}", dfa.Contact[1].Expires);
-			Console.WriteLine("Star: {0}", dfa.Contact[0].IsStar);
-			Console.WriteLine("Via: {2} = {0} : {1}", dfa.Via[0].SentBy.Host.ToString(), dfa.Via[0].SentBy.Port, dfa.Via[0].Transport.ToString());
-			Console.WriteLine("Via: {2} = {0} : {1}", dfa.Via[1].SentBy.Host.ToString(), dfa.Via[1].SentBy.Port, dfa.Via[1].Transport.ToString());
-			Console.WriteLine("CSeq: {0} {1}", dfa.CSeq.Value, dfa.CSeq.Method);
-			Console.WriteLine("MaxForwards: {0}", dfa.MaxForwards);
-			Console.WriteLine("From: {0} : {1} @ {2} ; Maddr= {3}", dfa.From.AddrSpec1.UriScheme.ToString(), dfa.From.AddrSpec1.User.ToString(), dfa.From.AddrSpec1.Hostport.Host.ToString(), dfa.From.AddrSpec1.Maddr.ToString());
-			Console.WriteLine("To: {0}", dfa.To.AddrSpec1.Hostport.Host.ToString());
-			Console.WriteLine("CallId: |{0}|", dfa.CallId.ToString());
-			Console.WriteLine("Record-Route[0].CommaAndValue: |{0}|", dfa.RecordRoute[0].CommaAndValue.ToString());
-			Console.WriteLine("Record-Route[1].CommaAndValue: |{0}|", dfa.RecordRoute[1].CommaAndValue.ToString());
-			Console.WriteLine("Route[0].CommaAndValue: |{0}|", dfa.Route[0].CommaAndValue.ToString());
-			Console.WriteLine("Route[1].CommaAndValue: |{0}|", dfa.Route[1].CommaAndValue.ToString());
-			Console.WriteLine("Route[2].CommaAndValue: |{0}|", dfa.Route[2].CommaAndValue.ToString());
-			Console.WriteLine("Via[0].CommaAndValue: |{0}|", dfa.Via[0].CommaAndValue.ToString());
-			Console.WriteLine("Via[1].CommaAndValue: |{0}|", dfa.Via[1].CommaAndValue.ToString());
-			Console.WriteLine("Via[0].ValueAndComma: |{0}|", dfa.Via[0].ValueAndComma.ToString());
-			Console.WriteLine("Via[1].ValueAndComma: |{0}|", dfa.Via[1].ValueAndComma.ToString());
-			Console.WriteLine("Via[0].Value: |{0}|", dfa.Via[0].Value.ToString());
-			Console.WriteLine("Via[1].Value: |{0}|", dfa.Via[1].Value.ToString());
-			Console.WriteLine("HasLr: |{0}|", dfa.RequestUri.HasLr);
-			Console.WriteLine("Event: |{0}|", dfa.Event.EventType.ToString());
-			Console.WriteLine("Content-Type.Type: |{0}|", dfa.ContentType.Type.ToString());
-			Console.WriteLine("Content-Type.Subtype: |{0}|", dfa.ContentType.Subtype.ToString());
+			//Console.WriteLine("RequestUri: |{0}|", dfa.RequestUri.Hostport.Host.ToString());
+			//Console.WriteLine("ContactCount: {0}", dfa.Count.ContactCount);
+			//Console.WriteLine("AddrSpec #0: |{0}| : {1}", dfa.Contact[0].AddrSpec2.Hostport.Host.ToString(), dfa.Contact[0].AddrSpec2.Hostport.Port);
+			//Console.WriteLine("AddrSpec #1: |{0}| : {1}", dfa.Contact[1].AddrSpec2.Hostport.Host.ToString(), dfa.Contact[1].AddrSpec2.Hostport.Port);
+			//Console.WriteLine("AddrSpec #2: |{0}| : {1}", dfa.Contact[2].AddrSpec2.Hostport.Host.ToString(), dfa.Contact[2].AddrSpec2.Hostport.Port);
+			//Console.WriteLine("AddrSpec #3: |{0}| : {1}", dfa.Contact[3].AddrSpec2.Hostport.Host.ToString(), dfa.Contact[3].AddrSpec2.Hostport.Port);
+			//Console.WriteLine("Expires 1: {0}", dfa.Contact[0].Expires);
+			//Console.WriteLine("Expires 2: {0}", dfa.Contact[1].Expires);
+			//Console.WriteLine("Star: {0}", dfa.Contact[0].IsStar);
+			//Console.WriteLine("Via: {2} = {0} : {1}", dfa.Via[0].SentBy.Host.ToString(), dfa.Via[0].SentBy.Port, dfa.Via[0].Transport.ToString());
+			//Console.WriteLine("Via: {2} = {0} : {1}", dfa.Via[1].SentBy.Host.ToString(), dfa.Via[1].SentBy.Port, dfa.Via[1].Transport.ToString());
+			//Console.WriteLine("CSeq: {0} {1}", dfa.CSeq.Value, dfa.CSeq.Method);
+			//Console.WriteLine("MaxForwards: {0}", dfa.MaxForwards);
+			//Console.WriteLine("From: {0} : {1} @ {2} ; Maddr= {3}", dfa.From.AddrSpec1.UriScheme.ToString(), dfa.From.AddrSpec1.User.ToString(), dfa.From.AddrSpec1.Hostport.Host.ToString(), dfa.From.AddrSpec1.Maddr.ToString());
+			//Console.WriteLine("To: {0}", dfa.To.AddrSpec1.Hostport.Host.ToString());
+			//Console.WriteLine("CallId: |{0}|", dfa.CallId.ToString());
+			//Console.WriteLine("Record-Route[0].CommaAndValue: |{0}|", dfa.RecordRoute[0].CommaAndValue.ToString());
+			//Console.WriteLine("Record-Route[1].CommaAndValue: |{0}|", dfa.RecordRoute[1].CommaAndValue.ToString());
+			//Console.WriteLine("Route[0].CommaAndValue: |{0}|", dfa.Route[0].CommaAndValue.ToString());
+			//Console.WriteLine("Route[1].CommaAndValue: |{0}|", dfa.Route[1].CommaAndValue.ToString());
+			//Console.WriteLine("Route[2].CommaAndValue: |{0}|", dfa.Route[2].CommaAndValue.ToString());
+			//Console.WriteLine("Via[0].CommaAndValue: |{0}|", dfa.Via[0].CommaAndValue.ToString());
+			//Console.WriteLine("Via[1].CommaAndValue: |{0}|", dfa.Via[1].CommaAndValue.ToString());
+			//Console.WriteLine("Via[0].ValueAndComma: |{0}|", dfa.Via[0].ValueAndComma.ToString());
+			//Console.WriteLine("Via[1].ValueAndComma: |{0}|", dfa.Via[1].ValueAndComma.ToString());
+			//Console.WriteLine("Via[0].Value: |{0}|", dfa.Via[0].Value.ToString());
+			//Console.WriteLine("Via[1].Value: |{0}|", dfa.Via[1].Value.ToString());
+			//Console.WriteLine("HasLr: |{0}|", dfa.RequestUri.HasLr);
+			//Console.WriteLine("Event: |{0}|", dfa.Event.EventType.ToString());
+			//Console.WriteLine("Content-Type.Type: |{0}|", dfa.ContentType.Type.ToString());
+			//Console.WriteLine("Content-Type.Subtype: |{0}|", dfa.ContentType.Subtype.ToString());
 
 			//Console.WriteLine();
 			//Console.WriteLine("AUTHORIZATION:");

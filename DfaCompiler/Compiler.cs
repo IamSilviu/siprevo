@@ -274,35 +274,36 @@ namespace DfaCompiler
 				description = mark.Substring(x + 2).Trim();
 			}
 
+			ActionsDescription.Action[] extraActions = null;
 			if (marks.ContainsKey(markpath))
 			{
 				Console.WriteLine("Warning: Duplicated mark {0}", markpath);
+				extraActions = marks[markpath].Actions;
+				marks.Remove(markpath);
+			}
+
+			var xmark = ActionsDescription.TryParse(description, markpath, extraActions);
+			if (xmark == null)
+			{
+				throw new Exception(string.Format("Error: Failed to parse mark {0}", markpath));
 			}
 			else
 			{
-				var xmark = ActionsDescription.TryParse(description, markpath);
-				if (xmark == null)
-				{
-					throw new Exception(string.Format("Error: Failed to parse mark {0}", markpath));
-				}
+				if (xmark.Actions == null || xmark.Actions[0].Mark != Marks.Group)
+					marks.Add(markpath, xmark);
 				else
 				{
-					if (xmark.Actions == null || xmark.Actions[0].Mark != Marks.Group)
-						marks.Add(markpath, xmark);
-					else
+					try
 					{
-						try
-						{
-							var group = _groups[xmark.Actions[0].Args[1]];
+						var group = _groups[xmark.Actions[0].Args[1]];
 
-							foreach (var item in group)
-								marks.Add(markpath + item.Key, item.Value.Clone("?", xmark.Actions[0].Args[0]));
-						}
-						catch (KeyNotFoundException)
-						{
-							Console.WriteLine("Group not defined {0}", xmark.Actions[0].Args[0]);
-							throw new Exception();
-						}
+						foreach (var item in group)
+							marks.Add(markpath + item.Key, item.Value.Clone("?", xmark.Actions[0].Args[0]));
+					}
+					catch (KeyNotFoundException)
+					{
+						Console.WriteLine("Group not defined {0}", xmark.Actions[0].Args[0]);
+						throw new Exception();
 					}
 				}
 			}

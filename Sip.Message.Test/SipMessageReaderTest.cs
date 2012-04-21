@@ -459,6 +459,84 @@ namespace SipMessageTest
 			Assert.AreEqual(Methods.Registerm, dfa.Method);
 		}
 
+		[Test]
+		public void It_should_parse_all_headers_in_raw_array()
+		{
+			var values = new string[Enum.GetValues(typeof(HeaderNames)).Length];
+
+			values[(int)HeaderNames.Accept] = "media/submedia";
+			values[(int)HeaderNames.AcceptEncoding] = "coding";
+			values[(int)HeaderNames.AcceptLanguage] = "language";
+			values[(int)HeaderNames.AlertInfo] = "<http:uri>";
+			values[(int)HeaderNames.Allow] = "REGISTER";
+			values[(int)HeaderNames.AllowEvents] = "allowevents";
+			values[(int)HeaderNames.AuthenticationInfo] = "rspauth=\"123\"";
+			values[(int)HeaderNames.Authorization] = "Digest username=\"jdoe1\"";
+			values[(int)HeaderNames.CallId] = "12345";
+			values[(int)HeaderNames.CallInfo] = "<http:uri>";
+			values[(int)HeaderNames.Contact] = "<sip:user@127.0.0.1>";
+			values[(int)HeaderNames.ContentDisposition] = "session";
+			values[(int)HeaderNames.ContentEncoding] = "utf";
+			values[(int)HeaderNames.ContentLanguage] = "eng";
+			values[(int)HeaderNames.ContentLength] = "120";
+			values[(int)HeaderNames.ContentType] = "content/type";
+			values[(int)HeaderNames.CSeq] = "44 REGISTER";
+			values[(int)HeaderNames.Date] = "Mon, 11 Jan 2222 23:59:59 GMT";
+			values[(int)HeaderNames.ErrorInfo] = "<error:info>";
+			values[(int)HeaderNames.Event] = "eventname";
+			values[(int)HeaderNames.Expires] = "150";
+			values[(int)HeaderNames.From] = "<sip:a@officesip.local>";
+			values[(int)HeaderNames.InReplyTo] = "callid";
+			values[(int)HeaderNames.MaxForwards] = "100";
+			values[(int)HeaderNames.MimeVersion] = "1.2";
+			values[(int)HeaderNames.MinExpires] = "50";
+			values[(int)HeaderNames.Organization] = "org";
+			values[(int)HeaderNames.Priority] = "low";
+			values[(int)HeaderNames.ProxyAuthenticate] = "Digest realm=\"o1fficesip.local\"";
+			values[(int)HeaderNames.ProxyAuthenticationInfo] = "rspauth=\"123\"";
+			values[(int)HeaderNames.ProxyAuthorization] = "Digest username=\"jdoe1\"";
+			values[(int)HeaderNames.ProxyRequire] = "ProxyRequire";
+			values[(int)HeaderNames.RecordRoute] = "<sip:127.0.0.1:5060;lr>";
+			values[(int)HeaderNames.ReplyTo] = "<sip:127.0.0.3:5060;lr>";
+			values[(int)HeaderNames.Require] = "require";
+			values[(int)HeaderNames.RetryAfter] = "25";
+			values[(int)HeaderNames.Route] = "<sip:127.0.0.3:5060;lr>";
+			values[(int)HeaderNames.Server] = "server";
+			values[(int)HeaderNames.SipEtag] = "token";
+			values[(int)HeaderNames.SipIfMatch] = "token";
+			values[(int)HeaderNames.Subject] = "subject";
+			values[(int)HeaderNames.SubscriptionState] = "active";
+			values[(int)HeaderNames.Supported] = "supoprted";
+			values[(int)HeaderNames.Timestamp] = "12345";
+			values[(int)HeaderNames.To] = "<sip:b@officesip.local>";
+			values[(int)HeaderNames.Unsupported] = "unsupported";
+			values[(int)HeaderNames.UserAgent] = "useragent";
+			values[(int)HeaderNames.Via] = "SIP/2.0/WS 127.0.0.1:1800";
+			values[(int)HeaderNames.Warning] = "100 agent \"text\"";
+			values[(int)HeaderNames.WwwAuthenticate] = "Digest realm=\"o1fficesip.local\"";
+			values[(int)HeaderNames.Extension] = "abrcadabra";
+
+			for (int i = 0; i < values.Length; i++)
+			{
+				if (i == (int)HeaderNames.AuthenticationInfo || i == (int)HeaderNames.None)
+					continue;
+				if (values[i] == null)
+					Assert.Fail("Value for header {0} not specified", ((HeaderNames)i).ToString());
+				TestRawHeaderParse((HeaderNames)i, values[i]);
+			}
+		}
+
+		private void TestRawHeaderParse(HeaderNames header, string value)
+		{
+			var name = Encoding.UTF8.GetString(header.ToUtf8Bytes());
+
+			var dfa = ParseHeader(name + ": " + value);
+			Assert.AreEqual(1, dfa.Count.HeaderCount);
+			Assert.AreEqual(name, dfa.Headers[0].Name.ToString());
+			Assert.AreEqual(header, dfa.Headers[0].HeaderName);
+			Assert.AreEqual(" " + value, dfa.Headers[0].Value.ToString());
+		}
+
 		private SipMessageReader ParseHeader(string header)
 		{
 			return ParseAll("DUMMY sip:domain SIP/2.0\r\n" + header + "\r\n\r\n");

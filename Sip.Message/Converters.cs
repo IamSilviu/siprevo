@@ -207,11 +207,12 @@ namespace Sip.Message
 			headerNames[(int)HeaderNames.ContentType] = Encoding.UTF8.GetBytes(@"Content-Type");
 			headerNames[(int)HeaderNames.ContentEncoding] = Encoding.UTF8.GetBytes(@"Content-Encoding");
 			headerNames[(int)HeaderNames.From] = Encoding.UTF8.GetBytes(@"From");
-			headerNames[(int)HeaderNames.CallId] = Encoding.UTF8.GetBytes(@"CallId");
+			headerNames[(int)HeaderNames.CallId] = Encoding.UTF8.GetBytes(@"Call-ID");
 			headerNames[(int)HeaderNames.Supported] = Encoding.UTF8.GetBytes(@"Supported");
 			headerNames[(int)HeaderNames.ContentLength] = Encoding.UTF8.GetBytes(@"Content-Length");
 			headerNames[(int)HeaderNames.Contact] = Encoding.UTF8.GetBytes(@"Contact");
 			headerNames[(int)HeaderNames.Event] = Encoding.UTF8.GetBytes(@"Event");
+			headerNames[(int)HeaderNames.Expires] = Encoding.UTF8.GetBytes(@"Expires");
 			headerNames[(int)HeaderNames.Subject] = Encoding.UTF8.GetBytes(@"Subject");
 			headerNames[(int)HeaderNames.To] = Encoding.UTF8.GetBytes(@"To");
 			headerNames[(int)HeaderNames.AllowEvents] = Encoding.UTF8.GetBytes(@"Allow-Events");
@@ -225,7 +226,7 @@ namespace Sip.Message
 			headerNames[(int)HeaderNames.Require] = Encoding.UTF8.GetBytes(@"Require");
 			headerNames[(int)HeaderNames.Warning] = Encoding.UTF8.GetBytes(@"Warning");
 			headerNames[(int)HeaderNames.Priority] = Encoding.UTF8.GetBytes(@"Priority");
-			headerNames[(int)HeaderNames.ReplyTo] = Encoding.UTF8.GetBytes(@"ReplyTo");
+			headerNames[(int)HeaderNames.ReplyTo] = Encoding.UTF8.GetBytes(@"Reply-To");
 			headerNames[(int)HeaderNames.SipEtag] = Encoding.UTF8.GetBytes(@"Sip-Etag");
 			headerNames[(int)HeaderNames.CallInfo] = Encoding.UTF8.GetBytes(@"Call-Info");
 			headerNames[(int)HeaderNames.Timestamp] = Encoding.UTF8.GetBytes(@"Timestamp");
