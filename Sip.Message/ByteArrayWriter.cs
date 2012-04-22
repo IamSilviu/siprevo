@@ -166,6 +166,26 @@ namespace Base.Message
 			Write(endpoint.Port);
 		}
 
+		//public void WriteAsTag(IPEndPoint endpoint)
+		//{
+		//    ValidateCapacity(10);
+		//    segment.Array[segment.Offset + end++] = (byte)0x69;
+
+		//    if (endpoint.Address.AddressFamily == AddressFamily.InterNetwork)
+		//    {
+		//        WriteAsHex(new ArraySegment<byte>(endpoint.Address.GetAddressBytes()));
+		//    }
+		//    else
+		//    {
+		//        var bytes = Encoding.UTF8.GetBytes(endpoint.Address.ToString());
+		//        for (int i = 0; i < bytes.Length; i++)
+		//            if (bytes[i] != 0x3A)
+		//                WriteAsHex(bytes[i]);
+		//    }
+
+		//    Write(endpoint.Port);
+		//}
+
 		public void Write(IPAddress address)
 		{
 			if (address.AddressFamily == AddressFamily.InterNetwork)
@@ -208,6 +228,17 @@ namespace Base.Message
 				segment.Array[segment.Offset + end] = GetLowerHexChar((byte)(data.Array[data.Offset + i] & 0x0f));
 				end++;
 			}
+		}
+
+		public void WriteAsHex(byte data)
+		{
+			ValidateCapacity(2);
+
+			segment.Array[segment.Offset + end] = GetLowerHexChar((byte)(data >> 4));
+			end++;
+
+			segment.Array[segment.Offset + end] = GetLowerHexChar((byte)(data & 0x0f));
+			end++;
 		}
 
 		public void WriteAsBase64(ArraySegment<byte> data)

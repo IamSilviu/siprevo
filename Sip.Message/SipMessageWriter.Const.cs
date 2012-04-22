@@ -134,10 +134,10 @@ namespace Sip.Message
 			public readonly static ByteArrayPart terminated = new ByteArrayPart(@"terminated");
 			public readonly static ByteArrayPart __sip_instance___ = new ByteArrayPart(";+sip.instance=\"<");
 
-			public readonly static ByteArrayPart UDP = new ByteArrayPart(@"UDP");
-			public readonly static ByteArrayPart TCP = new ByteArrayPart(@"TCP");
-			public readonly static ByteArrayPart TLS = new ByteArrayPart(@"TLS");
-			public readonly static ByteArrayPart SCTP = new ByteArrayPart(@"SCTP");
+			//public readonly static ByteArrayPart UDP = new ByteArrayPart(@"UDP");
+			//public readonly static ByteArrayPart TCP = new ByteArrayPart(@"TCP");
+			//public readonly static ByteArrayPart TLS = new ByteArrayPart(@"TLS");
+			//public readonly static ByteArrayPart SCTP = new ByteArrayPart(@"SCTP");
 
 			public readonly static ByteArrayPart udp = new ByteArrayPart(@"udp");
 			public readonly static ByteArrayPart tcp = new ByteArrayPart(@"tcp");
@@ -154,6 +154,9 @@ namespace Sip.Message
 			public readonly static ByteArrayPart __boundary_OFFICESIP2011VITALIFOMINE__ = new ByteArrayPart("\";boundary=OFFICESIP2011VITALIFOMINE\r\n");
 			public readonly static ByteArrayPart __OFFICESIP2011VITALIFOMINE__1 = new ByteArrayPart("--OFFICESIP2011VITALIFOMINE\r\n");
 			public readonly static ByteArrayPart __OFFICESIP2011VITALIFOMINE__2 = new ByteArrayPart("--OFFICESIP2011VITALIFOMINE--");
+
+			public readonly static byte[] i = Create(@"i");
+			public readonly static byte[] _invalid = Create(@".invalid");
 
 			public static byte[] Create(string text)
 			{

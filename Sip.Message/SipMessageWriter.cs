@@ -402,7 +402,7 @@ namespace Sip.Message
 			if (user.IsValid)
 				Write(user, C.At);
 
-			Write(endPoint);
+			Write(endPoint, transport);
 
 			if (transport != Transports.None)
 			{
@@ -528,7 +528,9 @@ namespace Sip.Message
 
 		public void WriteVia(Transports transport, ByteArrayPart host, int port, ByteArrayPart branch)
 		{
-			Write(C.Via, C.HCOLON, C.SP, C.SIP_2_0, C.SLASH, transport.ToByteArrayPart(), C.SP, host, C.HCOLON);
+			Write(C.Via, C.HCOLON, C.SP, C.SIP_2_0, C.SLASH);
+			Write(transport.ToUtf8Bytes());
+			Write(C.SP, host, C.HCOLON);
 			Write(port);
 			Write(C.SEMI, C.branch, C.EQUAL, branch, C.CRLF);
 		}
@@ -736,7 +738,7 @@ namespace Sip.Message
 			var scheme = (transport == Transports.Tls) ? UriSchemes.Sips : UriSchemes.Sip;
 
 			Write(C.RecordRoute, C.HCOLON, C.SP, C.LAQUOT, scheme.ToByteArrayPart(), C.HCOLON);
-			Write(endpoint);
+			Write(endpoint, transport);
 			Write(C._ms_received_cid_);
 			Write(msReceivedCid);
 			Write(C.SEMI, C.lr, C.RAQUOT, C.CRLF);
@@ -747,7 +749,7 @@ namespace Sip.Message
 			var scheme = (transport == Transports.Tls) ? UriSchemes.Sips : UriSchemes.Sip;
 
 			Write(C.RecordRoute, C.HCOLON, C.SP, C.LAQUOT, scheme.ToByteArrayPart(), C.HCOLON);
-			Write(endpoint);
+			Write(endpoint, transport);
 			Write(C.SEMI, C.lr, C.RAQUOT, C.CRLF);
 		}
 
@@ -992,8 +994,10 @@ namespace Sip.Message
 
 		public void WriteVia(Transports transport, IPEndPoint endpoint, int branch)
 		{
-			Write(C.Via__SIP_2_0_, transport.ToByteArrayPart(), C.SP);
-			Write(endpoint);
+			Write(C.Via__SIP_2_0_);
+			Write(transport.ToUtf8Bytes());
+			Write(C.SP);
+			Write(endpoint, transport);
 			Write(C._branch_z9hG4bK);
 			WriteAsHex8(branch);
 			Write(C.CRLF);
@@ -1001,8 +1005,10 @@ namespace Sip.Message
 
 		public void WriteVia(Transports transport, IPEndPoint endpoint)
 		{
-			Write(C.Via__SIP_2_0_, transport.ToByteArrayPart(), C.SP);
-			Write(endpoint);
+			Write(C.Via__SIP_2_0_);
+			Write(transport.ToUtf8Bytes());
+			Write(C.SP);
+			Write(endpoint, transport);
 			Write(C._branch_);
 			Write(C.z9hG4bK_NO_TRANSACTION);
 			Write(C.CRLF);
@@ -1010,13 +1016,27 @@ namespace Sip.Message
 
 		public void WriteVia(Transports transport, IPEndPoint endpoint, int branch, ArraySegment<byte> msRecivedCid)
 		{
-			Write(C.Via__SIP_2_0_, transport.ToByteArrayPart(), C.SP);
-			Write(endpoint);
+			Write(C.Via__SIP_2_0_);
+			Write(transport.ToUtf8Bytes());
+			Write(C.SP);
+			Write(endpoint, transport);
 			Write(C._branch_z9hG4bK);
 			WriteAsHex8(branch);
 			Write(C._ms_received_cid_);
 			Write(msRecivedCid);
 			Write(C.CRLF);
+		}
+
+		public void Write(IPEndPoint endpoint, Transports transport)
+		{
+			if (transport != Transports.Ws && transport != Transports.Wss)
+				Write(endpoint);
+			else
+			{
+				Write(C.i);
+				Write((UInt32)endpoint.GetHashCode());
+				Write(C._invalid);
+			}
 		}
 
 		public void WriteDigestAuthorization(HeaderNames header, ByteArrayPart username, ByteArrayPart realm, AuthQops qop,

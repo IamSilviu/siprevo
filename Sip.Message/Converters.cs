@@ -8,19 +8,18 @@ namespace Sip.Message
 	public static class Converters
 	{
 		private static readonly byte[][] transportParams;
+		private static readonly byte[][] transports;
 		private static readonly byte[][] authSchemes;
 		private static readonly byte[][] headerNames;
 
 		static Converters()
 		{
-			transportParams = new byte[Enum.GetValues(typeof(Transports)).Length][];
-			authSchemes = new byte[Enum.GetValues(typeof(AuthSchemes)).Length][];
-			headerNames = new byte[Enum.GetValues(typeof(HeaderNames)).Length][];
+			transports = InitializeTransports();
+			transportParams = InitializeTransportParams();
+			authSchemes = InitializeAuthSchemes();
+			headerNames = InitializeHeaderNames();
 
-			InitializeTransportParams();
-			InitializeAuthSchemes();
-			InitializeHeaderNames();
-
+			Verify(transports, typeof(Transports));
 			Verify(transportParams, typeof(Transports));
 			Verify(authSchemes, typeof(AuthSchemes));
 			Verify(headerNames, typeof(HeaderNames));
@@ -86,27 +85,27 @@ namespace Sip.Message
 			}
 		}
 
-		public static ByteArrayPart ToByteArrayPart(this Transports transport)
-		{
-			switch (transport)
-			{
-				case Transports.Tcp:
-					return SipMessageWriter.C.TCP;
-				case Transports.Tls:
-					return SipMessageWriter.C.TLS;
-				case Transports.Udp:
-					return SipMessageWriter.C.UDP;
-				case Transports.Sctp:
-					return SipMessageWriter.C.SCTP;
+		//public static ByteArrayPart ToByteArrayPart(this Transports transport)
+		//{
+		//    switch (transport)
+		//    {
+		//        case Transports.Tcp:
+		//            return SipMessageWriter.C.TCP;
+		//        case Transports.Tls:
+		//            return SipMessageWriter.C.TLS;
+		//        case Transports.Udp:
+		//            return SipMessageWriter.C.UDP;
+		//        case Transports.Sctp:
+		//            return SipMessageWriter.C.SCTP;
 
-				case Transports.Other:
-				case Transports.None:
-					throw new ArgumentException();
+		//        case Transports.Other:
+		//        case Transports.None:
+		//            throw new ArgumentException();
 
-				default:
-					throw new NotImplementedException();
-			}
-		}
+		//        default:
+		//            throw new NotImplementedException();
+		//    }
+		//}
 
 		public static ByteArrayPart ToByteArrayPart(this AuthQops qop)
 		{
@@ -139,21 +138,6 @@ namespace Sip.Message
 			}
 		}
 
-		public static byte[] ToTransportParamUtf8Bytes(this Transports transport)
-		{
-			return transportParams[(int)transport];
-		}
-
-		public static byte[] ToUtf8Bytes(this AuthSchemes schemes)
-		{
-			return authSchemes[(int)schemes];
-		}
-
-		public static byte[] ToUtf8Bytes(this HeaderNames headerName)
-		{
-			return headerNames[(int)headerName];
-		}
-
 		public static ByteArrayPart ToByteArrayPart(this string text)
 		{
 			return new ByteArrayPart(text);
@@ -176,8 +160,47 @@ namespace Sip.Message
 			}
 		}
 
-		private static void InitializeTransportParams()
+		public static byte[] ToUtf8Bytes(this Transports transport)
 		{
+			return transports[(int)transport];
+		}
+
+		public static byte[] ToTransportParamUtf8Bytes(this Transports transport)
+		{
+			return transportParams[(int)transport];
+		}
+
+		public static byte[] ToUtf8Bytes(this AuthSchemes schemes)
+		{
+			return authSchemes[(int)schemes];
+		}
+
+		public static byte[] ToUtf8Bytes(this HeaderNames headerName)
+		{
+			return headerNames[(int)headerName];
+		}
+
+		private static byte[][] InitializeTransports()
+		{
+			var transports = new byte[Enum.GetValues(typeof(Transports)).Length][];
+
+			transports[(int)Transports.None] = new byte[0];
+			transports[(int)Transports.Other] = new byte[0];
+			transports[(int)Transports.Tcp] = Encoding.UTF8.GetBytes(@"TCP");
+			transports[(int)Transports.Tls] = Encoding.UTF8.GetBytes(@"TLS");
+			transports[(int)Transports.Udp] = Encoding.UTF8.GetBytes(@"UDP");
+			transports[(int)Transports.Ws] = Encoding.UTF8.GetBytes(@"WS");
+			transports[(int)Transports.Wss] = Encoding.UTF8.GetBytes(@"WSS");
+			transports[(int)Transports.Sctp] = Encoding.UTF8.GetBytes(@"SCTP");
+			transports[(int)Transports.TlsSctp] = Encoding.UTF8.GetBytes(@"TLS-SCTP");
+
+			return transports;
+		}
+
+		private static byte[][] InitializeTransportParams()
+		{
+			var transportParams = new byte[Enum.GetValues(typeof(Transports)).Length][];
+
 			transportParams[(int)Transports.None] = new byte[0];
 			transportParams[(int)Transports.Other] = new byte[0];
 			transportParams[(int)Transports.Tcp] = Encoding.UTF8.GetBytes(@"tcp");
@@ -189,19 +212,27 @@ namespace Sip.Message
 			transportParams[(int)Transports.Wss] = Encoding.UTF8.GetBytes(@"ws");
 			transportParams[(int)Transports.Sctp] = Encoding.UTF8.GetBytes(@"sctp");
 			transportParams[(int)Transports.TlsSctp] = Encoding.UTF8.GetBytes(@"sctp");
+
+			return transportParams;
 		}
 
-		private static void InitializeAuthSchemes()
+		private static byte[][] InitializeAuthSchemes()
 		{
+			var authSchemes = new byte[Enum.GetValues(typeof(AuthSchemes)).Length][];
+
 			authSchemes[(int)AuthSchemes.None] = new byte[0];
 			authSchemes[(int)AuthSchemes.Digest] = Encoding.UTF8.GetBytes(@"Digest");
 			authSchemes[(int)AuthSchemes.Kerberos] = Encoding.UTF8.GetBytes(@"Kerberos");
 			authSchemes[(int)AuthSchemes.Ntlm] = Encoding.UTF8.GetBytes(@"NTLM");
 			authSchemes[(int)AuthSchemes.TlsDsk] = Encoding.UTF8.GetBytes(@"TLS-DSK");
+
+			return authSchemes;
 		}
 
-		private static void InitializeHeaderNames()
+		private static byte[][] InitializeHeaderNames()
 		{
+			var headerNames = new byte[Enum.GetValues(typeof(HeaderNames)).Length][];
+
 			headerNames[(int)HeaderNames.None] = new byte[0];
 			headerNames[(int)HeaderNames.Extension] = Encoding.UTF8.GetBytes(@"Extension");
 			headerNames[(int)HeaderNames.ContentType] = Encoding.UTF8.GetBytes(@"Content-Type");
@@ -254,6 +285,8 @@ namespace Sip.Message
 			headerNames[(int)HeaderNames.ContentDisposition] = Encoding.UTF8.GetBytes(@"Content-Disposition");
 			headerNames[(int)HeaderNames.ProxyAuthorization] = Encoding.UTF8.GetBytes(@"Proxy-Authorization");
 			headerNames[(int)HeaderNames.ProxyAuthenticationInfo] = Encoding.UTF8.GetBytes(@"Proxy-Authentication-Info");
+
+			return headerNames;
 		}
 
 		private static void Verify(byte[][] values, Type type)
