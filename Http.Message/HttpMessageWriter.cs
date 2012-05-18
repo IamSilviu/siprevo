@@ -66,6 +66,47 @@ namespace Http.Message
 			Write(C.Connection__close__);
 		}
 
+		public void WriteContentType(ContentType contentType)
+		{
+			if (contentType != ContentType.None)
+			{
+				Write(C.Content_Type__);
+
+				switch (contentType)
+				{
+					case ContentType.TextHtmlUtf8:
+						Write(C.text_html__charset_utf_8__);
+						break;
+					case ContentType.TextHtml:
+						Write(C.text_html__);
+						break;
+					case ContentType.TextJavascript:
+						Write(C.text_javascript__);
+						break;
+					case ContentType.TextPlain:
+						Write(C.text_plain__);
+						break;
+					case ContentType.TextCss:
+						Write(C.text_css__);
+						break;
+					case ContentType.ImageGif:
+						Write(C.image_gif__);
+						break;
+					case ContentType.ImageJpeg:
+						Write(C.image_jpeg__);
+						break;
+					case ContentType.ImagePng:
+						Write(C.image_png__);
+						break;
+					case ContentType.ImageTiff:
+						Write(C.image_tiff__);
+						break;
+					default:
+						throw new ArgumentOutOfRangeException(contentType.ToString());
+				}
+			}
+		}
+
 		public void WriteContentTypeHtmlUtf8()
 		{
 			Write(C.Content_Type__text_html__charset_utf_8__);
@@ -92,6 +133,15 @@ namespace Http.Message
 		{
 			Write(C.Sec_WebSocket_Protocol__);
 			Write(protocol);
+			Write(C.CRLF);
+		}
+
+		public void WriteSetCookie(byte[] name, int value)
+		{
+			Write(C.Set_Cookie__);
+			Write(name);
+			Write(C.EQUAL);
+			Write(value);
 			Write(C.CRLF);
 		}
 	}

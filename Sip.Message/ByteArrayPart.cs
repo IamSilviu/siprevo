@@ -54,7 +54,7 @@ namespace Base.Message
 			return true;
 		}
 
-		public bool IsEqualValue(byte[] bytes)
+		public bool Equals(byte[] bytes)
 		{
 			int lenght = Length;
 

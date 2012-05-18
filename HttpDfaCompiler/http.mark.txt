@@ -83,6 +83,14 @@ req.request-header.Sec-WebSocket-Protocol-Client.COMMA., -> Count = SecWebSocket
 req.request-header.Sec-WebSocket-Version-Client.version -> Decimal = SecWebSocketVersion;
 
 //
+// -------------------------------------------------------------------------------[ Cookie
+//
+req.cookie-header.cookie-string.cookie-pair.cookie-name -> LookupRange = Cookie[Cookie].Name;
+req.cookie-header.cookie-string.cookie-pair.cookie-value.cookie-octet -> LookupRange = Cookie[Cookie].Value;
+req.cookie-header.HCOLON.: -> Count = Cookie, 8, -1;
+req.cookie-header.cookie-string.; -> Count = Cookie, 8, -1;
+
+//
 //
 //
 //////////////////////////////////////////////////////////////////////////////////[...............]

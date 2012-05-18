@@ -33,6 +33,8 @@ namespace HttpDfaTester
 				"Origin: http://example.com\r\n" +
 				"Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n" +
 				"Sec-WebSocket-Protocol: chat  ,   superchat\r\n" +
+				"Cookie: session-id1=1; session-id2=2\r\n" +
+				"Cookie: session-id3=3; session-id4=4\r\n" +
 				"Sec-WebSocket-Version: 13\r\n" +
 				"\r\n");
 
@@ -51,6 +53,10 @@ namespace HttpDfaTester
 			Console.WriteLine("Content-Type: |{0}|", dfa.ContentType.Value.ToString());
 			Console.WriteLine("Content-Length: {0}", dfa.ContentLength);
 			Console.WriteLine("Referer: |{0}|", dfa.Referer.ToString());
+
+			Console.WriteLine("Cookie");
+			for (int i = 0; i < dfa.Count.Cookie; i++)
+				Console.WriteLine("  #{0} |{1}| : |{2}|", i, dfa.Cookie[i].Name.ToString(), dfa.Cookie[i].Value.ToString());
 
 			//Console.WriteLine("Upgrade");
 			//for (int i = 0; i < dfa.Count.UpgradeCount; i++)

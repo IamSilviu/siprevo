@@ -1271,6 +1271,111 @@ namespace DfaCompiler
 			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,GetDQUOTE(rulenames),State.Repeat(-1,-1,GetLHEX(rulenames)),GetDQUOTE(rulenames)));
 			return rule;
 		}
+		public State Getset_cookie_header0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("Set-Cookie:",rulenames),GetSP(rulenames),Getset_cookie_string(rulenames)));
+			return rule;
+		}
+		public State Getset_cookie_string0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,Getcookie_pair(rulenames),State.Repeat(-1,-1,(State.NoCloneConcatanation(FromString(";",rulenames),GetSP(rulenames),Getcookie_av(rulenames))))));
+			return rule;
+		}
+		public State Getcookie_pair0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,Getcookie_name(rulenames),FromString("=",rulenames),Getcookie_value(rulenames)));
+			return rule;
+		}
+		public State Getcookie_name0(List<string> rulenames)
+		{
+			State rule = Gettoken(rulenames);
+			return rule;
+		}
+		public State Getcookie_value0(List<string> rulenames)
+		{
+			State rule = State.NoCloneAlternation(State.Repeat(-1,-1,Getcookie_octet(rulenames)),(State.NoCloneConcatanation(GetDQUOTE(rulenames),State.Repeat(-1,-1,Getcookie_octet(rulenames)),GetDQUOTE(rulenames))));
+			return rule;
+		}
+		public State Getcookie_octet0(List<string> rulenames)
+		{
+			State rule = State.NoCloneAlternation(0x21,(0x23.To(0x2B)),(0x2D.To(0x3A)),(0x3C.To(0x5B)),(0x5D.To(0x7E)));
+			return rule;
+		}
+		public State Getcookie_av0(List<string> rulenames)
+		{
+			State rule = State.NoCloneAlternation(Getexpires_av(rulenames),Getmax_age_av(rulenames),Getdomain_av(rulenames),Getpath_av(rulenames),Getsecure_av(rulenames),Gethttponly_av(rulenames),Getextension_av(rulenames));
+			return rule;
+		}
+		public State Getexpires_av0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("Expires=",rulenames),Getsane_cookie_date(rulenames)));
+			return rule;
+		}
+		public State Getsane_cookie_date0(List<string> rulenames)
+		{
+			State rule = Getrfc1123_date(rulenames);
+			return rule;
+		}
+		public State Getmax_age_av0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("Max-Age=",rulenames),Getnon_zero_digit(rulenames),State.Repeat(-1,-1,GetDIGIT(rulenames))));
+			return rule;
+		}
+		public State Getnon_zero_digit0(List<string> rulenames)
+		{
+			State rule = (0x31.To(0x39));
+			return rule;
+		}
+		public State Getdomain_av0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("Domain=",rulenames),Getdomain_value(rulenames)));
+			return rule;
+		}
+		public State Getdomain_value0(List<string> rulenames)
+		{
+			State rule = State.Substract(Gettoken(rulenames),FromString(";",rulenames));
+			return rule;
+		}
+		public State Getpath_av0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("Path=",rulenames),Getpath_value(rulenames)));
+			return rule;
+		}
+		public State Getpath_value0(List<string> rulenames)
+		{
+			State rule = Getexcept_CTL_semi(rulenames);
+			return rule;
+		}
+		public State Getsecure_av0(List<string> rulenames)
+		{
+			State rule = FromString("Secure",rulenames);
+			return rule;
+		}
+		public State Gethttponly_av0(List<string> rulenames)
+		{
+			State rule = FromString("HttpOnly",rulenames);
+			return rule;
+		}
+		public State Getextension_av0(List<string> rulenames)
+		{
+			State rule = Getexcept_CTL_semi(rulenames);
+			return rule;
+		}
+		public State Getexcept_CTL_semi0(List<string> rulenames)
+		{
+			State rule = State.Substract(((0x00.To(0x0FF))),(State.NoCloneAlternation(GetCTL(rulenames),FromString(";",rulenames))));
+			return rule;
+		}
+		public State Getcookie_header0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("Cookie",rulenames),GetHCOLON(rulenames),Getcookie_string(rulenames)));
+			return rule;
+		}
+		public State Getcookie_string0(List<string> rulenames)
+		{
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,Getcookie_pair(rulenames),State.Repeat(-1,-1,(State.NoCloneConcatanation(FromString(";",rulenames),GetSP(rulenames),Getcookie_pair(rulenames))))));
+			return rule;
+		}
 		public State GetSec_WebSocket_Key0(List<string> rulenames)
 		{
 			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,FromString("Sec-WebSocket-Key",rulenames),GetHCOLON(rulenames),Getbase64_value_non_empty(rulenames)));
@@ -1563,12 +1668,12 @@ namespace DfaCompiler
 		}
 		public State Getreq0(List<string> rulenames)
 		{
-			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,GetRequest_Line(rulenames),State.Repeat(-1,-1,(State.NoCloneConcatanation((State.NoCloneAlternation(Getgeneral_header(rulenames),Getrequest_header(rulenames),Getentity_header(rulenames),Getextension_header_marked_only(rulenames))),GetCRLF(rulenames)))),GetCRLF(rulenames)));
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,GetRequest_Line(rulenames),State.Repeat(-1,-1,(State.NoCloneConcatanation((State.NoCloneAlternation(Getgeneral_header(rulenames),Getrequest_header(rulenames),Getentity_header(rulenames),Getcookie_header(rulenames),Getextension_header_marked_only(rulenames))),GetCRLF(rulenames)))),GetCRLF(rulenames)));
 			return rule;
 		}
 		public State Getextension_header_marked_only0(List<string> rulenames)
 		{
-			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(State.Substract(Gettoken(rulenames),(State.NoCloneAlternation(FromString("Host",rulenames),FromString("Content-Type",rulenames),FromString("Content-Length",rulenames),FromString("Upgrade",rulenames),FromString("Referer",rulenames),FromString("Sec-WebSocket-Key",rulenames),FromString("Sec-WebSocket-Extensions",rulenames),FromString("Sec-WebSocket-Protocol",rulenames),FromString("Sec-WebSocket-Version",rulenames))))),GetHCOLON(rulenames),State.NoCloneOption(Getfield_value(rulenames))));
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(State.Substract(Gettoken(rulenames),(State.NoCloneAlternation(FromString("Host",rulenames),FromString("Cookie",rulenames),FromString("Content-Type",rulenames),FromString("Content-Length",rulenames),FromString("Upgrade",rulenames),FromString("Referer",rulenames),FromString("Sec-WebSocket-Key",rulenames),FromString("Sec-WebSocket-Extensions",rulenames),FromString("Sec-WebSocket-Protocol",rulenames),FromString("Sec-WebSocket-Version",rulenames))))),GetHCOLON(rulenames),State.NoCloneOption(Getfield_value(rulenames))));
 			return rule;
 		}
 		public State Getextension_header_for_request0(List<string> rulenames)
@@ -3531,6 +3636,174 @@ namespace DfaCompiler
 		{
 			rulenames.Insert(0, "response-digest");
 			State rule = State.NoCloneAlternation(Getresponse_digest0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getset_cookie_header(List<string> rulenames)
+		{
+			rulenames.Insert(0, "set-cookie-header");
+			State rule = State.NoCloneAlternation(Getset_cookie_header0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getset_cookie_string(List<string> rulenames)
+		{
+			rulenames.Insert(0, "set-cookie-string");
+			State rule = State.NoCloneAlternation(Getset_cookie_string0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getcookie_pair(List<string> rulenames)
+		{
+			rulenames.Insert(0, "cookie-pair");
+			State rule = State.NoCloneAlternation(Getcookie_pair0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getcookie_name(List<string> rulenames)
+		{
+			rulenames.Insert(0, "cookie-name");
+			State rule = State.NoCloneAlternation(Getcookie_name0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getcookie_value(List<string> rulenames)
+		{
+			rulenames.Insert(0, "cookie-value");
+			State rule = State.NoCloneAlternation(Getcookie_value0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getcookie_octet(List<string> rulenames)
+		{
+			rulenames.Insert(0, "cookie-octet");
+			State rule = State.NoCloneAlternation(Getcookie_octet0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getcookie_av(List<string> rulenames)
+		{
+			rulenames.Insert(0, "cookie-av");
+			State rule = State.NoCloneAlternation(Getcookie_av0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getexpires_av(List<string> rulenames)
+		{
+			rulenames.Insert(0, "expires-av");
+			State rule = State.NoCloneAlternation(Getexpires_av0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getsane_cookie_date(List<string> rulenames)
+		{
+			rulenames.Insert(0, "sane-cookie-date");
+			State rule = State.NoCloneAlternation(Getsane_cookie_date0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getmax_age_av(List<string> rulenames)
+		{
+			rulenames.Insert(0, "max-age-av");
+			State rule = State.NoCloneAlternation(Getmax_age_av0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getnon_zero_digit(List<string> rulenames)
+		{
+			rulenames.Insert(0, "non-zero-digit");
+			State rule = State.NoCloneAlternation(Getnon_zero_digit0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getdomain_av(List<string> rulenames)
+		{
+			rulenames.Insert(0, "domain-av");
+			State rule = State.NoCloneAlternation(Getdomain_av0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getdomain_value(List<string> rulenames)
+		{
+			rulenames.Insert(0, "domain-value");
+			State rule = State.NoCloneAlternation(Getdomain_value0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getpath_av(List<string> rulenames)
+		{
+			rulenames.Insert(0, "path-av");
+			State rule = State.NoCloneAlternation(Getpath_av0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getpath_value(List<string> rulenames)
+		{
+			rulenames.Insert(0, "path-value");
+			State rule = State.NoCloneAlternation(Getpath_value0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getsecure_av(List<string> rulenames)
+		{
+			rulenames.Insert(0, "secure-av");
+			State rule = State.NoCloneAlternation(Getsecure_av0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Gethttponly_av(List<string> rulenames)
+		{
+			rulenames.Insert(0, "httponly-av");
+			State rule = State.NoCloneAlternation(Gethttponly_av0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getextension_av(List<string> rulenames)
+		{
+			rulenames.Insert(0, "extension-av");
+			State rule = State.NoCloneAlternation(Getextension_av0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getexcept_CTL_semi(List<string> rulenames)
+		{
+			rulenames.Insert(0, "except-CTL-semi");
+			State rule = State.NoCloneAlternation(Getexcept_CTL_semi0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getcookie_header(List<string> rulenames)
+		{
+			rulenames.Insert(0, "cookie-header");
+			State rule = State.NoCloneAlternation(Getcookie_header0(rulenames));
+			rule = OnMarkRule(rule, rulenames);
+			rulenames.RemoveAt(0);
+			return rule;
+		}
+		public State Getcookie_string(List<string> rulenames)
+		{
+			rulenames.Insert(0, "cookie-string");
+			State rule = State.NoCloneAlternation(Getcookie_string0(rulenames));
 			rule = OnMarkRule(rule, rulenames);
 			rulenames.RemoveAt(0);
 			return rule;

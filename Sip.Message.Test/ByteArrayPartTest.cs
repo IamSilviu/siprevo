@@ -95,10 +95,10 @@ namespace SipMessageTest
 			var bytes4 = Encoding.UTF8.GetBytes(@"123456789");
 			var bytes5 = Encoding.UTF8.GetBytes(@"12345678901");
 
-			Assert.IsTrue(part1.IsEqualValue(bytes2));
-			Assert.IsFalse(part1.IsEqualValue(bytes3));
-			Assert.IsFalse(part1.IsEqualValue(bytes4));
-			Assert.IsFalse(part1.IsEqualValue(bytes5));
+			Assert.IsTrue(part1.Equals(bytes2));
+			Assert.IsFalse(part1.Equals(bytes3));
+			Assert.IsFalse(part1.Equals(bytes4));
+			Assert.IsFalse(part1.Equals(bytes5));
 		}
 
 		[Test]
