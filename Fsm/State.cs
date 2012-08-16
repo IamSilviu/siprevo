@@ -363,14 +363,26 @@ namespace Fsm
 			//end1.Transition.Add(Epsilon, end2);
 		}
 
-		public void MarkDecimal(string name)
+		public void MarkDecimal(string name, string type, string defaultValue)
 		{
-			MarkEach(name, Marks.Decimal);
+			//MarkEach(name, Marks.Decimal);
+			MarkEach(new MarkImpl(Marks.Decimal)
+			{
+				Name = name,
+				Type = type,
+				Default = defaultValue,
+			});
 		}
 
-		public void MarkHex(string name)
+		public void MarkHex(string name, string type, string defaultValue)
 		{
-			MarkEach(name, Marks.Hex);
+//			MarkEach(name, Marks.Hex);
+			MarkEach(new MarkImpl(Marks.Hex)
+			{
+				Name = name,
+				Type = type,
+				Default = defaultValue,
+			});
 		}
 
 		//public void MarkResetIfInvalid(string name)
@@ -535,6 +547,20 @@ namespace Fsm
 			end.Transition.Add(Epsilon, new State());
 		}
 
+		protected void MarkEach(IMark mark)
+		{
+			var eclosure = Eclosure();
+			var end = FindEnd();
+
+			ForEach((state) =>
+			{
+				if (eclosure.Contains(state) == false)
+					state.AddMark(mark);
+			});
+
+			end.Transition.Add(Epsilon, new State());
+		}
+
 		protected void MarkNext(string name, Marks markType, int offset)
 		{
 			var proccessed = new HashSet<State>();
@@ -583,7 +609,7 @@ namespace Fsm
 			mark.Mark = Marks.Count;
 			mark.Name = name;
 			mark.Max = max;
-			mark.Default = default1;
+			mark.Default = default1.ToString();
 
 			var end1 = FindEnd();
 			end1.AddMark(mark);

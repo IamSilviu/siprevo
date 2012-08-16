@@ -12,10 +12,10 @@ namespace HttpDfaTester
 			Console.Write("Loading...");
 			int start = Environment.TickCount;
 
-			var dfa = new HttpMessageReader();
-			dfa.LoadTables(@"..\..\..\HttpDfaCompiler\bin\Release\Http.Message.dfa");
 			int loadTablesDelay = Environment.TickCount - start;
+			HttpMessageReader.LoadTables(@"..\..\..\HttpDfaCompiler\bin\Release\Http.Message.dfa");
 			start = Environment.TickCount;
+			var dfa = new HttpMessageReader();
 			dfa.SetDefaultValue();
 			dfa.Parse(new byte[] { 0 }, 0, 1);
 			Console.WriteLine("Done (LoadTables {0} ms + JIT {1} ms)", loadTablesDelay, Environment.TickCount - start);
@@ -29,7 +29,8 @@ namespace HttpDfaTester
 				"Content-Type: application/x-www-form-urlencoded\r\n" +
 				"Content-Length: 123\r\n" +
 				"Upgrade: first, websocket, websocketex, websocket/v15, second/567,     third\r\n" +
-				"Referer: referer.com\r\n" +
+				"Referer: http://localhost/#ffff\r\n" +
+				//"Referer: referer.com\r\n" +
 				"Origin: http://example.com\r\n" +
 				"Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n" +
 				"Sec-WebSocket-Protocol: chat  ,   superchat\r\n" +
@@ -73,6 +74,20 @@ namespace HttpDfaTester
 				Console.Write("|{0}|, ", dfa.SecWebSocketProtocol[i].ToString());
 			Console.WriteLine();
 			Console.WriteLine("Sec-WebSocket-Version: {0}", dfa.SecWebSocketVersion);
+
+			var message1 = utf.GetBytes(
+				"GET /api/role?time=1343516363983&sig=4c25f6162d70ede434b37571cbe23201 HTTP/1.1\r\n" +
+				"Accept: */*\r\n" +
+				"Content-Type: application/json\r\n" +
+				"X-Requested-With: XMLHttpRequest\r\n" +
+				"Referer: http://localhost/#\r\n" +
+				"Accept-Language: ru\r\n" +
+				"Accept-Encoding: gzip, deflate\r\n" +
+				"User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.0; Trident/5.0)\r\n" +
+				"Host: localhost\r\n" +
+				"Connection: Keep-Alive\r\n" +
+				"\r\n");
+
 
 			TestSpeed(dfa, message0);
 		}

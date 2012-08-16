@@ -180,13 +180,13 @@ namespace DfaCompiler
 			}
 		}
 
-		public void AddDecimal(string path)
-		{
-			var name = GetName(path);
+		//public void AddDecimal(string path)
+		//{
+		//    var name = GetName(path);
 
-			if (_decimals.Contains(name) == false)
-				_decimals.Add(name);
-		}
+		//    if (_decimals.Contains(name) == false)
+		//        _decimals.Add(name);
+		//}
 
 		public void AddVariables(DfaState state)
 		{

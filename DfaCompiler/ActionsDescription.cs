@@ -98,12 +98,16 @@ namespace DfaCompiler
 							SetArg(action, 2, match, 0);
 							break;
 						case "Decimal":
-							action = new Action(Marks.Decimal, 1);
+							action = new Action(Marks.Decimal, 3);
 							SetArg(action, 0, match, reservArgs, 1);
+							SetArg(action, 1, match, "int");
+							SetArg(action, 2, match, action.Args[1] + ".MinValue");
 							break;
 						case "Hex":
-							action = new Action(Marks.Hex, 1);
+							action = new Action(Marks.Hex, 3);
 							SetArg(action, 0, match, reservArgs, 1);
+							SetArg(action, 1, match, "int");
+							SetArg(action, 2, match, action.Args[1] + ".MinValue");
 							break;
 						case "Bool":
 							action = new Action(Marks.Bool, 1);
@@ -181,7 +185,7 @@ namespace DfaCompiler
 		{
 			var value = match.Groups["arg" + (i + 1)].Value;
 			if (string.IsNullOrEmpty(value))
-				value = ToCsName(defaultValue);
+				value = defaultValue; //ToCsName(defaultValue);
 
 			action.Args[i] = value;
 		}

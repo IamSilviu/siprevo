@@ -303,27 +303,27 @@ namespace DfaCompiler
 		}
 		public State Getasctime_date0(List<string> rulenames)
 		{
-			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,Getwkday(rulenames),GetSP(rulenames),Getdate3(rulenames),GetSP(rulenames),Gettime(rulenames),GetSP(rulenames),State.Repeat(4,-1,GetDIGIT(rulenames))));
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,Getwkday(rulenames),GetSP(rulenames),Getdate3(rulenames),GetSP(rulenames),Gettime(rulenames),GetSP(rulenames),State.Repeat(4,4,GetDIGIT(rulenames))));
 			return rule;
 		}
 		public State Getdate10(List<string> rulenames)
 		{
-			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,State.Repeat(2,-1,GetDIGIT(rulenames)),GetSP(rulenames),Getmonth(rulenames),GetSP(rulenames),State.Repeat(4,-1,GetDIGIT(rulenames))));
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,State.Repeat(2,2,GetDIGIT(rulenames)),GetSP(rulenames),Getmonth(rulenames),GetSP(rulenames),State.Repeat(4,4,GetDIGIT(rulenames))));
 			return rule;
 		}
 		public State Getdate20(List<string> rulenames)
 		{
-			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,State.Repeat(2,-1,GetDIGIT(rulenames)),FromString("-",rulenames),Getmonth(rulenames),FromString("-",rulenames),State.Repeat(2,-1,GetDIGIT(rulenames))));
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,State.Repeat(2,2,GetDIGIT(rulenames)),FromString("-",rulenames),Getmonth(rulenames),FromString("-",rulenames),State.Repeat(2,2,GetDIGIT(rulenames))));
 			return rule;
 		}
 		public State Getdate30(List<string> rulenames)
 		{
-			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,Getmonth(rulenames),GetSP(rulenames),(State.NoCloneAlternation(State.Repeat(2,-1,GetDIGIT(rulenames)),(State.NoCloneConcatanation(GetSP(rulenames),State.Repeat(1,-1,GetDIGIT(rulenames))))))));
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,Getmonth(rulenames),GetSP(rulenames),(State.NoCloneAlternation(State.Repeat(2,2,GetDIGIT(rulenames)),(State.NoCloneConcatanation(GetSP(rulenames),State.Repeat(1,1,GetDIGIT(rulenames))))))));
 			return rule;
 		}
 		public State Gettime0(List<string> rulenames)
 		{
-			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,State.Repeat(2,-1,GetDIGIT(rulenames)),FromString(":",rulenames),State.Repeat(2,-1,GetDIGIT(rulenames)),FromString(":",rulenames),State.Repeat(2,-1,GetDIGIT(rulenames))));
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,State.Repeat(2,2,GetDIGIT(rulenames)),FromString(":",rulenames),State.Repeat(2,2,GetDIGIT(rulenames)),FromString(":",rulenames),State.Repeat(2,2,GetDIGIT(rulenames))));
 			return rule;
 		}
 		public State Getwkday0(List<string> rulenames)
@@ -593,7 +593,7 @@ namespace DfaCompiler
 		}
 		public State Getextension_code0(List<string> rulenames)
 		{
-			State rule = State.Repeat(3,-1,GetDIGIT(rulenames));
+			State rule = State.Repeat(3,3,GetDIGIT(rulenames));
 			return rule;
 		}
 		public State GetReason_Phrase0(List<string> rulenames)
@@ -1038,7 +1038,7 @@ namespace DfaCompiler
 		}
 		public State Getwarn_code0(List<string> rulenames)
 		{
-			State rule = State.Repeat(3,-1,GetDIGIT(rulenames));
+			State rule = State.Repeat(3,3,GetDIGIT(rulenames));
 			return rule;
 		}
 		public State Getwarn_agent0(List<string> rulenames)
@@ -1228,7 +1228,7 @@ namespace DfaCompiler
 		}
 		public State Getnc_value0(List<string> rulenames)
 		{
-			State rule = State.Repeat(8,-1,GetLHEX(rulenames));
+			State rule = State.Repeat(8,8,GetLHEX(rulenames));
 			return rule;
 		}
 		public State Getresponse0(List<string> rulenames)
@@ -1238,7 +1238,7 @@ namespace DfaCompiler
 		}
 		public State Getrequest_digest0(List<string> rulenames)
 		{
-			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,GetDQUOTE(rulenames),State.Repeat(32,-1,GetLHEX(rulenames)),GetDQUOTE(rulenames)));
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,GetDQUOTE(rulenames),State.Repeat(32,32,GetLHEX(rulenames)),GetDQUOTE(rulenames)));
 			return rule;
 		}
 		public State GetLHEX0(List<string> rulenames)
@@ -1518,7 +1518,7 @@ namespace DfaCompiler
 		}
 		public State GetUTF8_NONASCII0(List<string> rulenames)
 		{
-			State rule = State.NoCloneAlternation(State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(0xC0.To(0x0DF)),State.Repeat(1,-1,GetUTF8_CONT(rulenames)))),State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(0xE0.To(0x0EF)),State.Repeat(2,-1,GetUTF8_CONT(rulenames)))),State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(0xF0.To(0x0F7)),State.Repeat(3,-1,GetUTF8_CONT(rulenames)))),State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(0xF8.To(0x0FB)),State.Repeat(4,-1,GetUTF8_CONT(rulenames)))),State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(0xFC.To(0x0FD)),State.Repeat(5,-1,GetUTF8_CONT(rulenames)))));
+			State rule = State.NoCloneAlternation(State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(0xC0.To(0x0DF)),State.Repeat(1,1,GetUTF8_CONT(rulenames)))),State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(0xE0.To(0x0EF)),State.Repeat(2,2,GetUTF8_CONT(rulenames)))),State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(0xF0.To(0x0F7)),State.Repeat(3,3,GetUTF8_CONT(rulenames)))),State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(0xF8.To(0x0FB)),State.Repeat(4,4,GetUTF8_CONT(rulenames)))),State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(0xFC.To(0x0FD)),State.Repeat(5,5,GetUTF8_CONT(rulenames)))));
 			return rule;
 		}
 		public State GetUTF8_CONT0(List<string> rulenames)
@@ -1673,7 +1673,7 @@ namespace DfaCompiler
 		}
 		public State Getextension_header_marked_only0(List<string> rulenames)
 		{
-			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(State.Substract(Gettoken(rulenames),(State.NoCloneAlternation(FromString("Host",rulenames),FromString("Cookie",rulenames),FromString("Content-Type",rulenames),FromString("Content-Length",rulenames),FromString("Upgrade",rulenames),FromString("Referer",rulenames),FromString("Sec-WebSocket-Key",rulenames),FromString("Sec-WebSocket-Extensions",rulenames),FromString("Sec-WebSocket-Protocol",rulenames),FromString("Sec-WebSocket-Version",rulenames))))),GetHCOLON(rulenames),State.NoCloneOption(Getfield_value(rulenames))));
+			State rule = State.NoCloneConcatanation(OnChangeConcatanation(rulenames,(State.Substract(Gettoken(rulenames),(State.NoCloneAlternation(FromString("Host",rulenames),FromString("Cookie",rulenames),FromString("Content-Type",rulenames),FromString("Content-Length",rulenames),FromString("Upgrade",rulenames),FromString("Sec-WebSocket-Key",rulenames),FromString("Sec-WebSocket-Extensions",rulenames),FromString("Sec-WebSocket-Protocol",rulenames),FromString("Sec-WebSocket-Version",rulenames))))),GetHCOLON(rulenames),State.NoCloneOption(Getfield_value(rulenames))));
 			return rule;
 		}
 		public State Getextension_header_for_request0(List<string> rulenames)

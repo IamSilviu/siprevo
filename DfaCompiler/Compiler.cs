@@ -183,10 +183,10 @@ namespace DfaCompiler
 							e.Start.MarkContinueRange(action.Args[0]);
 							break;
 						case Marks.Decimal:
-							e.Start.MarkDecimal(action.Args[0]);
+							e.Start.MarkDecimal(action.Args[0], action.Args[1], action.Args[2]);
 							break;
 						case Marks.Hex:
-							e.Start.MarkHex(action.Args[0]);
+							e.Start.MarkHex(action.Args[0], action.Args[1], action.Args[2]);
 							break;
 						case Marks.Count:
 							e.Start.MarkCount(action.Args[0], int.Parse(action.Args[1]), int.Parse(action.Args[2]));

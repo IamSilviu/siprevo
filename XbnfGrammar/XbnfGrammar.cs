@@ -306,7 +306,7 @@ namespace XbnfGrammar1
 
 			if (repeat.ChildNodes.Count == 1)
 			{
-				repeat1 = int.Parse(repeat.ChildNodes[0].FindTokenAndGetText());
+				repeat2 = repeat1 = int.Parse(repeat.ChildNodes[0].FindTokenAndGetText());
 			}
 			else if (repeat.ChildNodes.Count >= 3)
 			{

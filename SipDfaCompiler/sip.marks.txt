@@ -15,8 +15,8 @@
 // PATH -> ResetIfInvalid [= VARNAME]  // this reset range begin if end is invalid
 //
 //
-// PATH -> Decimal [= VARNAME];
-// PATH -> Hex [= VARNAME];
+// PATH -> Decimal [= VARNAME [, TYPE=int [, INITIALVALUE=TYPE.MinValue]]];
+// PATH -> Hex [= VARNAME [, TYPE=int [, INITIALVALUE=TYPE.MinValue]]];
 //
 // PATH -> Const [= VARNAME [, CONSTVALUE [, PRIORITY=10]]];
 //

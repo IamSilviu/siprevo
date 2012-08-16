@@ -59,6 +59,11 @@ namespace Base.Message
 			get { return segment.Offset + begin; }
 		}
 
+		public int End
+		{
+			get { return segment.Offset + end; }
+		}
+
 		public int OffsetOffset
 		{
 			get { return begin; }
@@ -67,6 +72,11 @@ namespace Base.Message
 		public byte[] Buffer
 		{
 			get { return segment.Array; }
+		}
+
+		public void AddCount(int length)
+		{
+			end += length;
 		}
 
 		public ByteArrayPart ToByteArrayPart()
@@ -351,6 +361,13 @@ namespace Base.Message
 		#endregion
 
 		#region public void Write(params object[] parts) {...}
+
+		public void Write(byte[] part1, byte[] part2, byte[] part3)
+		{
+			Write(part1);
+			Write(part2);
+			Write(part3);
+		}
 
 		public void Write(ByteArrayPart part1, ByteArrayPart part2)
 		{

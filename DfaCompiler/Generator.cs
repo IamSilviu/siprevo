@@ -325,7 +325,8 @@ namespace DfaCompiler
 			GenerateVaribales(item.Counts, "int", "Count");
 			GenerateCustomVaribales(item.Customs);
 			GenerateVaribales(item.Begins1, _beginEndStructName);
-			GenerateVaribales(item.Decimals1, "int");
+			//GenerateVaribales(item.Decimals1, "int");
+			GenerateCustomVaribales(item.Decimals1);
 			GenerateVaribales(item.Bools, "bool");
 
 			foreach (var pair in item.Enums)
@@ -407,6 +408,12 @@ namespace DfaCompiler
 			_main.WriteLine("}");
 		}
 
+		private void GenerateInitializers(Dictionary<string, VariableInfo> vars)
+		{
+			foreach (var var1 in vars)
+				GenerateInitializer(var1.Value.ShortName, var1.Value.Type, "", var1.Value.Default);
+		}
+
 		private void GenerateInitializers(Dictionary<string, VariableInfo> vars, string type1, string prefix, string value)
 		{
 			foreach (var var1 in vars)
@@ -416,7 +423,7 @@ namespace DfaCompiler
 		private void GenerateInitializers(Dictionary<string, VariableInfo> vars, string type1, string prefix)
 		{
 			foreach (var var1 in vars)
-				GenerateInitializer(var1.Value.ShortName, type1, prefix, var1.Value.Default.ToString());
+				GenerateInitializer(var1.Value.ShortName, type1, prefix, var1.Value.Default);
 		}
 
 		private void GenerateInitializer(string shortName, string type1, string prefix, string value)
@@ -518,7 +525,8 @@ namespace DfaCompiler
 			GenerateInitializers(item.Begins1, _beginEndStructName, "", "." + GetSetDefauleValueCall());
 
 			GenerateInitializers(item.Counts, "int", "Count.");
-			GenerateInitializers(item.Decimals1, "int", "", "int.MinValue");
+			//GenerateInitializers(item.Decimals1, "int", "", "int.MinValue");
+			GenerateInitializers(item.Decimals1);
 			GenerateInitializers(item.Bools, "bool", "", "false");
 
 			_main.WriteLine("OnSetDefaultValue();");

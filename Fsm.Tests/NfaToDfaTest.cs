@@ -22,7 +22,7 @@ namespace Fsm.Tests
 			var state0 = new State(State.Epsilon, state1, state7) { Tag = "0", };
 
 			int count;
-			var a = state0.ToDfa2(out count, false);
+			var a = state0.ToDfa3(out count, false);
 			var b = a.Transition[1];
 			var c = a.Transition[2];
 			var d = b.Transition[1];

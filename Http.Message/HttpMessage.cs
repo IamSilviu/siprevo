@@ -56,10 +56,14 @@ namespace Http.Message
 		TextHtml,
 		TextJavascript,
 		TextPlain,
+		TextXml,
 		TextCss,
 		ImageGif,
 		ImageJpeg,
 		ImagePng,
 		ImageTiff,
+		ApplicationJson,
+		ApplicationXml,
+		ApplicationJavascript,
 	}
 }

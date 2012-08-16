@@ -854,7 +854,7 @@ extension-header-marked-only = (token &! ( "Host"
                                          | "Content-Type"
                                          | "Content-Length"
                                          | "Upgrade"
-                                         | "Referer"
+                                         /* | "Referer" IE send buggy header with # */
                                          | "Sec-WebSocket-Key"
                                          | "Sec-WebSocket-Extensions"
                                          | "Sec-WebSocket-Protocol"

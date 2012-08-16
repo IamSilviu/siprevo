@@ -86,6 +86,9 @@ namespace Http.Message
 					case ContentType.TextPlain:
 						Write(C.text_plain__);
 						break;
+					case ContentType.TextXml:
+						Write(C.text_xml__);
+						break;
 					case ContentType.TextCss:
 						Write(C.text_css__);
 						break;
@@ -100,6 +103,15 @@ namespace Http.Message
 						break;
 					case ContentType.ImageTiff:
 						Write(C.image_tiff__);
+						break;
+					case ContentType.ApplicationJson:
+						Write(C.application_json__);
+						break;
+					case ContentType.ApplicationXml:
+						Write(C.application_xml__);
+						break;
+					case ContentType.ApplicationJavascript:
+						Write(C.application_javascript__);
 						break;
 					default:
 						throw new ArgumentOutOfRangeException(contentType.ToString());
@@ -142,6 +154,41 @@ namespace Http.Message
 			Write(name);
 			Write(C.EQUAL);
 			Write(value);
+			Write(C.CRLF);
+		}
+
+		public void WriteCacheControlNoCache()
+		{
+			Write(C.Cache_Control__no_cache__);
+		}
+
+		public void WriteAuthenticateDigest(byte[] realm, int nonce1, int nonce2, int nonce3, int nonce4)
+		//, bool authint, bool stale, int opaque)
+		{
+			Write(C.WWW_Authenticate__Digest_);
+
+			Write(C.realm__, realm, C.DQUOTE);
+			
+			Write(C.__nonce__);
+			WriteAsHex8(nonce1);
+			WriteAsHex8(nonce2);
+			WriteAsHex8(nonce3);
+			WriteAsHex8(nonce4);
+			Write(C.DQUOTE);
+
+			Write(C.__algorithm_MD5);
+
+			//, C.COMMA);
+			//Write(C.qop, C.EQUAL, C.DQUOTE, C.auth);
+			//if (authint)
+			//    Write(C.COMMA, C.auth_int);
+			//Write(C.DQUOTE, C.COMMA);
+			//Write(C.algorithm, C.EQUAL, C.MD5, C.COMMA);
+			//Write(C.stale, C.EQUAL, stale ? C._true : C._false, C.COMMA);
+			//Write(C.opaque, C.EQUAL, C.DQUOTE);
+			//WriteAsHex8(opaque);
+			//Write(C.DQUOTE);
+
 			Write(C.CRLF);
 		}
 	}

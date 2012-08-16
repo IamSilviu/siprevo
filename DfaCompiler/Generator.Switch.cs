@@ -16,6 +16,27 @@ namespace DfaCompiler
 
 			_main.WriteLine("#region int Parse(..)");
 
+			_main.WriteLine("public bool ParseAll(ArraySegment<byte> data)");
+			_main.WriteLine("{");
+			_main.WriteLine("return ParseAll(data.Array, data.Offset, data.Count);");
+			_main.WriteLine("}");
+
+			_main.WriteLine("public bool ParseAll(byte[] bytes, int offset, int length)");
+			_main.WriteLine("{");
+			_main.WriteLine("int parsed = 0;");
+			_main.WriteLine("do");
+			_main.WriteLine("{");
+			_main.WriteLine("Final = false;");
+			_main.WriteLine("parsed += Parse(bytes, offset + parsed, length - parsed);");
+			_main.WriteLine("} while (parsed < length && IsFinal);");
+			_main.WriteLine("return IsFinal;");
+			_main.WriteLine("}");
+
+			_main.WriteLine("public int Parse(ArraySegment<byte> data)");
+			_main.WriteLine("{");
+			_main.WriteLine("return Parse(data.Array, data.Offset, data.Count);");
+			_main.WriteLine("}");
+
 			_main.WriteLine("public int Parse(byte[] bytes, int offset, int length)");
 			_main.WriteLine("{");
 			_main.WriteLine("OnBeforeParse();");
@@ -72,141 +93,101 @@ namespace DfaCompiler
 			{
 				_main.WriteLine("case State{0}:", state.Index);
 
-				//foreach (var nfa1 in state.AllMarks)
-				//{
-				//    if (nfa1.Mark == Marks.Error)
-				//    {
-				//        _main.WriteLine("goto case State{0};", errorState);
-				//        return;
-				//    }
-				//}
-
-				foreach (var nfa1 in state.AllMarks)
-				{
-					if (nfa1.Mark == Marks.ResetRange)
-					{
-						var name = GetVarname(nfa1.Name, "");
-						// #1 Do NOT use SetDefaultValue, it clears bytes too -> wrong!
-						// #1 Should to create special method for this
-						// #2 Ok for IndexArray optimimized 
-						_main.WriteLine("{0}." + GetSetDefauleValueCall() + ";", name);
-					}
-
-					if (nfa1.Mark == Marks.ResetRangeIfInvalid)
-					{
-						var name = GetVarname(nfa1.Name, "");
-						_main.WriteLine("if({0}.End <0) {0}.Begin = int.MinValue;", name);
-					}
-
-					if (nfa1.Mark == Marks.Custom)
-					{
-						var name = GetVarname(nfa1.Name, "");
-						_main.WriteLine(nfa1.Value.Replace("Var", name));
-					}
-				}
-
-				foreach (var nfa1 in state.AllMarks)//.NfaStates)
-				{
-					if (nfa1.Mark == Marks.Count)
-						_main.WriteLine("{0}++;", GetVarname(nfa1.Name, "Count."));
-				}
-
-				foreach (var mark in state.AllMarks)
-				{
-					if (mark.Mark == Marks.ContinueRange)
-					{
-						var ifv = GetCountComparation(RemoveExtraInfo(mark.Name));
-						if (ifv != "")
-							ifv += " && ";
-						_main.WriteLine("if({1}{0}.End == i-1) {0}.End = i;", GetVarname(mark.Name, ""), ifv);
-					}
-				}
-
-				foreach (var nfa1 in state.AllMarks)//.NfaStates)
-				{
-					switch (nfa1.Mark)
-					{
-						case Marks.BeginRange:
-						case Marks.EndRange:
-						case Marks.EndRangeIfInvalid:
-
-							var varName = GetVarname(nfa1.Name, "") +
-								((nfa1.Mark == Marks.BeginRange) ? ".Begin" : ".End");
-
-							var condition = GetCountComparation(RemoveExtraInfo(nfa1.Name));
-							if (nfa1.Mark != Marks.EndRange)
-							{
-								if (condition != "")
-									condition += " && ";
-								condition = varName + " < 0";
-							}
-
-							if (condition != "")
-								_main.Write("if({0})", condition);
-
-							_main.Write("{0} = i", varName);
-
-							if (nfa1.Offset != 0)
-								_main.Write("{0} {1}", (nfa1.Offset > 0) ? "+" : "-", Math.Abs(nfa1.Offset));
-
-							_main.WriteLine(";");
-
-							break;
-
-
-						case Marks.BoolEx:
-							_main.WriteLine("boolExPosition = i;");
-							goto case Marks.Bool;
-						case Marks.Bool:
-							_main.WriteLine("{0} = true;", GetVarname(nfa1.Name, ""));
-							break;
-
-						case Marks.BoolExNot:
-							_main.WriteLine("if(boolExPosition == i-1) {0} = false;", GetVarname(nfa1.Name, ""));
-							break;
-
-
-						case Marks.Final:
-							_main.WriteLine("Final = true;");
-							break;
-					}
-
-					//if (nfa1.Mark == Marks.BeginRange)
-					//{
-					//    var extra = GetCountComparation(RemoveExtraInfo(nfa1.Name));
-					//    if (extra != "")
-					//        extra += " && ";
-					//    _main.Write("if({1}{0} < 0) {0} = i", GetVarname(nfa1.Name, "") + ".Begin", extra);
-					//    if (nfa1.Offset != 0)
-					//        _main.Write("{0} {1}", (nfa1.Offset > 0) ? "+" : "-", Math.Abs(nfa1.Offset));
-					//    _main.WriteLine(";");
-					//}
-
-					//if (nfa1.Mark == Marks.EndRange)
-					//{
-					//    var ifv = GetCountComparation(RemoveExtraInfo(nfa1.Name));
-					//    if (ifv != "")
-					//        _main.Write("if({0}) ", ifv);
-					//    _main.WriteLine("{0} = i;", GetVarname(nfa1.Name, "") + ".End");
-					//}
-
-					////if (nfa1.Mark == Marks.ContinueRange)
-					////{
-					////    var ifv = GetCountComparation(RemoveExtraInfo(nfa1.Name));
-					////    if (ifv != "")
-					////        ifv += " && ";
-					////    _main.WriteLine("if({1}{0}.End == i-1) {0}.End = i;", GetVarname(nfa1.Name, ""), ifv);
-					////}
-
-					//if (nfa1.Mark == Marks.Bool)
-					//    _main.WriteLine("{0} = true;", GetVarname(nfa1.Name, ""));
-
-					//if (nfa1.Mark == Marks.Final)
-					//    _main.WriteLine("Final = true;");
-				}
-
 				if (mode == SwitchMode.ActionJump || mode == SwitchMode.ActionOnly)
 				{
+					foreach (var nfa1 in state.AllMarks)
+					{
+						if (nfa1.Mark == Marks.ResetRange)
+						{
+							var name = GetVarname(nfa1.Name, "");
+							// #1 Do NOT use SetDefaultValue, it clears bytes too -> wrong!
+							// #1 Should to create special method for this
+							// #2 Ok for IndexArray optimimized 
+							_main.WriteLine("{0}." + GetSetDefauleValueCall() + ";", name);
+						}
+
+						if (nfa1.Mark == Marks.ResetRangeIfInvalid)
+						{
+							var name = GetVarname(nfa1.Name, "");
+							_main.WriteLine("if({0}.End <0) {0}.Begin = int.MinValue;", name);
+						}
+
+						if (nfa1.Mark == Marks.Custom)
+						{
+							var name = GetVarname(nfa1.Name, "");
+							_main.WriteLine(nfa1.Value.Replace("Var", name));
+						}
+					}
+
+					foreach (var nfa1 in state.AllMarks)//.NfaStates)
+					{
+						if (nfa1.Mark == Marks.Count)
+							_main.WriteLine("{0}++;", GetVarname(nfa1.Name, "Count."));
+					}
+
+					foreach (var mark in state.AllMarks)
+					{
+						if (mark.Mark == Marks.ContinueRange)
+						{
+							var ifv = GetCountComparation(RemoveExtraInfo(mark.Name));
+							if (ifv != "")
+								ifv += " && ";
+							_main.WriteLine("if({1}{0}.End == i-1) {0}.End = i;", GetVarname(mark.Name, ""), ifv);
+						}
+					}
+
+					foreach (var nfa1 in state.AllMarks)//.NfaStates)
+					{
+						switch (nfa1.Mark)
+						{
+							case Marks.BeginRange:
+							case Marks.EndRange:
+							case Marks.EndRangeIfInvalid:
+
+								var varName = GetVarname(nfa1.Name, "") +
+									((nfa1.Mark == Marks.BeginRange) ? ".Begin" : ".End");
+
+								var condition = GetCountComparation(RemoveExtraInfo(nfa1.Name));
+								if (nfa1.Mark != Marks.EndRange)
+								{
+									if (condition != "")
+										condition += " && ";
+									condition = varName + " < 0";
+								}
+
+								if (condition != "")
+									_main.Write("if({0})", condition);
+
+								_main.Write("{0} = i", varName);
+
+								if (nfa1.Offset != 0)
+									_main.Write("{0} {1}", (nfa1.Offset > 0) ? "+" : "-", Math.Abs(nfa1.Offset));
+
+								_main.WriteLine(";");
+
+								break;
+
+
+							case Marks.BoolEx:
+								_main.WriteLine("boolExPosition = i;");
+								goto case Marks.Bool;
+							case Marks.Bool:
+								_main.WriteLine("{0} = true;", GetVarname(nfa1.Name, ""));
+								break;
+
+							case Marks.BoolExNot:
+								_main.WriteLine("if(boolExPosition == i-1) {0} = false;", GetVarname(nfa1.Name, ""));
+								break;
+
+
+							case Marks.Final:
+								_main.WriteLine("Final = true;");
+								break;
+						}
+					}
+
+					//if (mode == SwitchMode.ActionJump || mode == SwitchMode.ActionOnly)
+					//{
 					if (state.HasMarks)
 					{
 						foreach (var decimal1 in state.Decimals)
@@ -214,29 +195,37 @@ namespace DfaCompiler
 
 						foreach (var hex1 in state.Hexes)
 							_main.WriteLine("{0} = ({0} << 4) + AsciiCodeToHex[bytes[i - 1]];", GetVarname(hex1.Name, ""));
-						//	_main.WriteLine("{0} = ({0} << 4) + GetHexDigit(bytes[i - 1]);", GetVarname(hex1.Name, ""));
 					}
-				}
+					//}
 
-				if (state.Consts.Count > 0)
-				{
-					foreach (var pair in state.ConstNameValues)
+					if (state.Consts.Count > 0)
 					{
-						var ifv = GetCountComparation(RemoveExtraInfo(pair.Key));
+						foreach (var pair in state.ConstNameValues)
+						{
+							var ifv = GetCountComparation(RemoveExtraInfo(pair.Key));
 
-						if (ifv != "")
-							_main.Write("if(" + ifv + ") ");
+							if (ifv != "")
+								_main.Write("if(" + ifv + ") ");
 
-						_main.WriteLine("{0} = {1}s.{2};",
-							AddCountPrefix(RemoveExtraInfo(pair.Key)),
-							RemoveBrackets(VariableInfo.GetShortName(pair.Key)),
-							pair.Value);
+							_main.WriteLine("{0} = {1}s.{2};",
+								AddCountPrefix(RemoveExtraInfo(pair.Key)),
+								RemoveBrackets(VariableInfo.GetShortName(pair.Key)),
+								pair.Value);
+						}
 					}
 				}
 
 				if (state.IsFinal)
 				{
-					_main.WriteLine("goto exit1;");
+					if (mode == SwitchMode.JumpOnly)
+					{
+						_main.WriteLine("state = table{0}[bytes[i]];", state.Index);
+						_main.WriteLine("break;");
+					}
+					else
+					{
+						_main.WriteLine("goto exit1;");
+					}
 				}
 				else
 				{
@@ -244,7 +233,8 @@ namespace DfaCompiler
 						_main.WriteLine("state = table{0}[bytes[i]];", state.Index);
 					_main.WriteLine("break;");
 				}
-			});
+
+			}); // ForEach state
 
 			_main.WriteLine("case State{0}:", errorState);
 			if (mode == SwitchMode.ActionJump || mode == SwitchMode.ActionOnly)
@@ -287,7 +277,7 @@ namespace DfaCompiler
 		{
 			_main.WriteLine("#region void LoadTables(..)");
 
-			_main.WriteLine("public void LoadTables(string path)");
+			_main.WriteLine("public static void LoadTables(string path)");
 			_main.WriteLine("{");
 
 			if (empty == false)

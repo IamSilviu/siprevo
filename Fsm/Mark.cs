@@ -35,7 +35,7 @@ namespace Fsm
 		int Priority { get; }
 		string Value { get; }
 		int Max { get; }
-		int Default { get; }
+		string Default { get; }
 		int Offset { get; }
 		bool IsSame(IMark mark);
 
@@ -57,7 +57,7 @@ namespace Fsm
 				(string.IsNullOrEmpty(x.Name) ? 0 : x.Name.GetHashCode()) ^
 				(string.IsNullOrEmpty(x.Value) ? 0 : x.Value.GetHashCode()) ^
 				x.Max ^
-				x.Default ^
+				(string.IsNullOrEmpty(x.Default) ? 0 : x.Default.GetHashCode()) ^
 				x.Priority ^
 				x.Offset;
 		}
@@ -70,7 +70,7 @@ namespace Fsm
 		private string _name;
 		private string _value;
 		private int _max;
-		private int _default;
+		private string _default;
 		private int _priority;
 		private int _offset;
 		private string _type;
@@ -135,7 +135,8 @@ namespace Fsm
 			set { _max = value; }
 		}
 
-		public int Default
+		// it looks like this property double Value
+		public string Default
 		{
 			get { return _default; }
 			set { _default = value; }
@@ -162,13 +163,18 @@ namespace Fsm
 		public bool IsSame(IMark mark)
 		{
 			return
-				Mark == mark.Mark &&
-				Name == mark.Name &&
-				Value == mark.Value &&
-				Max == mark.Max &&
-				Default == mark.Default &&
-				Priority == mark.Priority &&
-				Offset == mark.Offset;
+				(
+					this == mark
+				) ||
+				(
+					Mark == mark.Mark &&
+					Name == mark.Name &&
+					Value == mark.Value &&
+					Max == mark.Max &&
+					Default == mark.Default &&
+					Priority == mark.Priority &&
+					Offset == mark.Offset
+				);
 		}
 
 		public void CopyFrom(IMark imark)
