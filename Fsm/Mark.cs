@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 using System.Collections.Generic;
 
 namespace Fsm
@@ -29,6 +32,7 @@ namespace Fsm
 	}
 
 	public interface IMark
+		: IEquatable<IMark>
 	{
 		Marks Mark { get; }
 		string Name { get; }
@@ -160,6 +164,42 @@ namespace Fsm
 			set { _type = value; }
 		}
 
+		public bool Equals(IMark other)
+		{
+			return
+				(
+					this == other
+				) ||
+				(
+					Mark == other.Mark &&
+					Name == other.Name &&
+					Value == other.Value &&
+					Max == other.Max &&
+					Default == other.Default &&
+					Priority == other.Priority &&
+					Offset == other.Offset
+				);
+		}
+
+		public override bool Equals(object obj)
+		{
+			IMark other = obj as IMark;
+			return other != null && Equals(other);
+		}
+
+		public override int GetHashCode()
+		{
+			return
+				(int)Mark ^
+				(string.IsNullOrEmpty(Name) ? 0 : Name.GetHashCode()) ^
+				(string.IsNullOrEmpty(Value) ? 0 : Value.GetHashCode()) ^
+				Max ^
+				(string.IsNullOrEmpty(Default) ? 0 : Default.GetHashCode()) ^
+				Priority ^
+				Offset;
+		}
+
+		[Obsolete("Should be removed after testing, use Equals")]
 		public bool IsSame(IMark mark)
 		{
 			return
@@ -188,5 +228,24 @@ namespace Fsm
 			Offset = imark.Offset;
 			Type = imark.Type;
 		}
+
+		//#region IXmlSerializable
+
+		//public void WriteXml(XmlWriter writer)
+		//{
+		//    writer.WriteStartElement("Hellow");
+		//    writer.WriteEndElement();
+		//}
+
+		//public void ReadXml(XmlReader reader)
+		//{
+		//}
+
+		//public XmlSchema GetSchema()
+		//{
+		//    return null;
+		//}
+
+		//#endregion
 	}
 }

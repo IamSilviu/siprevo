@@ -65,5 +65,10 @@ namespace Http.Message
 		ApplicationJson,
 		ApplicationXml,
 		ApplicationJavascript,
+		ApplicationXcapCapsXml,
+		ApplicationResourceListsXml,
+		ApplicationRlsServicesXml,
+		ApplicationAuthPolicyXml,
+		ApplicationXcapErrorXml,
 	}
 }

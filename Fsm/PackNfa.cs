@@ -7,7 +7,7 @@ namespace Fsm
 	{
 		public static int Pack(this State start, bool showProgress)
 		{
-			int i, count = 0;
+			int i, total = 0, count = 0;
 
 			if (showProgress)
 				Console.WriteLine("Pack NFA...");
@@ -15,7 +15,8 @@ namespace Fsm
 			do
 			{
 				i = PackInternal(start);
-				count += i;
+				total += i;
+				count++;
 
 				if (showProgress)
 					Console.Write("\rPacked by step: {0}\t", i);
@@ -23,9 +24,9 @@ namespace Fsm
 			while (i > 0);
 
 			if (showProgress)
-				Console.WriteLine("\rDone ({0}).\t\t\t", count);
+				Console.WriteLine("\rDone ({0}/{1}).\t\t\t", count, total);
 
-			return count;
+			return total;
 		}
 
 		private static int PackInternal(State start)

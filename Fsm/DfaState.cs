@@ -12,7 +12,15 @@ namespace Fsm
 		private Indexer<DfaState>.Array _trasition;
 		private Indexer<State>.Array _nfaStates;
 
-		public DfaState(Int32[] nfaIds)
+		internal DfaState()
+		{
+			Indexer<DfaState>.Add(this);
+
+			_trasition = new Indexer<DfaState>.Array(byte.MaxValue + 1);
+			_nfaStates = null;
+		}
+
+		internal DfaState(Int32[] nfaIds)
 		{
 			Indexer<DfaState>.Add(this);
 
@@ -219,6 +227,11 @@ namespace Fsm
 
 				return _marks;
 			}
+		}
+
+		internal void SetMarks(List<IMark> marks)
+		{
+			this._marks = marks;
 		}
 
 		#endregion

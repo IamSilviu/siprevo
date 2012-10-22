@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{65CFD1C3-F5A0-4E90-9E92-6842F9D7DADD}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{0D25AE86-BF44-40FD-972D-678E85F639E7}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Http.Message</RootNamespace>
-    <AssemblyName>Http.Message</AssemblyName>
+    <RootNamespace>DfaToCSharp</RootNamespace>
+    <AssemblyName>DfaToCSharp</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -35,49 +35,24 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Sip.Message\Base64Encoding.cs">
-      <Link>Base.Message\Base64Encoding.cs</Link>
+    <Compile Include="..\BnfToDfa\ActionsDescription.cs">
+      <Link>ActionsDescription.cs</Link>
     </Compile>
-    <Compile Include="..\Sip.Message\BeginEnd.cs">
-      <Link>Base.Message\BeginEnd.cs</Link>
-    </Compile>
-    <Compile Include="..\Sip.Message\BeginEndIndex.cs">
-      <Link>Base.Message\BeginEndIndex.cs</Link>
-    </Compile>
-    <Compile Include="..\Sip.Message\BufferManager.cs">
-      <Link>Base.Message\BufferManager.cs</Link>
-    </Compile>
-    <Compile Include="..\Sip.Message\ByteArrayPart.cs">
-      <Link>Base.Message\ByteArrayPart.cs</Link>
-    </Compile>
-    <Compile Include="..\Sip.Message\ByteArrayWriter.cs">
-      <Link>Base.Message\ByteArrayWriter.cs</Link>
-    </Compile>
-    <Compile Include="..\Sip.Message\IBufferManager.cs">
-      <Link>Base.Message\IBufferManager.cs</Link>
-    </Compile>
-    <Compile Include="HttpMessage.cs" />
-    <Compile Include="HttpMessageReader.cs" />
-    <Compile Include="HttpMessageWriter.C.cs" />
-    <Compile Include="HttpMessageWriter.cs" />
+    <Compile Include="Generator.cs" />
+    <Compile Include="Generator.Helpers.cs" />
+    <Compile Include="Generator.Switch.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="HttpMessageReader.Extension.cs" />
-    <Compile Include="StatusCodes.cs" />
+    <Compile Include="VariableTreeItem.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Bnf2Dfa\http.bat" />
-    <None Include="Bnf2Dfa\http.bnf" />
-    <None Include="Bnf2Dfa\http.mrk" />
-    <None Include="Http.Message.dfa">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Sip.Message\Sip.Message.csproj">
-      <Project>{33B6452A-AEFF-4DA5-84EE-B0652E09C0DB}</Project>
-      <Name>Sip.Message</Name>
+    <ProjectReference Include="..\Fsm\Fsm.csproj">
+      <Project>{EB73E534-0377-4329-85CF-141F9433EC1E}</Project>
+      <Name>Fsm</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

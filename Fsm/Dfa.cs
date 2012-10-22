@@ -4,9 +4,284 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace Fsm
 {
+	public class Dfa
+		: IXmlSerializable
+	{
+		private DfaState start;
+
+		public Dfa()
+		{
+		}
+
+		public Dfa(DfaState start)
+		{
+			this.start = start;
+		}
+
+		public void WriteXml(XmlWriter writer)
+		{
+			var marks = new Dictionary<IMark, int>();
+
+			SerializeMarks(writer, marks);
+			SerializeStates(writer, marks);
+		}
+
+		public DfaState Start
+		{
+			get { return start; }
+		}
+
+		private void SerializeStates(XmlWriter writer, Dictionary<IMark, int> marks)
+		{
+			int countStates = 0;
+			if (start != null)
+				start.ForEachNR((state) => { state.Index = countStates++; });
+
+			writer.WriteStartElement("States");
+
+			start.ForEachNR(
+				(state) =>
+				{
+					writer.WriteStartElement("State");
+					writer.WriteAttributeString("id", state.Index.ToString());
+
+					writer.WriteStartElement("Transitions");
+					for (int i = 0; i <= 255; i++)
+					{
+						var next = state.GetTransited((byte)i);
+
+						if (next != null)
+						{
+							writer.WriteStartElement("Transition");
+							writer.WriteAttributeString("char", i.ToString());
+							writer.WriteAttributeString("stateId", next.Index.ToString());
+							writer.WriteEndElement();
+						}
+					}
+					writer.WriteEndElement();
+
+					writer.WriteStartElement("Marks");
+					foreach (var mark in state.AllMarks)
+						writer.WriteElementString("Id", marks[mark].ToString());
+					writer.WriteEndElement();
+
+					writer.WriteEndElement();
+				});
+
+			writer.WriteEndElement();
+		}
+
+		private void SerializeMarks(XmlWriter writer, Dictionary<IMark, int> marks)
+		{
+			writer.WriteStartElement("Marks");
+
+			int count = -1;
+			start.ForEachNR(
+				(state) =>
+				{
+					foreach (var mark in state.AllMarks)
+					{
+						int index;
+						if (marks.TryGetValue(mark, out index) == false)
+						{
+							marks.Add(mark, ++count);
+							SerializeMark(writer, count, mark);
+						}
+					}
+				});
+
+			writer.WriteEndElement();
+		}
+
+		private static void SerializeMark(XmlWriter writer, int index, IMark mark)
+		{
+			writer.WriteStartElement("Mark");
+
+			writer.WriteAttributeString("id", index.ToString());
+
+			writer.WriteAttributeString("mark", mark.Mark.ToString());
+			writer.WriteAttributeString("name", mark.Name);
+			writer.WriteAttributeString("priority", mark.Priority.ToString());
+			writer.WriteAttributeString("value", mark.Value);
+			writer.WriteAttributeString("max", mark.Max.ToString());
+			writer.WriteAttributeString("default", mark.Default);
+			writer.WriteAttributeString("offset", mark.Offset.ToString());
+			writer.WriteAttributeString("type", mark.Type);
+
+			writer.WriteEndElement();
+		}
+
+		public void ReadXml(XmlReader reader)
+		{
+			reader.ReadStartElement("Dfa");
+			reader.MoveToContent();
+
+			Dictionary<int, IMark> marks = null;
+
+			while (reader.NodeType != XmlNodeType.EndElement || reader.LocalName != "Dfa")
+			{
+				reader.MoveToElement();
+				switch (reader.Name)
+				{
+					case "Marks":
+						marks = ReadMarks(reader);
+						break;
+					case "States":
+						ReadStates(reader, marks);
+						break;
+					default:
+						reader.Read();
+						break;
+				}
+			}
+
+			reader.ReadEndElement();
+		}
+
+		private Dictionary<int, IMark> ReadMarks(XmlReader reader)
+		{
+			var marks = new Dictionary<int, IMark>();
+
+			reader.ReadStartElement("Marks");
+			reader.MoveToElement();
+
+			while (reader.IsStartElement("Mark"))
+			{
+				int index = XmlConvert.ToInt32(reader.GetAttribute("id"));
+
+				var mark = new MarkImpl()
+				{
+					Mark = (Marks)Enum.Parse(typeof(Marks), reader.GetAttribute("mark")),
+					Name = reader.GetAttribute("name"),
+					Priority = XmlConvert.ToInt32(reader.GetAttribute("priority")),
+					Value = reader.GetAttribute("value"),
+					Max = XmlConvert.ToInt32(reader.GetAttribute("max")),
+					Default = reader.GetAttribute("default"),
+					Offset = XmlConvert.ToInt32(reader.GetAttribute("offset")),
+					Type = reader.GetAttribute("type"),
+				};
+
+				marks.Add(index, mark);
+
+				reader.Read();
+				reader.MoveToElement();
+			}
+
+			reader.ReadEndElement();
+
+			return marks;
+		}
+
+		private void ReadStates(XmlReader reader, Dictionary<int, IMark> marks)
+		{
+			var states = new Dictionary<int, DfaState>();
+
+			reader.ReadStartElement("States");
+			reader.MoveToElement();
+
+			while (reader.IsStartElement("State"))
+			{
+				int index = Convert.ToInt32(reader.GetAttribute("id"));
+				var state = GetOrCreateState(states, index);
+
+				if (states.Count == 1)
+					start = state;
+
+				reader.ReadStartElement("State");
+
+				ReadStateTransition(reader, state, states);
+				ReadStateMarks(reader, state, marks);
+
+				reader.ReadEndElement(); // State
+
+				reader.MoveToElement();
+			}
+
+			reader.ReadEndElement();
+		}
+
+		private static DfaState GetOrCreateState(Dictionary<int, DfaState> states, int index)
+		{
+			DfaState state;
+
+			if (states.TryGetValue(index, out state) == false)
+				states.Add(index, state = new DfaState());
+
+			return state;
+		}
+
+		private static void ReadStateTransition(XmlReader reader, DfaState state, Dictionary<int, DfaState> states)
+		{
+			reader.MoveToElement();
+
+			if (reader.IsEmptyElement)
+			{
+				reader.Read();
+			}
+			else
+			{
+				reader.ReadStartElement("Transitions");
+				reader.MoveToElement();
+
+				while (reader.IsStartElement("Transition"))
+				{
+					int character = Convert.ToInt32(reader.GetAttribute("char"));
+					int nextIndex = Convert.ToInt32(reader.GetAttribute("stateId"));
+
+					state.AddTransition((byte)character, GetOrCreateState(states, nextIndex));
+
+					reader.Read();
+					reader.MoveToElement();
+				}
+
+				reader.ReadEndElement();
+			}
+		}
+
+		private static void ReadStateMarks(XmlReader reader, DfaState state, Dictionary<int, IMark> marks)
+		{
+			reader.MoveToContent();
+
+			if (reader.IsEmptyElement)
+			{
+				reader.Read();
+				state.SetMarks(new List<IMark>());
+			}
+			else
+			{
+				var stateMarks = new List<IMark>();
+
+				reader.ReadStartElement("Marks");
+				reader.MoveToElement();
+
+				while (reader.IsStartElement("Id"))
+				{
+					reader.ReadStartElement();
+					int markIndex = reader.ReadContentAsInt();
+					reader.ReadEndElement();
+
+					stateMarks.Add(marks[markIndex]);
+
+					reader.MoveToElement();
+				}
+
+				state.SetMarks(stateMarks);
+
+				reader.ReadEndElement();
+			}
+		}
+
+		public XmlSchema GetSchema()
+		{
+			return null;
+		}
+	}
+
 	//public class Dfa
 	//{
 	//    private DfaState _start;

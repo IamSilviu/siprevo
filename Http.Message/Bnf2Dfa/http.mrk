@@ -23,7 +23,7 @@
 // -------------------------------------------------------------------------------[ Request-Line
 //
 req.Request-Line.Method -> Group = , METHOD;
-req.Request-Line.Method.extension-method -> Range = MethodBytes;
+req.Request-Line.Method.extension-method -> LookupRange = MethodBytes;
 req.Request-Line.Request-URI -> LookupRange = RequestUri;
 req.Request-Line.HTTP-Version.DIGIT -> Decimal = HttpVersion;
 

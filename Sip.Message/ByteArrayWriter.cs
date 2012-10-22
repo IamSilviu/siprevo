@@ -362,11 +362,44 @@ namespace Base.Message
 
 		#region public void Write(params object[] parts) {...}
 
+		public void Write(byte[] part1, byte[] part2)
+		{
+			Write(part1);
+			Write(part2);
+		}
+
 		public void Write(byte[] part1, byte[] part2, byte[] part3)
 		{
 			Write(part1);
 			Write(part2);
 			Write(part3);
+		}
+
+		public void Write(byte[] part1, byte[] part2, byte[] part3, byte[] part4)
+		{
+			Write(part1);
+			Write(part2);
+			Write(part3);
+			Write(part4);
+		}
+
+		public void Write(byte[] part1, byte[] part2, byte[] part3, byte[] part4, byte[] part5)
+		{
+			Write(part1);
+			Write(part2);
+			Write(part3);
+			Write(part4);
+			Write(part5);
+		}
+
+		public void Write(byte[] part1, byte[] part2, byte[] part3, byte[] part4, byte[] part5, byte[] part6)
+		{
+			Write(part1);
+			Write(part2);
+			Write(part3);
+			Write(part4);
+			Write(part5);
+			Write(part6);
 		}
 
 		public void Write(ByteArrayPart part1, ByteArrayPart part2)

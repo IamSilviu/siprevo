@@ -180,9 +180,14 @@ namespace Sip.Message
 
 		#endregion
 
+		public void WriteHeader(HeaderNames name, ByteArrayPart value)
+		{
+			Write(name.ToUtf8Bytes());
+			Write(C.HCOLON, C.SP, value, C.CRLF);
+		}
+
 		public void WriteHeader(Header header)
 		{
-			//if (header.IsRemoved == false)
 			Write(header.Name, C.HCOLON, header.Value, C.CRLF);
 		}
 
@@ -832,6 +837,13 @@ namespace Sip.Message
 
 			ReversWrite((uint)(end - contentLengthEnd - C.CRLF.Length * 2), ref contentLengthEnd);
 			contentLengthEnd = -1;
+		}
+
+		public void WriteXErrorDetails(byte[] details)
+		{
+			Write(C.x_Error_Details, C.HCOLON, C.SP);
+			Write(details);
+			Write(C.CRLF);
 		}
 
 		public void WriteXErrorDetails(ByteArrayPart details)

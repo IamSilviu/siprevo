@@ -244,6 +244,22 @@ namespace SipMessageTest
 		}
 
 		[Test]
+		public void It_should_parse_Via_value_range()
+		{
+			var dfa = ParseHeaders(
+				"Via:SIP/2.0/TCP 127.0.0.1:1801,SIP/2.0/TCP 127.0.0.2:1802,SIP/2.0/TCP 127.0.0.3:1803",
+				"Via:  SIP/2.0/TCP 127.0.0.4:1804  ,  SIP/2.0/TCP 127.0.0.5:1805  ,  SIP/2.0/TCP 127.0.0.6:1806");
+
+			Assert.AreEqual(6, dfa.Count.ViaCount);
+			Assert.AreEqual("SIP/2.0/TCP 127.0.0.1:1801", dfa.Via[0].Value.ToString());
+			Assert.AreEqual("SIP/2.0/TCP 127.0.0.2:1802", dfa.Via[1].Value.ToString());
+			Assert.AreEqual("SIP/2.0/TCP 127.0.0.3:1803", dfa.Via[2].Value.ToString());
+			Assert.AreEqual("SIP/2.0/TCP 127.0.0.4:1804", dfa.Via[3].Value.ToString());
+			Assert.AreEqual("SIP/2.0/TCP 127.0.0.5:1805", dfa.Via[4].Value.ToString());
+			Assert.AreEqual("SIP/2.0/TCP 127.0.0.6:1806", dfa.Via[5].Value.ToString());
+		}
+
+		[Test]
 		public void It_should_parse_Content_Type_header()
 		{
 			{

@@ -9,34 +9,6 @@ namespace Http.Message
 {
 	public partial class HttpMessageReader
 	{
-		public static void InitializeAsync(Action<int> callback)
-		{
-			var reader = new HttpMessageReader();
-
-			reader.LoadTables();
-			ThreadPool.QueueUserWorkItem((stateInfo) =>
-				{
-					if (callback != null)
-						callback(reader.CompileParseMethod());
-				});
-		}
-
-		public int CompileParseMethod()
-		{
-			int start = Environment.TickCount;
-
-			SetDefaultValue();
-			Parse(new byte[] { 0 }, 0, 1);
-
-			return Environment.TickCount - start;
-		}
-
-		public void LoadTables()
-		{
-			LoadTables(
-				Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\Http.Message.dfa");
-		}
-
 		partial void OnAfterParse()
 		{
 			if (IsFinal)
@@ -51,6 +23,7 @@ namespace Http.Message
 			Count.SecWebSocketProtocol++;
 			Count.SecWebSocketExtensions++;
 			Count.Cookie++;
+			Count.AuthorizationCount++;
 		}
 
 		public bool HasContentLength

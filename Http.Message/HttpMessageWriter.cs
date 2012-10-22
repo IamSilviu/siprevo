@@ -113,6 +113,21 @@ namespace Http.Message
 					case ContentType.ApplicationJavascript:
 						Write(C.application_javascript__);
 						break;
+					case ContentType.ApplicationXcapCapsXml:
+						Write(C.application_xcap_caps_xml__);
+						break;
+					case ContentType.ApplicationResourceListsXml:
+						Write(C.application_resource_lists_xml__);
+						break;
+					case ContentType.ApplicationRlsServicesXml:
+						Write(C.application_rls_services_xml__);
+						break;
+					case ContentType.ApplicationAuthPolicyXml:
+						Write(C.application_auth_policy_xml__);
+						break;
+					case ContentType.ApplicationXcapErrorXml:
+						Write(C.application_xcap_error_xml__);
+						break;
 					default:
 						throw new ArgumentOutOfRangeException(contentType.ToString());
 				}
@@ -168,7 +183,7 @@ namespace Http.Message
 			Write(C.WWW_Authenticate__Digest_);
 
 			Write(C.realm__, realm, C.DQUOTE);
-			
+
 			Write(C.__nonce__);
 			WriteAsHex8(nonce1);
 			WriteAsHex8(nonce2);
@@ -189,6 +204,39 @@ namespace Http.Message
 			//WriteAsHex8(opaque);
 			//Write(C.DQUOTE);
 
+			Write(C.CRLF);
+		}
+
+		public void WriteAuthenticateDigest(bool proxy, ByteArrayPart realm, int nonce1, int nonce2, int nonce3, int nonce4, bool authint, bool stale, int opaque)
+		{
+			Write(proxy ? C.Proxy_Authenticate : C.WWW_Authenticate, C.HCOLON, C.SP, C.Digest, C.SP);
+
+			Write(C.realm, C.EQUAL, C.DQUOTE);
+			Write(realm);
+			Write(C.DQUOTE, C.COMMA);
+			Write(C.nonce, C.EQUAL, C.DQUOTE);
+			WriteAsHex8(nonce1);
+			WriteAsHex8(nonce2);
+			WriteAsHex8(nonce3);
+			WriteAsHex8(nonce4);
+			Write(C.DQUOTE, C.COMMA);
+			Write(C.qop, C.EQUAL, C.DQUOTE, C.auth);
+			if (authint)
+				Write(C.COMMA, C.auth_int);
+			Write(C.DQUOTE, C.COMMA);
+			Write(C.algorithm, C.EQUAL, C.MD5, C.COMMA);
+			Write(C.stale, C.EQUAL, stale ? C._true : C._false, C.COMMA);
+			Write(C.opaque, C.EQUAL, C.DQUOTE);
+			WriteAsHex8(opaque);
+			Write(C.DQUOTE);
+
+			Write(C.CRLF);
+		}
+
+		public void WriteXErrorDetails(byte[] details)
+		{
+			Write(C.x_Error_Details__);
+			Write(details);
 			Write(C.CRLF);
 		}
 	}
