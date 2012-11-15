@@ -24,6 +24,7 @@ namespace Http.Message
 			Count.SecWebSocketExtensions++;
 			Count.Cookie++;
 			Count.AuthorizationCount++;
+			Count.IfMatches++;
 		}
 
 		public bool HasContentLength

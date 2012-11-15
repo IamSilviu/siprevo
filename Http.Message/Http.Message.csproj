@@ -58,6 +58,8 @@
     <Compile Include="..\Sip.Message\IBufferManager.cs">
       <Link>Base.Message\IBufferManager.cs</Link>
     </Compile>
+    <Compile Include="ContentType.cs" />
+    <Compile Include="Converters.cs" />
     <Compile Include="HttpMessage.cs" />
     <Compile Include="HttpMessageReader.cs" />
     <Compile Include="HttpMessageWriter.C.cs" />

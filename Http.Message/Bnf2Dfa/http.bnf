@@ -127,6 +127,8 @@ national       = %x80-0FF
 
 http_URL       = "http:" "//" host [ ":" port ] [ abs_path [ "?" query ]]
 
+OWS            = *( SP | HT ) ; vf: optional whitespaces
+
 ;
 ;host           = <A legal Internet host domain name
 ;                or IP address (in dotted-decimal form),
@@ -197,7 +199,7 @@ chunk-data     = chunk-size(OCTET)
 trailer        = *(entity-header CRLF)
        
 
-media-type     = type "/" subtype *( ";" parameter )
+media-type     = type "/" subtype *( ";" OWS parameter ) ; vf: add whitespace
 type           = token
 subtype        = token
 

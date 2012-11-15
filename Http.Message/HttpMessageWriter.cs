@@ -128,6 +128,9 @@ namespace Http.Message
 					case ContentType.ApplicationXcapErrorXml:
 						Write(C.application_xcap_error_xml__);
 						break;
+					case ContentType.ApplicationPidfXml:
+						Write(C.application_pidf_xml__);
+						break;
 					default:
 						throw new ArgumentOutOfRangeException(contentType.ToString());
 				}
@@ -225,7 +228,7 @@ namespace Http.Message
 				Write(C.COMMA, C.auth_int);
 			Write(C.DQUOTE, C.COMMA);
 			Write(C.algorithm, C.EQUAL, C.MD5, C.COMMA);
-			Write(C.stale, C.EQUAL, stale ? C._true : C._false, C.COMMA);
+			Write(C.stale, C.EQUAL, stale ? C.@true : C.@false, C.COMMA);
 			Write(C.opaque, C.EQUAL, C.DQUOTE);
 			WriteAsHex8(opaque);
 			Write(C.DQUOTE);
@@ -238,6 +241,186 @@ namespace Http.Message
 			Write(C.x_Error_Details__);
 			Write(details);
 			Write(C.CRLF);
+		}
+
+		public void WriteAccessControlAllowOrigin(bool anyOrNone)
+		{
+			Write(C.Access_Control_Allow_Origin__);
+			Write(anyOrNone ? C.STAR : C.@null);
+			Write(C.CRLF);
+		}
+
+		public void WriteAccessControlAllowCredentials(bool allow)
+		{
+			Write(C.Access_Control_Allow_Credentials__);
+			Write(allow ? C.@true : C.@false);
+			Write(C.CRLF);
+		}
+
+		public void WriteAccessControlMaxAge(int age)
+		{
+			Write(C.Access_Control_Max_Age__);
+			Write(age);
+			Write(C.CRLF);
+		}
+
+		#region public void WriteAccessControlAllowMethods(...)
+
+		public void WriteAccessControlAllowMethods(Methods method1)
+		{
+			Write(C.Access_Control_Allow_Methods__);
+			Write(method1.ToUtf8Bytes());
+			Write(C.CRLF);
+		}
+
+		public void WriteAccessControlAllowMethods(Methods method1, Methods method2)
+		{
+			Write(C.Access_Control_Allow_Methods__);
+			Write(method1.ToUtf8Bytes());
+			Write(C.COMMA);
+			Write(method2.ToUtf8Bytes());
+			Write(C.CRLF);
+		}
+
+		public void WriteAccessControlAllowMethods(Methods method1, Methods method2, Methods method3)
+		{
+			Write(C.Access_Control_Allow_Methods__);
+			Write(method1.ToUtf8Bytes());
+			Write(C.COMMA);
+			Write(method2.ToUtf8Bytes());
+			Write(C.COMMA);
+			Write(method3.ToUtf8Bytes());
+			Write(C.CRLF);
+		}
+
+		public void WriteAccessControlAllowMethods(Methods method1, Methods method2, Methods method3, Methods method4)
+		{
+			Write(C.Access_Control_Allow_Methods__);
+			Write(method1.ToUtf8Bytes());
+			Write(C.COMMA);
+			Write(method2.ToUtf8Bytes());
+			Write(C.COMMA);
+			Write(method3.ToUtf8Bytes());
+			Write(C.COMMA);
+			Write(method4.ToUtf8Bytes());
+			Write(C.CRLF);
+		}
+
+		public void WriteAccessControlAllowMethods(Methods method1, Methods method2, Methods method3, Methods method4, Methods method5)
+		{
+			Write(C.Access_Control_Allow_Methods__);
+			Write(method1.ToUtf8Bytes());
+			Write(C.COMMA);
+			Write(method2.ToUtf8Bytes());
+			Write(C.COMMA);
+			Write(method3.ToUtf8Bytes());
+			Write(C.COMMA);
+			Write(method4.ToUtf8Bytes());
+			Write(C.COMMA);
+			Write(method5.ToUtf8Bytes());
+			Write(C.CRLF);
+		}
+
+		public void WriteAccessControlAllowMethods(params Methods[] methods)
+		{
+			Write(C.Access_Control_Allow_Methods__);
+			for (int i = 0; i < methods.Length; i++)
+			{
+				if (i > 0)
+					Write(C.COMMA);
+				Write(methods[i].ToUtf8Bytes());
+			}
+			Write(C.CRLF);
+		}
+
+		#endregion
+
+		public void WriteAccessControlAllowHeaders(byte[] value)
+		{
+			Write(C.Access_Control_Allow_Headers__);
+			Write(value);
+			Write(C.CRLF);
+		}
+
+		public void WriteAccessControlExposeHeaders(byte[] value)
+		{
+			Write(C.Access_Control_Expose_Headers__);
+			Write(value);
+			Write(C.CRLF);
+		}
+
+		#region public void WriteAllow(...)
+
+		public void WriteAllow(Methods method1)
+		{
+			Write(C.Allow__);
+			Write(method1.ToUtf8Bytes());
+			Write(C.CRLF);
+		}
+
+		public void WriteAllow(Methods method1, Methods method2)
+		{
+			Write(C.Allow__);
+			Write(method1.ToUtf8Bytes());
+			Write(C.COMMA);
+			Write(method2.ToUtf8Bytes());
+			Write(C.CRLF);
+		}
+
+		public void WriteAllow(Methods method1, Methods method2, Methods method3)
+		{
+			Write(C.Allow__);
+			Write(method1.ToUtf8Bytes());
+			Write(C.COMMA);
+			Write(method2.ToUtf8Bytes());
+			Write(C.COMMA);
+			Write(method3.ToUtf8Bytes());
+			Write(C.CRLF);
+		}
+
+		public void WriteAllow(params Methods[] methods)
+		{
+			Write(C.Allow__);
+			for (int i = 0; i < methods.Length; i++)
+			{
+				if (i > 0)
+					Write(C.COMMA);
+				Write(methods[i].ToUtf8Bytes());
+			}
+			Write(C.CRLF);
+		}
+
+		#endregion
+
+		public void WriteEtag(int etag)
+		{
+			Write(C.ETag__);
+			Write(C.DQUOTE);
+			WriteAsHex8(etag);
+			Write(C.DQUOTE);
+			Write(C.CRLF);
+		}
+
+		public void WriteLocation(bool httpOrHttps, ByteArrayPart host, int port, byte[] extra)
+		{
+			Write(C.Location__);
+			Write(httpOrHttps ? C.http___ : C.https___);
+			Write(host);
+			if (port > 0)
+			{
+				Write(C.HCOLON);
+				Write(port);
+			}
+			if (extra != null)
+				Write(extra);
+			Write(C.CRLF);
+		}
+
+		public void WriteResponse(StatusCodes statusCode)
+		{
+			WriteStatusLine(statusCode);
+			WriteContentLength(0);
+			WriteCRLF();
 		}
 	}
 }

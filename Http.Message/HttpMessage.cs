@@ -48,27 +48,4 @@ namespace Http.Message
 			return bytes.Length > 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF;
 		}
 	}
-
-	public enum ContentType
-	{
-		None,
-		TextHtmlUtf8,
-		TextHtml,
-		TextJavascript,
-		TextPlain,
-		TextXml,
-		TextCss,
-		ImageGif,
-		ImageJpeg,
-		ImagePng,
-		ImageTiff,
-		ApplicationJson,
-		ApplicationXml,
-		ApplicationJavascript,
-		ApplicationXcapCapsXml,
-		ApplicationResourceListsXml,
-		ApplicationRlsServicesXml,
-		ApplicationAuthPolicyXml,
-		ApplicationXcapErrorXml,
-	}
 }

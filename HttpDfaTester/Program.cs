@@ -13,7 +13,7 @@ namespace HttpDfaTester
 			int start = Environment.TickCount;
 
 			int loadTablesDelay = Environment.TickCount - start;
-			HttpMessageReader.LoadTables(@"..\..\..\HttpDfaCompiler\bin\Release\Http.Message.dfa");
+			HttpMessageReader.LoadTables(@"..\..\..\Http.Message\bin\Release");
 			start = Environment.TickCount;
 			var dfa = new HttpMessageReader();
 			dfa.SetDefaultValue();
@@ -26,7 +26,8 @@ namespace HttpDfaTester
 				"POST /enlighten/calais.asmx/Enlighten HTTP/1.1\r\n" +
 				"Test: test\r\n" +
 				"Host: api.opencalais.com:9000\r\n" +
-				"Content-Type: application/x-www-form-urlencoded\r\n" +
+				"Content-Type: application/x-www-form-urlencoded; charset=UTF-8\r\n" +
+				//"Content-Type: application/x-www-form-urlencoded\r\n" +
 				"Content-Length: 123\r\n" +
 				"Upgrade: first, websocket, websocketex, websocket/v15, second/567,     third\r\n" +
 				"Referer: http://localhost/#ffff\r\n" +
@@ -37,6 +38,7 @@ namespace HttpDfaTester
 				"Cookie: session-id1=1; session-id2=2\r\n" +
 				"Cookie: session-id3=3; session-id4=4\r\n" +
 				"Sec-WebSocket-Version: 13\r\n" +
+				"If-Match: \"01234567\"\r\n" +
 				"\r\n");
 
 			dfa.SetDefaultValue();
@@ -68,6 +70,11 @@ namespace HttpDfaTester
 				Console.Write("{0}, ", dfa.Upgrade[i]);
 			Console.WriteLine();
 
+			Console.Write("If-Match: ");
+			for (int i = 0; i < dfa.Count.IfMatches; i++)
+				Console.Write("{0}, ", dfa.IfMatches[i].ToString());
+			Console.WriteLine();
+
 			Console.WriteLine("Sec-WebSocket-Key: |{0}|", dfa.SecWebSocketKey.ToString());
 			Console.Write("Sec-WebSocket-Protocol: ");
 			for (int i = 0; i < dfa.Count.SecWebSocketProtocol; i++)
@@ -89,7 +96,7 @@ namespace HttpDfaTester
 				"\r\n");
 
 
-			TestSpeed(dfa, message0);
+			//TestSpeed(dfa, message0);
 		}
 
 		private static void TestSpeed(HttpMessageReader dfa, byte[] message)

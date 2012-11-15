@@ -108,6 +108,16 @@ namespace Base.Message
 			}
 		}
 
+		public void Write(string value)
+		{
+			int count = Encoding.UTF8.GetByteCount(value);
+
+			ValidateCapacity(count);
+
+			Encoding.UTF8.GetBytes(value, 0, value.Length, segment.Array, segment.Offset + end);
+			end += count;
+		}
+
 		public void Write(Int32 value)
 		{
 			ValidateCapacity(11);

@@ -96,6 +96,7 @@ public class Max
 {
 public const int Cookie = 8;
 public const int Upgrade = 8;
+public const int IfMatches = 8;
 public const int AuthorizationCount = 10;
 public const int SecWebSocketProtocol = 8;
 public const int SecWebSocketExtensions = 8;
@@ -104,6 +105,7 @@ public struct Counts
 {
 public int Cookie;
 public int Upgrade;
+public int IfMatches;
 public int AuthorizationCount;
 public int SecWebSocketProtocol;
 public int SecWebSocketExtensions;
@@ -112,6 +114,7 @@ public Counts Count;
 public ByteArrayPart MethodBytes;
 public ByteArrayPart RequestUri;
 public ByteArrayPart Referer;
+public ByteArrayPart[] IfMatches;
 public ByteArrayPart SecWebSocketKey;
 public ByteArrayPart[] SecWebSocketProtocol;
 public ByteArrayPart[] SecWebSocketExtensions;
@@ -208,6 +211,8 @@ for(int i=0; i<Max.Upgrade; i++) Upgrade[i] = Upgrades.None;
 MethodBytes.SetDefaultValue();
 RequestUri.SetDefaultValue();
 Referer.SetDefaultValue();
+if(IfMatches==null) IfMatches=new ByteArrayPart[Max.IfMatches];
+for(int i=0; i<Max.IfMatches; i++) IfMatches[i].SetDefaultValue();
 SecWebSocketKey.SetDefaultValue();
 if(SecWebSocketProtocol==null) SecWebSocketProtocol=new ByteArrayPart[Max.SecWebSocketProtocol];
 for(int i=0; i<Max.SecWebSocketProtocol; i++) SecWebSocketProtocol[i].SetDefaultValue();
@@ -215,6 +220,7 @@ if(SecWebSocketExtensions==null) SecWebSocketExtensions=new ByteArrayPart[Max.Se
 for(int i=0; i<Max.SecWebSocketExtensions; i++) SecWebSocketExtensions[i].SetDefaultValue();
 Count.Cookie = -1;
 Count.Upgrade = -1;
+Count.IfMatches = -1;
 Count.AuthorizationCount = -1;
 Count.SecWebSocketProtocol = -1;
 Count.SecWebSocketExtensions = -1;
@@ -234,6 +240,8 @@ Authorization[i].SetArray(bytes);
 MethodBytes.Bytes = bytes;
 RequestUri.Bytes = bytes;
 Referer.Bytes = bytes;
+for(int i=0; i<Max.IfMatches; i++)
+IfMatches[i].Bytes = bytes;
 SecWebSocketKey.Bytes = bytes;
 for(int i=0; i<Max.SecWebSocketProtocol; i++)
 SecWebSocketProtocol[i].Bytes = bytes;
@@ -2099,6 +2107,58 @@ const int State1854 = 1854;
 const int State1855 = 1855;
 const int State1856 = 1856;
 const int State1857 = 1857;
+const int State1858 = 1858;
+const int State1859 = 1859;
+const int State1860 = 1860;
+const int State1861 = 1861;
+const int State1862 = 1862;
+const int State1863 = 1863;
+const int State1864 = 1864;
+const int State1865 = 1865;
+const int State1866 = 1866;
+const int State1867 = 1867;
+const int State1868 = 1868;
+const int State1869 = 1869;
+const int State1870 = 1870;
+const int State1871 = 1871;
+const int State1872 = 1872;
+const int State1873 = 1873;
+const int State1874 = 1874;
+const int State1875 = 1875;
+const int State1876 = 1876;
+const int State1877 = 1877;
+const int State1878 = 1878;
+const int State1879 = 1879;
+const int State1880 = 1880;
+const int State1881 = 1881;
+const int State1882 = 1882;
+const int State1883 = 1883;
+const int State1884 = 1884;
+const int State1885 = 1885;
+const int State1886 = 1886;
+const int State1887 = 1887;
+const int State1888 = 1888;
+const int State1889 = 1889;
+const int State1890 = 1890;
+const int State1891 = 1891;
+const int State1892 = 1892;
+const int State1893 = 1893;
+const int State1894 = 1894;
+const int State1895 = 1895;
+const int State1896 = 1896;
+const int State1897 = 1897;
+const int State1898 = 1898;
+const int State1899 = 1899;
+const int State1900 = 1900;
+const int State1901 = 1901;
+const int State1902 = 1902;
+const int State1903 = 1903;
+const int State1904 = 1904;
+const int State1905 = 1905;
+const int State1906 = 1906;
+const int State1907 = 1907;
+const int State1908 = 1908;
+const int State1909 = 1909;
 #endregion
 #region States Tables
 private static int[] table0;
@@ -3958,6 +4018,58 @@ private static int[] table1853;
 private static int[] table1854;
 private static int[] table1855;
 private static int[] table1856;
+private static int[] table1857;
+private static int[] table1858;
+private static int[] table1859;
+private static int[] table1860;
+private static int[] table1861;
+private static int[] table1862;
+private static int[] table1863;
+private static int[] table1864;
+private static int[] table1865;
+private static int[] table1866;
+private static int[] table1867;
+private static int[] table1868;
+private static int[] table1869;
+private static int[] table1870;
+private static int[] table1871;
+private static int[] table1872;
+private static int[] table1873;
+private static int[] table1874;
+private static int[] table1875;
+private static int[] table1876;
+private static int[] table1877;
+private static int[] table1878;
+private static int[] table1879;
+private static int[] table1880;
+private static int[] table1881;
+private static int[] table1882;
+private static int[] table1883;
+private static int[] table1884;
+private static int[] table1885;
+private static int[] table1886;
+private static int[] table1887;
+private static int[] table1888;
+private static int[] table1889;
+private static int[] table1890;
+private static int[] table1891;
+private static int[] table1892;
+private static int[] table1893;
+private static int[] table1894;
+private static int[] table1895;
+private static int[] table1896;
+private static int[] table1897;
+private static int[] table1898;
+private static int[] table1899;
+private static int[] table1900;
+private static int[] table1901;
+private static int[] table1902;
+private static int[] table1903;
+private static int[] table1904;
+private static int[] table1905;
+private static int[] table1906;
+private static int[] table1907;
+private static int[] table1908;
 #endregion
 #region void LoadTables(..)
 public static void LoadTables()
@@ -9543,6 +9655,162 @@ Buffer.BlockCopy(buffer, 0, table1855, 0, maxBytes);
 table1856 = new int[maxItems];
 reader.Read(buffer, 0, buffer.Length);
 Buffer.BlockCopy(buffer, 0, table1856, 0, maxBytes);
+table1857 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1857, 0, maxBytes);
+table1858 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1858, 0, maxBytes);
+table1859 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1859, 0, maxBytes);
+table1860 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1860, 0, maxBytes);
+table1861 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1861, 0, maxBytes);
+table1862 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1862, 0, maxBytes);
+table1863 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1863, 0, maxBytes);
+table1864 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1864, 0, maxBytes);
+table1865 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1865, 0, maxBytes);
+table1866 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1866, 0, maxBytes);
+table1867 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1867, 0, maxBytes);
+table1868 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1868, 0, maxBytes);
+table1869 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1869, 0, maxBytes);
+table1870 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1870, 0, maxBytes);
+table1871 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1871, 0, maxBytes);
+table1872 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1872, 0, maxBytes);
+table1873 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1873, 0, maxBytes);
+table1874 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1874, 0, maxBytes);
+table1875 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1875, 0, maxBytes);
+table1876 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1876, 0, maxBytes);
+table1877 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1877, 0, maxBytes);
+table1878 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1878, 0, maxBytes);
+table1879 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1879, 0, maxBytes);
+table1880 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1880, 0, maxBytes);
+table1881 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1881, 0, maxBytes);
+table1882 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1882, 0, maxBytes);
+table1883 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1883, 0, maxBytes);
+table1884 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1884, 0, maxBytes);
+table1885 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1885, 0, maxBytes);
+table1886 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1886, 0, maxBytes);
+table1887 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1887, 0, maxBytes);
+table1888 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1888, 0, maxBytes);
+table1889 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1889, 0, maxBytes);
+table1890 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1890, 0, maxBytes);
+table1891 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1891, 0, maxBytes);
+table1892 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1892, 0, maxBytes);
+table1893 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1893, 0, maxBytes);
+table1894 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1894, 0, maxBytes);
+table1895 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1895, 0, maxBytes);
+table1896 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1896, 0, maxBytes);
+table1897 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1897, 0, maxBytes);
+table1898 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1898, 0, maxBytes);
+table1899 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1899, 0, maxBytes);
+table1900 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1900, 0, maxBytes);
+table1901 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1901, 0, maxBytes);
+table1902 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1902, 0, maxBytes);
+table1903 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1903, 0, maxBytes);
+table1904 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1904, 0, maxBytes);
+table1905 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1905, 0, maxBytes);
+table1906 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1906, 0, maxBytes);
+table1907 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1907, 0, maxBytes);
+table1908 = new int[maxItems];
+reader.Read(buffer, 0, buffer.Length);
+Buffer.BlockCopy(buffer, 0, table1908, 0, maxBytes);
 }
 }
 public static void InitializeAsync(Action<int> callback)
@@ -15172,6 +15440,162 @@ case State1856:
 state = table1856[bytes[i]];
 break;
 case State1857:
+state = table1857[bytes[i]];
+break;
+case State1858:
+state = table1858[bytes[i]];
+break;
+case State1859:
+state = table1859[bytes[i]];
+break;
+case State1860:
+state = table1860[bytes[i]];
+break;
+case State1861:
+state = table1861[bytes[i]];
+break;
+case State1862:
+state = table1862[bytes[i]];
+break;
+case State1863:
+state = table1863[bytes[i]];
+break;
+case State1864:
+state = table1864[bytes[i]];
+break;
+case State1865:
+state = table1865[bytes[i]];
+break;
+case State1866:
+state = table1866[bytes[i]];
+break;
+case State1867:
+state = table1867[bytes[i]];
+break;
+case State1868:
+state = table1868[bytes[i]];
+break;
+case State1869:
+state = table1869[bytes[i]];
+break;
+case State1870:
+state = table1870[bytes[i]];
+break;
+case State1871:
+state = table1871[bytes[i]];
+break;
+case State1872:
+state = table1872[bytes[i]];
+break;
+case State1873:
+state = table1873[bytes[i]];
+break;
+case State1874:
+state = table1874[bytes[i]];
+break;
+case State1875:
+state = table1875[bytes[i]];
+break;
+case State1876:
+state = table1876[bytes[i]];
+break;
+case State1877:
+state = table1877[bytes[i]];
+break;
+case State1878:
+state = table1878[bytes[i]];
+break;
+case State1879:
+state = table1879[bytes[i]];
+break;
+case State1880:
+state = table1880[bytes[i]];
+break;
+case State1881:
+state = table1881[bytes[i]];
+break;
+case State1882:
+state = table1882[bytes[i]];
+break;
+case State1883:
+state = table1883[bytes[i]];
+break;
+case State1884:
+state = table1884[bytes[i]];
+break;
+case State1885:
+state = table1885[bytes[i]];
+break;
+case State1886:
+state = table1886[bytes[i]];
+break;
+case State1887:
+state = table1887[bytes[i]];
+break;
+case State1888:
+state = table1888[bytes[i]];
+break;
+case State1889:
+state = table1889[bytes[i]];
+break;
+case State1890:
+state = table1890[bytes[i]];
+break;
+case State1891:
+state = table1891[bytes[i]];
+break;
+case State1892:
+state = table1892[bytes[i]];
+break;
+case State1893:
+state = table1893[bytes[i]];
+break;
+case State1894:
+state = table1894[bytes[i]];
+break;
+case State1895:
+state = table1895[bytes[i]];
+break;
+case State1896:
+state = table1896[bytes[i]];
+break;
+case State1897:
+state = table1897[bytes[i]];
+break;
+case State1898:
+state = table1898[bytes[i]];
+break;
+case State1899:
+state = table1899[bytes[i]];
+break;
+case State1900:
+state = table1900[bytes[i]];
+break;
+case State1901:
+state = table1901[bytes[i]];
+break;
+case State1902:
+state = table1902[bytes[i]];
+break;
+case State1903:
+state = table1903[bytes[i]];
+break;
+case State1904:
+state = table1904[bytes[i]];
+break;
+case State1905:
+state = table1905[bytes[i]];
+break;
+case State1906:
+state = table1906[bytes[i]];
+break;
+case State1907:
+state = table1907[bytes[i]];
+break;
+case State1908:
+state = table1908[bytes[i]];
+break;
+case State1909:
 Error = true;
 goto exit1;
 }
@@ -16095,6 +16519,7 @@ case State266:
 state = table266[bytes[i]];
 break;
 case State267:
+Count.IfMatches++;
 state = table267[bytes[i]];
 break;
 case State268:
@@ -16119,24 +16544,22 @@ case State274:
 state = table274[bytes[i]];
 break;
 case State275:
-Referer.End = i;
 state = table275[bytes[i]];
 break;
 case State276:
+Referer.End = i;
 state = table276[bytes[i]];
 break;
 case State277:
-if(Referer.Begin < 0)Referer.Begin = i- 1;
-Referer.End = i;
 state = table277[bytes[i]];
 break;
 case State278:
 if(Referer.Begin < 0)Referer.Begin = i- 1;
+Referer.End = i;
 state = table278[bytes[i]];
 break;
 case State279:
 if(Referer.Begin < 0)Referer.Begin = i- 1;
-Referer.End = i;
 state = table279[bytes[i]];
 break;
 case State280:
@@ -16150,6 +16573,8 @@ Referer.End = i;
 state = table281[bytes[i]];
 break;
 case State282:
+if(Referer.Begin < 0)Referer.Begin = i- 1;
+Referer.End = i;
 state = table282[bytes[i]];
 break;
 case State283:
@@ -16195,7 +16620,6 @@ case State296:
 state = table296[bytes[i]];
 break;
 case State297:
-if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 state = table297[bytes[i]];
 break;
 case State298:
@@ -16203,6 +16627,7 @@ if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 state = table298[bytes[i]];
 break;
 case State299:
+if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 state = table299[bytes[i]];
 break;
 case State300:
@@ -16227,18 +16652,18 @@ case State306:
 state = table306[bytes[i]];
 break;
 case State307:
-if(Cookie[Count.Cookie].Value.Begin < 0)Cookie[Count.Cookie].Value.Begin = i- 1;
-if(Count.Cookie < Max.Cookie)Cookie[Count.Cookie].Value.End = i;
 state = table307[bytes[i]];
 break;
 case State308:
+if(Cookie[Count.Cookie].Value.Begin < 0)Cookie[Count.Cookie].Value.Begin = i- 1;
+if(Count.Cookie < Max.Cookie)Cookie[Count.Cookie].Value.End = i;
 state = table308[bytes[i]];
 break;
 case State309:
-Count.Cookie++;
 state = table309[bytes[i]];
 break;
 case State310:
+Count.Cookie++;
 state = table310[bytes[i]];
 break;
 case State311:
@@ -16248,10 +16673,10 @@ case State312:
 state = table312[bytes[i]];
 break;
 case State313:
-if(Host.Host.Begin < 0)Host.Host.Begin = i- 1;
 state = table313[bytes[i]];
 break;
 case State314:
+if(Host.Host.Begin < 0)Host.Host.Begin = i- 1;
 state = table314[bytes[i]];
 break;
 case State315:
@@ -16282,9 +16707,12 @@ case State323:
 state = table323[bytes[i]];
 break;
 case State324:
+if(IfMatches[Count.IfMatches].Begin < 0)IfMatches[Count.IfMatches].Begin = i;
 state = table324[bytes[i]];
 break;
 case State325:
+if(IfMatches[Count.IfMatches].Begin < 0)IfMatches[Count.IfMatches].Begin = i- 1;
+if(Count.IfMatches < Max.IfMatches)IfMatches[Count.IfMatches].End = i;
 state = table325[bytes[i]];
 break;
 case State326:
@@ -16312,7 +16740,6 @@ case State333:
 state = table333[bytes[i]];
 break;
 case State334:
-Referer.End = i;
 state = table334[bytes[i]];
 break;
 case State335:
@@ -16329,7 +16756,6 @@ case State338:
 state = table338[bytes[i]];
 break;
 case State339:
-Referer.End = i;
 state = table339[bytes[i]];
 break;
 case State340:
@@ -16340,9 +16766,11 @@ case State341:
 state = table341[bytes[i]];
 break;
 case State342:
+Referer.End = i;
 state = table342[bytes[i]];
 break;
 case State343:
+Referer.End = i;
 state = table343[bytes[i]];
 break;
 case State344:
@@ -16376,7 +16804,6 @@ case State353:
 state = table353[bytes[i]];
 break;
 case State354:
-if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 state = table354[bytes[i]];
 break;
 case State355:
@@ -16386,6 +16813,7 @@ case State356:
 state = table356[bytes[i]];
 break;
 case State357:
+if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 state = table357[bytes[i]];
 break;
 case State358:
@@ -16407,8 +16835,6 @@ case State363:
 state = table363[bytes[i]];
 break;
 case State364:
-if(Cookie[Count.Cookie].Value.Begin < 0)Cookie[Count.Cookie].Value.Begin = i- 1;
-if(Count.Cookie < Max.Cookie)Cookie[Count.Cookie].Value.End = i;
 state = table364[bytes[i]];
 break;
 case State365:
@@ -16418,6 +16844,8 @@ case State366:
 state = table366[bytes[i]];
 break;
 case State367:
+if(Cookie[Count.Cookie].Value.Begin < 0)Cookie[Count.Cookie].Value.Begin = i- 1;
+if(Count.Cookie < Max.Cookie)Cookie[Count.Cookie].Value.End = i;
 state = table367[bytes[i]];
 break;
 case State368:
@@ -16478,6 +16906,8 @@ case State386:
 state = table386[bytes[i]];
 break;
 case State387:
+if(IfMatches[Count.IfMatches].Begin < 0)IfMatches[Count.IfMatches].Begin = i;
+if(Count.IfMatches < Max.IfMatches)IfMatches[Count.IfMatches].End = i;
 state = table387[bytes[i]];
 break;
 case State388:
@@ -16556,7 +16986,6 @@ case State412:
 state = table412[bytes[i]];
 break;
 case State413:
-Referer.End = i;
 state = table413[bytes[i]];
 break;
 case State414:
@@ -16572,6 +17001,7 @@ case State417:
 state = table417[bytes[i]];
 break;
 case State418:
+Referer.End = i;
 state = table418[bytes[i]];
 break;
 case State419:
@@ -16608,7 +17038,6 @@ case State429:
 state = table429[bytes[i]];
 break;
 case State430:
-if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 state = table430[bytes[i]];
 break;
 case State431:
@@ -16624,6 +17053,7 @@ case State434:
 state = table434[bytes[i]];
 break;
 case State435:
+if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 state = table435[bytes[i]];
 break;
 case State436:
@@ -16648,8 +17078,6 @@ case State442:
 state = table442[bytes[i]];
 break;
 case State443:
-if(Host.Host.Begin < 0)Host.Host.Begin = i- 1;
-Host.Host.End = i;
 state = table443[bytes[i]];
 break;
 case State444:
@@ -16665,6 +17093,8 @@ case State447:
 state = table447[bytes[i]];
 break;
 case State448:
+if(Host.Host.Begin < 0)Host.Host.Begin = i- 1;
+Host.Host.End = i;
 state = table448[bytes[i]];
 break;
 case State449:
@@ -16695,12 +17125,17 @@ case State457:
 state = table457[bytes[i]];
 break;
 case State458:
+Count.IfMatches++;
 state = table458[bytes[i]];
 break;
 case State459:
+if(IfMatches[Count.IfMatches].Begin < 0)IfMatches[Count.IfMatches].Begin = i;
+if(Count.IfMatches < Max.IfMatches)IfMatches[Count.IfMatches].End = i;
 state = table459[bytes[i]];
 break;
 case State460:
+if(IfMatches[Count.IfMatches].Begin < 0)IfMatches[Count.IfMatches].Begin = i;
+if(Count.IfMatches < Max.IfMatches)IfMatches[Count.IfMatches].End = i;
 state = table460[bytes[i]];
 break;
 case State461:
@@ -16740,7 +17175,6 @@ case State472:
 state = table472[bytes[i]];
 break;
 case State473:
-if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 state = table473[bytes[i]];
 break;
 case State474:
@@ -16762,6 +17196,7 @@ case State479:
 state = table479[bytes[i]];
 break;
 case State480:
+if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 state = table480[bytes[i]];
 break;
 case State481:
@@ -16789,7 +17224,6 @@ case State488:
 state = table488[bytes[i]];
 break;
 case State489:
-Host.Host.End = i;
 state = table489[bytes[i]];
 break;
 case State490:
@@ -16811,6 +17245,7 @@ case State495:
 state = table495[bytes[i]];
 break;
 case State496:
+Host.Host.End = i;
 state = table496[bytes[i]];
 break;
 case State497:
@@ -16928,7 +17363,6 @@ case State534:
 state = table534[bytes[i]];
 break;
 case State535:
-if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 state = table535[bytes[i]];
 break;
 case State536:
@@ -16956,10 +17390,10 @@ case State543:
 state = table543[bytes[i]];
 break;
 case State544:
-Count.AuthorizationCount++;
 state = table544[bytes[i]];
 break;
 case State545:
+if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 state = table545[bytes[i]];
 break;
 case State546:
@@ -16969,9 +17403,6 @@ case State547:
 state = table547[bytes[i]];
 break;
 case State548:
-if(ContentType.Type.Begin < 0)ContentType.Type.Begin = i- 1;
-if(ContentType.Value.Begin < 0)ContentType.Value.Begin = i- 1;
-ContentType.Type.End = i;
 state = table548[bytes[i]];
 break;
 case State549:
@@ -16990,7 +17421,7 @@ case State553:
 state = table553[bytes[i]];
 break;
 case State554:
-Host.Host.End = i;
+Count.AuthorizationCount++;
 state = table554[bytes[i]];
 break;
 case State555:
@@ -17003,6 +17434,9 @@ case State557:
 state = table557[bytes[i]];
 break;
 case State558:
+if(ContentType.Type.Begin < 0)ContentType.Type.Begin = i- 1;
+if(ContentType.Value.Begin < 0)ContentType.Value.Begin = i- 1;
+ContentType.Type.End = i;
 state = table558[bytes[i]];
 break;
 case State559:
@@ -17021,6 +17455,7 @@ case State563:
 state = table563[bytes[i]];
 break;
 case State564:
+Host.Host.End = i;
 state = table564[bytes[i]];
 break;
 case State565:
@@ -17042,6 +17477,7 @@ case State570:
 state = table570[bytes[i]];
 break;
 case State571:
+Count.IfMatches++;
 state = table571[bytes[i]];
 break;
 case State572:
@@ -17054,7 +17490,6 @@ case State574:
 state = table574[bytes[i]];
 break;
 case State575:
-if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 state = table575[bytes[i]];
 break;
 case State576:
@@ -17094,6 +17529,7 @@ case State587:
 state = table587[bytes[i]];
 break;
 case State588:
+if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 state = table588[bytes[i]];
 break;
 case State589:
@@ -17142,7 +17578,6 @@ case State603:
 state = table603[bytes[i]];
 break;
 case State604:
-ContentType.Type.End = i;
 state = table604[bytes[i]];
 break;
 case State605:
@@ -17182,6 +17617,7 @@ case State616:
 state = table616[bytes[i]];
 break;
 case State617:
+ContentType.Type.End = i;
 state = table617[bytes[i]];
 break;
 case State618:
@@ -17218,6 +17654,7 @@ case State628:
 state = table628[bytes[i]];
 break;
 case State629:
+if(IfMatches[Count.IfMatches].Begin < 0)IfMatches[Count.IfMatches].Begin = i;
 state = table629[bytes[i]];
 break;
 case State630:
@@ -17242,7 +17679,6 @@ case State636:
 state = table636[bytes[i]];
 break;
 case State637:
-if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 state = table637[bytes[i]];
 break;
 case State638:
@@ -17297,19 +17733,16 @@ case State654:
 state = table654[bytes[i]];
 break;
 case State655:
+if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 state = table655[bytes[i]];
 break;
 case State656:
 state = table656[bytes[i]];
 break;
 case State657:
-ContentLength = (ContentLength << 1) * 5 + bytes[i - 1] - 48;
 state = table657[bytes[i]];
 break;
 case State658:
-if(ContentType.Subtype.Begin < 0)ContentType.Subtype.Begin = i- 1;
-ContentType.Subtype.End = i;
-ContentType.Value.End = i;
 state = table658[bytes[i]];
 break;
 case State659:
@@ -17361,10 +17794,13 @@ case State674:
 state = table674[bytes[i]];
 break;
 case State675:
+ContentLength = (ContentLength << 1) * 5 + bytes[i - 1] - 48;
 state = table675[bytes[i]];
 break;
 case State676:
-if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
+if(ContentType.Subtype.Begin < 0)ContentType.Subtype.Begin = i- 1;
+ContentType.Subtype.End = i;
+ContentType.Value.End = i;
 state = table676[bytes[i]];
 break;
 case State677:
@@ -17449,11 +17885,10 @@ case State703:
 state = table703[bytes[i]];
 break;
 case State704:
+if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 state = table704[bytes[i]];
 break;
 case State705:
-ContentType.Subtype.End = i;
-ContentType.Value.End = i;
 state = table705[bytes[i]];
 break;
 case State706:
@@ -17496,7 +17931,6 @@ case State718:
 state = table718[bytes[i]];
 break;
 case State719:
-if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Websocket;
 state = table719[bytes[i]];
 break;
 case State720:
@@ -17539,6 +17973,8 @@ case State732:
 state = table732[bytes[i]];
 break;
 case State733:
+ContentType.Subtype.End = i;
+ContentType.Value.End = i;
 state = table733[bytes[i]];
 break;
 case State734:
@@ -17596,6 +18032,7 @@ case State751:
 state = table751[bytes[i]];
 break;
 case State752:
+if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Websocket;
 state = table752[bytes[i]];
 break;
 case State753:
@@ -17755,7 +18192,6 @@ case State804:
 state = table804[bytes[i]];
 break;
 case State805:
-if(SecWebSocketKey.Begin < 0)SecWebSocketKey.Begin = i- 1;
 state = table805[bytes[i]];
 break;
 case State806:
@@ -17870,11 +18306,9 @@ case State842:
 state = table842[bytes[i]];
 break;
 case State843:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthScheme = AuthSchemes.Digest;
 state = table843[bytes[i]];
 break;
 case State844:
-ContentType.Value.End = i;
 state = table844[bytes[i]];
 break;
 case State845:
@@ -17896,6 +18330,7 @@ case State850:
 state = table850[bytes[i]];
 break;
 case State851:
+if(SecWebSocketKey.Begin < 0)SecWebSocketKey.Begin = i- 1;
 state = table851[bytes[i]];
 break;
 case State852:
@@ -18010,9 +18445,11 @@ case State888:
 state = table888[bytes[i]];
 break;
 case State889:
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthScheme = AuthSchemes.Digest;
 state = table889[bytes[i]];
 break;
 case State890:
+ContentType.Value.End = i;
 state = table890[bytes[i]];
 break;
 case State891:
@@ -18028,7 +18465,6 @@ case State894:
 state = table894[bytes[i]];
 break;
 case State895:
-ContentType.Value.End = i;
 state = table895[bytes[i]];
 break;
 case State896:
@@ -18179,6 +18615,7 @@ case State944:
 state = table944[bytes[i]];
 break;
 case State945:
+ContentType.Value.End = i;
 state = table945[bytes[i]];
 break;
 case State946:
@@ -18194,11 +18631,9 @@ case State949:
 state = table949[bytes[i]];
 break;
 case State950:
-SecWebSocketKey.End = i;
 state = table950[bytes[i]];
 break;
 case State951:
-SecWebSocketKey.End = i;
 state = table951[bytes[i]];
 break;
 case State952:
@@ -18328,7 +18763,6 @@ case State993:
 state = table993[bytes[i]];
 break;
 case State994:
-Count.SecWebSocketProtocol++;
 state = table994[bytes[i]];
 break;
 case State995:
@@ -18338,15 +18772,12 @@ case State996:
 state = table996[bytes[i]];
 break;
 case State997:
-SecWebSocketVersion = (SecWebSocketVersion << 1) * 5 + bytes[i - 1] - 48;
 state = table997[bytes[i]];
 break;
 case State998:
-SecWebSocketVersion = (SecWebSocketVersion << 1) * 5 + bytes[i - 1] - 48;
 state = table998[bytes[i]];
 break;
 case State999:
-SecWebSocketVersion = (SecWebSocketVersion << 1) * 5 + bytes[i - 1] - 48;
 state = table999[bytes[i]];
 break;
 case State1000:
@@ -18356,9 +18787,11 @@ case State1001:
 state = table1001[bytes[i]];
 break;
 case State1002:
+SecWebSocketKey.End = i;
 state = table1002[bytes[i]];
 break;
 case State1003:
+SecWebSocketKey.End = i;
 state = table1003[bytes[i]];
 break;
 case State1004:
@@ -18434,7 +18867,6 @@ case State1027:
 state = table1027[bytes[i]];
 break;
 case State1028:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
 state = table1028[bytes[i]];
 break;
 case State1029:
@@ -18471,8 +18903,6 @@ case State1039:
 state = table1039[bytes[i]];
 break;
 case State1040:
-if(SecWebSocketProtocol[Count.SecWebSocketProtocol].Begin < 0)SecWebSocketProtocol[Count.SecWebSocketProtocol].Begin = i- 1;
-if(Count.SecWebSocketProtocol < Max.SecWebSocketProtocol)SecWebSocketProtocol[Count.SecWebSocketProtocol].End = i;
 state = table1040[bytes[i]];
 break;
 case State1041:
@@ -18491,6 +18921,7 @@ case State1045:
 state = table1045[bytes[i]];
 break;
 case State1046:
+Count.SecWebSocketProtocol++;
 state = table1046[bytes[i]];
 break;
 case State1047:
@@ -18500,12 +18931,15 @@ case State1048:
 state = table1048[bytes[i]];
 break;
 case State1049:
+SecWebSocketVersion = (SecWebSocketVersion << 1) * 5 + bytes[i - 1] - 48;
 state = table1049[bytes[i]];
 break;
 case State1050:
+SecWebSocketVersion = (SecWebSocketVersion << 1) * 5 + bytes[i - 1] - 48;
 state = table1050[bytes[i]];
 break;
 case State1051:
+SecWebSocketVersion = (SecWebSocketVersion << 1) * 5 + bytes[i - 1] - 48;
 state = table1051[bytes[i]];
 break;
 case State1052:
@@ -18593,6 +19027,7 @@ case State1079:
 state = table1079[bytes[i]];
 break;
 case State1080:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
 state = table1080[bytes[i]];
 break;
 case State1081:
@@ -18614,9 +19049,6 @@ case State1086:
 state = table1086[bytes[i]];
 break;
 case State1087:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1087[bytes[i]];
 break;
 case State1088:
@@ -18626,13 +19058,14 @@ case State1089:
 state = table1089[bytes[i]];
 break;
 case State1090:
-if(Authorization[Count.AuthorizationCount].MessageQop.Begin < 0)Authorization[Count.AuthorizationCount].MessageQop.Begin = i;
 state = table1090[bytes[i]];
 break;
 case State1091:
 state = table1091[bytes[i]];
 break;
 case State1092:
+if(SecWebSocketProtocol[Count.SecWebSocketProtocol].Begin < 0)SecWebSocketProtocol[Count.SecWebSocketProtocol].Begin = i- 1;
+if(Count.SecWebSocketProtocol < Max.SecWebSocketProtocol)SecWebSocketProtocol[Count.SecWebSocketProtocol].End = i;
 state = table1092[bytes[i]];
 break;
 case State1093:
@@ -18648,7 +19081,6 @@ case State1096:
 state = table1096[bytes[i]];
 break;
 case State1097:
-Count.SecWebSocketExtensions++;
 state = table1097[bytes[i]];
 break;
 case State1098:
@@ -18661,7 +19093,6 @@ case State1100:
 state = table1100[bytes[i]];
 break;
 case State1101:
-if(Count.SecWebSocketProtocol < Max.SecWebSocketProtocol)SecWebSocketProtocol[Count.SecWebSocketProtocol].End = i;
 state = table1101[bytes[i]];
 break;
 case State1102:
@@ -18758,9 +19189,6 @@ case State1132:
 state = table1132[bytes[i]];
 break;
 case State1133:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1133[bytes[i]];
 break;
 case State1134:
@@ -18770,7 +19198,6 @@ case State1135:
 state = table1135[bytes[i]];
 break;
 case State1136:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].MessageQop.End = i;
 state = table1136[bytes[i]];
 break;
 case State1137:
@@ -18780,16 +19207,19 @@ case State1138:
 state = table1138[bytes[i]];
 break;
 case State1139:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1139[bytes[i]];
 break;
 case State1140:
 state = table1140[bytes[i]];
 break;
 case State1141:
-if(Authorization[Count.AuthorizationCount].DigestUri.Begin < 0)Authorization[Count.AuthorizationCount].DigestUri.Begin = i;
 state = table1141[bytes[i]];
 break;
 case State1142:
+if(Authorization[Count.AuthorizationCount].MessageQop.Begin < 0)Authorization[Count.AuthorizationCount].MessageQop.Begin = i;
 state = table1142[bytes[i]];
 break;
 case State1143:
@@ -18802,8 +19232,6 @@ case State1145:
 state = table1145[bytes[i]];
 break;
 case State1146:
-if(SecWebSocketExtensions[Count.SecWebSocketExtensions].Begin < 0)SecWebSocketExtensions[Count.SecWebSocketExtensions].Begin = i- 1;
-if(Count.SecWebSocketExtensions < Max.SecWebSocketExtensions)SecWebSocketExtensions[Count.SecWebSocketExtensions].End = i;
 state = table1146[bytes[i]];
 break;
 case State1147:
@@ -18813,6 +19241,7 @@ case State1148:
 state = table1148[bytes[i]];
 break;
 case State1149:
+Count.SecWebSocketExtensions++;
 state = table1149[bytes[i]];
 break;
 case State1150:
@@ -18825,6 +19254,7 @@ case State1152:
 state = table1152[bytes[i]];
 break;
 case State1153:
+if(Count.SecWebSocketProtocol < Max.SecWebSocketProtocol)SecWebSocketProtocol[Count.SecWebSocketProtocol].End = i;
 state = table1153[bytes[i]];
 break;
 case State1154:
@@ -18921,6 +19351,9 @@ case State1184:
 state = table1184[bytes[i]];
 break;
 case State1185:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1185[bytes[i]];
 break;
 case State1186:
@@ -18930,9 +19363,7 @@ case State1187:
 state = table1187[bytes[i]];
 break;
 case State1188:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].MessageQop.End = i;
 state = table1188[bytes[i]];
 break;
 case State1189:
@@ -18955,17 +19386,17 @@ case State1194:
 state = table1194[bytes[i]];
 break;
 case State1195:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1195[bytes[i]];
 break;
 case State1196:
 state = table1196[bytes[i]];
 break;
 case State1197:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1197[bytes[i]];
 break;
 case State1198:
+if(SecWebSocketExtensions[Count.SecWebSocketExtensions].Begin < 0)SecWebSocketExtensions[Count.SecWebSocketExtensions].Begin = i- 1;
+if(Count.SecWebSocketExtensions < Max.SecWebSocketExtensions)SecWebSocketExtensions[Count.SecWebSocketExtensions].End = i;
 state = table1198[bytes[i]];
 break;
 case State1199:
@@ -18984,7 +19415,6 @@ case State1203:
 state = table1203[bytes[i]];
 break;
 case State1204:
-if(Count.SecWebSocketExtensions < Max.SecWebSocketExtensions)SecWebSocketExtensions[Count.SecWebSocketExtensions].End = i;
 state = table1204[bytes[i]];
 break;
 case State1205:
@@ -19081,41 +19511,37 @@ case State1235:
 state = table1235[bytes[i]];
 break;
 case State1236:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1236[bytes[i]];
 break;
 case State1237:
-if(Authorization[Count.AuthorizationCount].Nonce.Begin < 0)Authorization[Count.AuthorizationCount].Nonce.Begin = i;
 state = table1237[bytes[i]];
 break;
 case State1238:
 state = table1238[bytes[i]];
 break;
 case State1239:
-if(Authorization[Count.AuthorizationCount].Realm.Begin < 0)Authorization[Count.AuthorizationCount].Realm.Begin = i;
 state = table1239[bytes[i]];
 break;
 case State1240:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1240[bytes[i]];
 break;
 case State1241:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1241[bytes[i]];
 break;
 case State1242:
 state = table1242[bytes[i]];
 break;
 case State1243:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1243[bytes[i]];
 break;
 case State1244:
 state = table1244[bytes[i]];
 break;
 case State1245:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
+if(Authorization[Count.AuthorizationCount].DigestUri.Begin < 0)Authorization[Count.AuthorizationCount].DigestUri.Begin = i;
 state = table1245[bytes[i]];
 break;
 case State1246:
@@ -19126,7 +19552,6 @@ if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.Authori
 state = table1247[bytes[i]];
 break;
 case State1248:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1248[bytes[i]];
 break;
 case State1249:
@@ -19134,15 +19559,12 @@ if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.Authori
 state = table1249[bytes[i]];
 break;
 case State1250:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1250[bytes[i]];
 break;
 case State1251:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1251[bytes[i]];
 break;
 case State1252:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1252[bytes[i]];
 break;
 case State1253:
@@ -19155,6 +19577,7 @@ case State1255:
 state = table1255[bytes[i]];
 break;
 case State1256:
+if(Count.SecWebSocketExtensions < Max.SecWebSocketExtensions)SecWebSocketExtensions[Count.SecWebSocketExtensions].End = i;
 state = table1256[bytes[i]];
 break;
 case State1257:
@@ -19251,60 +19674,68 @@ case State1287:
 state = table1287[bytes[i]];
 break;
 case State1288:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1288[bytes[i]];
 break;
 case State1289:
+if(Authorization[Count.AuthorizationCount].Nonce.Begin < 0)Authorization[Count.AuthorizationCount].Nonce.Begin = i;
 state = table1289[bytes[i]];
 break;
 case State1290:
 state = table1290[bytes[i]];
 break;
 case State1291:
+if(Authorization[Count.AuthorizationCount].Realm.Begin < 0)Authorization[Count.AuthorizationCount].Realm.Begin = i;
 state = table1291[bytes[i]];
 break;
 case State1292:
 state = table1292[bytes[i]];
 break;
 case State1293:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1293[bytes[i]];
 break;
 case State1294:
 state = table1294[bytes[i]];
 break;
 case State1295:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1295[bytes[i]];
 break;
 case State1296:
 state = table1296[bytes[i]];
 break;
 case State1297:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1297[bytes[i]];
 break;
 case State1298:
 state = table1298[bytes[i]];
 break;
 case State1299:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1299[bytes[i]];
 break;
 case State1300:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1300[bytes[i]];
 break;
 case State1301:
-if(Authorization[Count.AuthorizationCount].Cnonce.Begin < 0)Authorization[Count.AuthorizationCount].Cnonce.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1301[bytes[i]];
 break;
 case State1302:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1302[bytes[i]];
 break;
 case State1303:
-if(Authorization[Count.AuthorizationCount].Nonce.Begin < 0)Authorization[Count.AuthorizationCount].Nonce.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Nonce.End = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1303[bytes[i]];
 break;
 case State1304:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1304[bytes[i]];
 break;
 case State1305:
@@ -19326,12 +19757,9 @@ case State1310:
 state = table1310[bytes[i]];
 break;
 case State1311:
-if(Authorization[Count.AuthorizationCount].Opaque.Begin < 0)Authorization[Count.AuthorizationCount].Opaque.Begin = i;
 state = table1311[bytes[i]];
 break;
 case State1312:
-if(Authorization[Count.AuthorizationCount].Realm.Begin < 0)Authorization[Count.AuthorizationCount].Realm.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Realm.End = i;
 state = table1312[bytes[i]];
 break;
 case State1313:
@@ -19455,12 +19883,18 @@ case State1352:
 state = table1352[bytes[i]];
 break;
 case State1353:
+if(Authorization[Count.AuthorizationCount].Cnonce.Begin < 0)Authorization[Count.AuthorizationCount].Cnonce.Begin = i;
 state = table1353[bytes[i]];
 break;
 case State1354:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1354[bytes[i]];
 break;
 case State1355:
+if(Authorization[Count.AuthorizationCount].Nonce.Begin < 0)Authorization[Count.AuthorizationCount].Nonce.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Nonce.End = i;
 state = table1355[bytes[i]];
 break;
 case State1356:
@@ -19485,11 +19919,12 @@ case State1362:
 state = table1362[bytes[i]];
 break;
 case State1363:
+if(Authorization[Count.AuthorizationCount].Opaque.Begin < 0)Authorization[Count.AuthorizationCount].Opaque.Begin = i;
 state = table1363[bytes[i]];
 break;
 case State1364:
-if(Authorization[Count.AuthorizationCount].Cnonce.Begin < 0)Authorization[Count.AuthorizationCount].Cnonce.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Cnonce.End = i;
+if(Authorization[Count.AuthorizationCount].Realm.Begin < 0)Authorization[Count.AuthorizationCount].Realm.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Realm.End = i;
 state = table1364[bytes[i]];
 break;
 case State1365:
@@ -19514,27 +19949,18 @@ case State1371:
 state = table1371[bytes[i]];
 break;
 case State1372:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1372[bytes[i]];
 break;
 case State1373:
 state = table1373[bytes[i]];
 break;
 case State1374:
-if(Authorization[Count.AuthorizationCount].Nonce.Begin < 0)Authorization[Count.AuthorizationCount].Nonce.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Nonce.End = i;
 state = table1374[bytes[i]];
 break;
 case State1375:
-if(Authorization[Count.AuthorizationCount].Nonce.Begin < 0)Authorization[Count.AuthorizationCount].Nonce.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Nonce.End = i;
 state = table1375[bytes[i]];
 break;
 case State1376:
-if(Authorization[Count.AuthorizationCount].Opaque.Begin < 0)Authorization[Count.AuthorizationCount].Opaque.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Opaque.End = i;
 state = table1376[bytes[i]];
 break;
 case State1377:
@@ -19562,17 +19988,12 @@ case State1384:
 state = table1384[bytes[i]];
 break;
 case State1385:
-if(Authorization[Count.AuthorizationCount].Realm.Begin < 0)Authorization[Count.AuthorizationCount].Realm.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Realm.End = i;
 state = table1385[bytes[i]];
 break;
 case State1386:
-if(Authorization[Count.AuthorizationCount].Realm.Begin < 0)Authorization[Count.AuthorizationCount].Realm.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Realm.End = i;
 state = table1386[bytes[i]];
 break;
 case State1387:
-Authorization[Count.AuthorizationCount].HasResponse = true;
 state = table1387[bytes[i]];
 break;
 case State1388:
@@ -19660,6 +20081,8 @@ case State1415:
 state = table1415[bytes[i]];
 break;
 case State1416:
+if(Authorization[Count.AuthorizationCount].Cnonce.Begin < 0)Authorization[Count.AuthorizationCount].Cnonce.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Cnonce.End = i;
 state = table1416[bytes[i]];
 break;
 case State1417:
@@ -19684,22 +20107,30 @@ case State1423:
 state = table1423[bytes[i]];
 break;
 case State1424:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1424[bytes[i]];
 break;
 case State1425:
 state = table1425[bytes[i]];
 break;
 case State1426:
+if(Authorization[Count.AuthorizationCount].Nonce.Begin < 0)Authorization[Count.AuthorizationCount].Nonce.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Nonce.End = i;
 state = table1426[bytes[i]];
 break;
 case State1427:
+if(Authorization[Count.AuthorizationCount].Nonce.Begin < 0)Authorization[Count.AuthorizationCount].Nonce.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Nonce.End = i;
 state = table1427[bytes[i]];
 break;
 case State1428:
+if(Authorization[Count.AuthorizationCount].Opaque.Begin < 0)Authorization[Count.AuthorizationCount].Opaque.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Opaque.End = i;
 state = table1428[bytes[i]];
 break;
 case State1429:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
 state = table1429[bytes[i]];
 break;
 case State1430:
@@ -19724,25 +20155,23 @@ case State1436:
 state = table1436[bytes[i]];
 break;
 case State1437:
+if(Authorization[Count.AuthorizationCount].Realm.Begin < 0)Authorization[Count.AuthorizationCount].Realm.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Realm.End = i;
 state = table1437[bytes[i]];
 break;
 case State1438:
+if(Authorization[Count.AuthorizationCount].Realm.Begin < 0)Authorization[Count.AuthorizationCount].Realm.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Realm.End = i;
 state = table1438[bytes[i]];
 break;
 case State1439:
-if(Authorization[Count.AuthorizationCount].Cnonce.Begin < 0)Authorization[Count.AuthorizationCount].Cnonce.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Cnonce.End = i;
+Authorization[Count.AuthorizationCount].HasResponse = true;
 state = table1439[bytes[i]];
 break;
 case State1440:
-if(Authorization[Count.AuthorizationCount].Cnonce.Begin < 0)Authorization[Count.AuthorizationCount].Cnonce.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Cnonce.End = i;
 state = table1440[bytes[i]];
 break;
 case State1441:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1441[bytes[i]];
 break;
 case State1442:
@@ -19770,13 +20199,9 @@ case State1449:
 state = table1449[bytes[i]];
 break;
 case State1450:
-if(Authorization[Count.AuthorizationCount].Opaque.Begin < 0)Authorization[Count.AuthorizationCount].Opaque.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Opaque.End = i;
 state = table1450[bytes[i]];
 break;
 case State1451:
-if(Authorization[Count.AuthorizationCount].Opaque.Begin < 0)Authorization[Count.AuthorizationCount].Opaque.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Opaque.End = i;
 state = table1451[bytes[i]];
 break;
 case State1452:
@@ -19801,11 +20226,9 @@ case State1458:
 state = table1458[bytes[i]];
 break;
 case State1459:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
 state = table1459[bytes[i]];
 break;
 case State1460:
-if(Authorization[Count.AuthorizationCount].Username.Begin < 0)Authorization[Count.AuthorizationCount].Username.Begin = i;
 state = table1460[bytes[i]];
 break;
 case State1461:
@@ -19869,6 +20292,7 @@ case State1480:
 state = table1480[bytes[i]];
 break;
 case State1481:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
 state = table1481[bytes[i]];
 break;
 case State1482:
@@ -19899,12 +20323,19 @@ case State1490:
 state = table1490[bytes[i]];
 break;
 case State1491:
+if(Authorization[Count.AuthorizationCount].Cnonce.Begin < 0)Authorization[Count.AuthorizationCount].Cnonce.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Cnonce.End = i;
 state = table1491[bytes[i]];
 break;
 case State1492:
+if(Authorization[Count.AuthorizationCount].Cnonce.Begin < 0)Authorization[Count.AuthorizationCount].Cnonce.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Cnonce.End = i;
 state = table1492[bytes[i]];
 break;
 case State1493:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1493[bytes[i]];
 break;
 case State1494:
@@ -19923,9 +20354,6 @@ case State1498:
 state = table1498[bytes[i]];
 break;
 case State1499:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1499[bytes[i]];
 break;
 case State1500:
@@ -19935,10 +20363,13 @@ case State1501:
 state = table1501[bytes[i]];
 break;
 case State1502:
-if(Authorization[Count.AuthorizationCount].MessageQop.Begin < 0)Authorization[Count.AuthorizationCount].MessageQop.Begin = i;
+if(Authorization[Count.AuthorizationCount].Opaque.Begin < 0)Authorization[Count.AuthorizationCount].Opaque.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Opaque.End = i;
 state = table1502[bytes[i]];
 break;
 case State1503:
+if(Authorization[Count.AuthorizationCount].Opaque.Begin < 0)Authorization[Count.AuthorizationCount].Opaque.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Opaque.End = i;
 state = table1503[bytes[i]];
 break;
 case State1504:
@@ -19951,11 +20382,9 @@ case State1506:
 state = table1506[bytes[i]];
 break;
 case State1507:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1507[bytes[i]];
 break;
 case State1508:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1508[bytes[i]];
 break;
 case State1509:
@@ -19965,9 +20394,11 @@ case State1510:
 state = table1510[bytes[i]];
 break;
 case State1511:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
 state = table1511[bytes[i]];
 break;
 case State1512:
+if(Authorization[Count.AuthorizationCount].Username.Begin < 0)Authorization[Count.AuthorizationCount].Username.Begin = i;
 state = table1512[bytes[i]];
 break;
 case State1513:
@@ -19980,8 +20411,6 @@ case State1515:
 state = table1515[bytes[i]];
 break;
 case State1516:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1516[bytes[i]];
 break;
 case State1517:
@@ -20012,13 +20441,9 @@ case State1525:
 state = table1525[bytes[i]];
 break;
 case State1526:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1526[bytes[i]];
 break;
 case State1527:
-if(Authorization[Count.AuthorizationCount].Username.Begin < 0)Authorization[Count.AuthorizationCount].Username.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Username.End = i;
 state = table1527[bytes[i]];
 break;
 case State1528:
@@ -20091,6 +20516,9 @@ case State1550:
 state = table1550[bytes[i]];
 break;
 case State1551:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1551[bytes[i]];
 break;
 case State1552:
@@ -20100,6 +20528,7 @@ case State1553:
 state = table1553[bytes[i]];
 break;
 case State1554:
+if(Authorization[Count.AuthorizationCount].MessageQop.Begin < 0)Authorization[Count.AuthorizationCount].MessageQop.Begin = i;
 state = table1554[bytes[i]];
 break;
 case State1555:
@@ -20115,12 +20544,11 @@ case State1558:
 state = table1558[bytes[i]];
 break;
 case State1559:
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1559[bytes[i]];
 break;
 case State1560:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1560[bytes[i]];
 break;
 case State1561:
@@ -20130,7 +20558,6 @@ case State1562:
 state = table1562[bytes[i]];
 break;
 case State1563:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].MessageQop.End = i;
 state = table1563[bytes[i]];
 break;
 case State1564:
@@ -20146,14 +20573,14 @@ case State1567:
 state = table1567[bytes[i]];
 break;
 case State1568:
-if(Authorization[Count.AuthorizationCount].DigestUri.Begin < 0)Authorization[Count.AuthorizationCount].DigestUri.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1568[bytes[i]];
 break;
 case State1569:
 state = table1569[bytes[i]];
 break;
 case State1570:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1570[bytes[i]];
 break;
 case State1571:
@@ -20163,30 +20590,28 @@ case State1572:
 state = table1572[bytes[i]];
 break;
 case State1573:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1573[bytes[i]];
 break;
 case State1574:
 state = table1574[bytes[i]];
 break;
 case State1575:
-if(Authorization[Count.AuthorizationCount].Username.Begin < 0)Authorization[Count.AuthorizationCount].Username.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Username.End = i;
 state = table1575[bytes[i]];
 break;
 case State1576:
-if(Authorization[Count.AuthorizationCount].Username.Begin < 0)Authorization[Count.AuthorizationCount].Username.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Username.End = i;
 state = table1576[bytes[i]];
 break;
 case State1577:
 state = table1577[bytes[i]];
 break;
 case State1578:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1578[bytes[i]];
 break;
 case State1579:
+if(Authorization[Count.AuthorizationCount].Username.Begin < 0)Authorization[Count.AuthorizationCount].Username.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Username.End = i;
 state = table1579[bytes[i]];
 break;
 case State1580:
@@ -20274,9 +20699,6 @@ case State1607:
 state = table1607[bytes[i]];
 break;
 case State1608:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1608[bytes[i]];
 break;
 case State1609:
@@ -20289,42 +20711,42 @@ case State1611:
 state = table1611[bytes[i]];
 break;
 case State1612:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1612[bytes[i]];
 break;
 case State1613:
-if(Authorization[Count.AuthorizationCount].DigestUri.Begin < 0)Authorization[Count.AuthorizationCount].DigestUri.Begin = i;
 state = table1613[bytes[i]];
 break;
 case State1614:
 state = table1614[bytes[i]];
 break;
 case State1615:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].MessageQop.End = i;
 state = table1615[bytes[i]];
 break;
 case State1616:
 state = table1616[bytes[i]];
 break;
 case State1617:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1617[bytes[i]];
 break;
 case State1618:
 state = table1618[bytes[i]];
 break;
 case State1619:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Md5;
 state = table1619[bytes[i]];
 break;
 case State1620:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+if(Authorization[Count.AuthorizationCount].DigestUri.Begin < 0)Authorization[Count.AuthorizationCount].DigestUri.Begin = i;
 state = table1620[bytes[i]];
 break;
 case State1621:
 state = table1621[bytes[i]];
 break;
 case State1622:
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1622[bytes[i]];
 break;
 case State1623:
@@ -20334,15 +20756,21 @@ case State1624:
 state = table1624[bytes[i]];
 break;
 case State1625:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1625[bytes[i]];
 break;
 case State1626:
 state = table1626[bytes[i]];
 break;
 case State1627:
+if(Authorization[Count.AuthorizationCount].Username.Begin < 0)Authorization[Count.AuthorizationCount].Username.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Username.End = i;
 state = table1627[bytes[i]];
 break;
 case State1628:
+if(Authorization[Count.AuthorizationCount].Username.Begin < 0)Authorization[Count.AuthorizationCount].Username.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Username.End = i;
 state = table1628[bytes[i]];
 break;
 case State1629:
@@ -20415,60 +20843,52 @@ case State1651:
 state = table1651[bytes[i]];
 break;
 case State1652:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1652[bytes[i]];
 break;
 case State1653:
-if(Authorization[Count.AuthorizationCount].Nonce.Begin < 0)Authorization[Count.AuthorizationCount].Nonce.Begin = i;
 state = table1653[bytes[i]];
 break;
 case State1654:
 state = table1654[bytes[i]];
 break;
 case State1655:
-if(Authorization[Count.AuthorizationCount].Realm.Begin < 0)Authorization[Count.AuthorizationCount].Realm.Begin = i;
 state = table1655[bytes[i]];
 break;
 case State1656:
 state = table1656[bytes[i]];
 break;
 case State1657:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1657[bytes[i]];
 break;
 case State1658:
 state = table1658[bytes[i]];
 break;
 case State1659:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1659[bytes[i]];
 break;
 case State1660:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1660[bytes[i]];
 break;
 case State1661:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1661[bytes[i]];
 break;
 case State1662:
 state = table1662[bytes[i]];
 break;
 case State1663:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1663[bytes[i]];
 break;
 case State1664:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1664[bytes[i]];
 break;
 case State1665:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
+if(Authorization[Count.AuthorizationCount].DigestUri.Begin < 0)Authorization[Count.AuthorizationCount].DigestUri.Begin = i;
 state = table1665[bytes[i]];
 break;
 case State1666:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1666[bytes[i]];
 break;
 case State1667:
@@ -20476,22 +20896,22 @@ if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.Authori
 state = table1667[bytes[i]];
 break;
 case State1668:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1668[bytes[i]];
 break;
 case State1669:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1669[bytes[i]];
 break;
 case State1670:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1670[bytes[i]];
 break;
 case State1671:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Md5;
 state = table1671[bytes[i]];
 break;
 case State1672:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1672[bytes[i]];
 break;
 case State1673:
@@ -20540,17 +20960,12 @@ case State1687:
 state = table1687[bytes[i]];
 break;
 case State1688:
-if(Authorization[Count.AuthorizationCount].Cnonce.Begin < 0)Authorization[Count.AuthorizationCount].Cnonce.Begin = i;
 state = table1688[bytes[i]];
 break;
 case State1689:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1689[bytes[i]];
 break;
 case State1690:
-if(Authorization[Count.AuthorizationCount].Opaque.Begin < 0)Authorization[Count.AuthorizationCount].Opaque.Begin = i;
 state = table1690[bytes[i]];
 break;
 case State1691:
@@ -20572,12 +20987,9 @@ case State1696:
 state = table1696[bytes[i]];
 break;
 case State1697:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1697[bytes[i]];
 break;
 case State1698:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1698[bytes[i]];
 break;
 case State1699:
@@ -20596,90 +21008,92 @@ case State1703:
 state = table1703[bytes[i]];
 break;
 case State1704:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1704[bytes[i]];
 break;
 case State1705:
+if(Authorization[Count.AuthorizationCount].Nonce.Begin < 0)Authorization[Count.AuthorizationCount].Nonce.Begin = i;
 state = table1705[bytes[i]];
 break;
 case State1706:
 state = table1706[bytes[i]];
 break;
 case State1707:
+if(Authorization[Count.AuthorizationCount].Realm.Begin < 0)Authorization[Count.AuthorizationCount].Realm.Begin = i;
 state = table1707[bytes[i]];
 break;
 case State1708:
 state = table1708[bytes[i]];
 break;
 case State1709:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1709[bytes[i]];
 break;
 case State1710:
-Authorization[Count.AuthorizationCount].HasResponse = true;
 state = table1710[bytes[i]];
 break;
 case State1711:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1711[bytes[i]];
 break;
 case State1712:
 state = table1712[bytes[i]];
 break;
 case State1713:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1713[bytes[i]];
 break;
 case State1714:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1714[bytes[i]];
 break;
 case State1715:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1715[bytes[i]];
 break;
 case State1716:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1716[bytes[i]];
 break;
 case State1717:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1717[bytes[i]];
 break;
 case State1718:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1718[bytes[i]];
 break;
 case State1719:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1719[bytes[i]];
 break;
 case State1720:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 state = table1720[bytes[i]];
 break;
 case State1721:
 state = table1721[bytes[i]];
 break;
 case State1722:
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1722[bytes[i]];
 break;
 case State1723:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1723[bytes[i]];
 break;
 case State1724:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
 state = table1724[bytes[i]];
 break;
 case State1725:
-if(Authorization[Count.AuthorizationCount].Username.Begin < 0)Authorization[Count.AuthorizationCount].Username.Begin = i;
 state = table1725[bytes[i]];
 break;
 case State1726:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1726[bytes[i]];
 break;
 case State1727:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1727[bytes[i]];
 break;
 case State1728:
@@ -20698,42 +21112,38 @@ case State1732:
 state = table1732[bytes[i]];
 break;
 case State1733:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1733[bytes[i]];
 break;
 case State1734:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1734[bytes[i]];
 break;
 case State1735:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1735[bytes[i]];
 break;
 case State1736:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1736[bytes[i]];
 break;
 case State1737:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Md5Sess;
 state = table1737[bytes[i]];
 break;
 case State1738:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1738[bytes[i]];
 break;
 case State1739:
 state = table1739[bytes[i]];
 break;
 case State1740:
+if(Authorization[Count.AuthorizationCount].Cnonce.Begin < 0)Authorization[Count.AuthorizationCount].Cnonce.Begin = i;
 state = table1740[bytes[i]];
 break;
 case State1741:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1741[bytes[i]];
 break;
 case State1742:
+if(Authorization[Count.AuthorizationCount].Opaque.Begin < 0)Authorization[Count.AuthorizationCount].Opaque.Begin = i;
 state = table1742[bytes[i]];
 break;
 case State1743:
@@ -20746,23 +21156,21 @@ case State1745:
 state = table1745[bytes[i]];
 break;
 case State1746:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1746[bytes[i]];
 break;
 case State1747:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1747[bytes[i]];
 break;
 case State1748:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1748[bytes[i]];
 break;
 case State1749:
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1749[bytes[i]];
 break;
 case State1750:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1750[bytes[i]];
 break;
 case State1751:
@@ -20787,23 +21195,22 @@ case State1757:
 state = table1757[bytes[i]];
 break;
 case State1758:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Md5;
 state = table1758[bytes[i]];
 break;
 case State1759:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1759[bytes[i]];
 break;
 case State1760:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1760[bytes[i]];
 break;
 case State1761:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1761[bytes[i]];
 break;
 case State1762:
+Authorization[Count.AuthorizationCount].HasResponse = true;
 state = table1762[bytes[i]];
 break;
 case State1763:
@@ -20816,9 +21223,12 @@ case State1765:
 state = table1765[bytes[i]];
 break;
 case State1766:
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1766[bytes[i]];
 break;
 case State1767:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1767[bytes[i]];
 break;
 case State1768:
@@ -20843,18 +21253,21 @@ case State1774:
 state = table1774[bytes[i]];
 break;
 case State1775:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1775[bytes[i]];
 break;
 case State1776:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
 state = table1776[bytes[i]];
 break;
 case State1777:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
+if(Authorization[Count.AuthorizationCount].Username.Begin < 0)Authorization[Count.AuthorizationCount].Username.Begin = i;
 state = table1777[bytes[i]];
 break;
 case State1778:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1778[bytes[i]];
 break;
 case State1779:
@@ -20878,21 +21291,25 @@ case State1784:
 state = table1784[bytes[i]];
 break;
 case State1785:
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1785[bytes[i]];
 break;
 case State1786:
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1786[bytes[i]];
 break;
 case State1787:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 state = table1787[bytes[i]];
 break;
 case State1788:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1788[bytes[i]];
 break;
 case State1789:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Md5Sess;
 state = table1789[bytes[i]];
 break;
 case State1790:
@@ -20919,12 +21336,10 @@ case State1796:
 state = table1796[bytes[i]];
 break;
 case State1797:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1797[bytes[i]];
 break;
 case State1798:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1798[bytes[i]];
 break;
 case State1799:
@@ -20933,6 +21348,8 @@ if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.Authori
 state = table1799[bytes[i]];
 break;
 case State1800:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1800[bytes[i]];
 break;
 case State1801:
@@ -20942,17 +21359,12 @@ case State1802:
 state = table1802[bytes[i]];
 break;
 case State1803:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1803[bytes[i]];
 break;
 case State1804:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1804[bytes[i]];
 break;
 case State1805:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1805[bytes[i]];
 break;
 case State1806:
@@ -20965,12 +21377,10 @@ case State1808:
 state = table1808[bytes[i]];
 break;
 case State1809:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Md5Sess;
 state = table1809[bytes[i]];
 break;
 case State1810:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Md5;
 state = table1810[bytes[i]];
 break;
 case State1811:
@@ -20979,85 +21389,60 @@ if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.Authori
 state = table1811[bytes[i]];
 break;
 case State1812:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1812[bytes[i]];
 break;
 case State1813:
 state = table1813[bytes[i]];
 break;
 case State1814:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1814[bytes[i]];
 break;
 case State1815:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1815[bytes[i]];
 break;
 case State1816:
 state = table1816[bytes[i]];
 break;
 case State1817:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1817[bytes[i]];
 break;
 case State1818:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1818[bytes[i]];
 break;
 case State1819:
 state = table1819[bytes[i]];
 break;
 case State1820:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1820[bytes[i]];
 break;
 case State1821:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1821[bytes[i]];
 break;
 case State1822:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1822[bytes[i]];
 break;
 case State1823:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1823[bytes[i]];
 break;
 case State1824:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1824[bytes[i]];
 break;
 case State1825:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1825[bytes[i]];
 break;
 case State1826:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1826[bytes[i]];
 break;
 case State1827:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1827[bytes[i]];
 break;
 case State1828:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1828[bytes[i]];
 break;
 case State1829:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1829[bytes[i]];
 break;
 case State1830:
@@ -21071,48 +21456,31 @@ if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.Authori
 state = table1831[bytes[i]];
 break;
 case State1832:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1832[bytes[i]];
 break;
 case State1833:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1833[bytes[i]];
 break;
 case State1834:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1834[bytes[i]];
 break;
 case State1835:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1835[bytes[i]];
 break;
 case State1836:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1836[bytes[i]];
 break;
 case State1837:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1837[bytes[i]];
 break;
 case State1838:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1838[bytes[i]];
 break;
 case State1839:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1839[bytes[i]];
 break;
 case State1840:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1840[bytes[i]];
 break;
 case State1841:
@@ -21126,37 +21494,25 @@ if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.Authori
 state = table1842[bytes[i]];
 break;
 case State1843:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1843[bytes[i]];
 break;
 case State1844:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1844[bytes[i]];
 break;
 case State1845:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1845[bytes[i]];
 break;
 case State1846:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1846[bytes[i]];
 break;
 case State1847:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1847[bytes[i]];
 break;
 case State1848:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1848[bytes[i]];
 break;
 case State1849:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1849[bytes[i]];
 break;
 case State1850:
@@ -21170,30 +21526,267 @@ if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.Authori
 state = table1851[bytes[i]];
 break;
 case State1852:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1852[bytes[i]];
 break;
 case State1853:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1853[bytes[i]];
 break;
 case State1854:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1854[bytes[i]];
 break;
 case State1855:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 state = table1855[bytes[i]];
 break;
 case State1856:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
 if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 state = table1856[bytes[i]];
 break;
 case State1857:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1857[bytes[i]];
+break;
+case State1858:
+state = table1858[bytes[i]];
+break;
+case State1859:
+state = table1859[bytes[i]];
+break;
+case State1860:
+state = table1860[bytes[i]];
+break;
+case State1861:
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Md5Sess;
+state = table1861[bytes[i]];
+break;
+case State1862:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1862[bytes[i]];
+break;
+case State1863:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1863[bytes[i]];
+break;
+case State1864:
+state = table1864[bytes[i]];
+break;
+case State1865:
+state = table1865[bytes[i]];
+break;
+case State1866:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1866[bytes[i]];
+break;
+case State1867:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1867[bytes[i]];
+break;
+case State1868:
+state = table1868[bytes[i]];
+break;
+case State1869:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1869[bytes[i]];
+break;
+case State1870:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1870[bytes[i]];
+break;
+case State1871:
+state = table1871[bytes[i]];
+break;
+case State1872:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1872[bytes[i]];
+break;
+case State1873:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1873[bytes[i]];
+break;
+case State1874:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1874[bytes[i]];
+break;
+case State1875:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1875[bytes[i]];
+break;
+case State1876:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1876[bytes[i]];
+break;
+case State1877:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1877[bytes[i]];
+break;
+case State1878:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1878[bytes[i]];
+break;
+case State1879:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1879[bytes[i]];
+break;
+case State1880:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1880[bytes[i]];
+break;
+case State1881:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1881[bytes[i]];
+break;
+case State1882:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1882[bytes[i]];
+break;
+case State1883:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1883[bytes[i]];
+break;
+case State1884:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1884[bytes[i]];
+break;
+case State1885:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1885[bytes[i]];
+break;
+case State1886:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1886[bytes[i]];
+break;
+case State1887:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1887[bytes[i]];
+break;
+case State1888:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1888[bytes[i]];
+break;
+case State1889:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1889[bytes[i]];
+break;
+case State1890:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1890[bytes[i]];
+break;
+case State1891:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1891[bytes[i]];
+break;
+case State1892:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1892[bytes[i]];
+break;
+case State1893:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1893[bytes[i]];
+break;
+case State1894:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1894[bytes[i]];
+break;
+case State1895:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1895[bytes[i]];
+break;
+case State1896:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1896[bytes[i]];
+break;
+case State1897:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1897[bytes[i]];
+break;
+case State1898:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1898[bytes[i]];
+break;
+case State1899:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1899[bytes[i]];
+break;
+case State1900:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1900[bytes[i]];
+break;
+case State1901:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1901[bytes[i]];
+break;
+case State1902:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1902[bytes[i]];
+break;
+case State1903:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1903[bytes[i]];
+break;
+case State1904:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1904[bytes[i]];
+break;
+case State1905:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1905[bytes[i]];
+break;
+case State1906:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1906[bytes[i]];
+break;
+case State1907:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1907[bytes[i]];
+break;
+case State1908:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+state = table1908[bytes[i]];
+break;
+case State1909:
 i--;
 Error = true;
 goto exit1;
@@ -21849,6 +22442,7 @@ break;
 case State266:
 break;
 case State267:
+Count.IfMatches++;
 break;
 case State268:
 break;
@@ -21865,20 +22459,18 @@ break;
 case State274:
 break;
 case State275:
-Referer.End = i;
 break;
 case State276:
+Referer.End = i;
 break;
 case State277:
-if(Referer.Begin < 0)Referer.Begin = i- 1;
-Referer.End = i;
 break;
 case State278:
 if(Referer.Begin < 0)Referer.Begin = i- 1;
+Referer.End = i;
 break;
 case State279:
 if(Referer.Begin < 0)Referer.Begin = i- 1;
-Referer.End = i;
 break;
 case State280:
 if(Referer.Begin < 0)Referer.Begin = i- 1;
@@ -21889,6 +22481,8 @@ if(Referer.Begin < 0)Referer.Begin = i- 1;
 Referer.End = i;
 break;
 case State282:
+if(Referer.Begin < 0)Referer.Begin = i- 1;
+Referer.End = i;
 break;
 case State283:
 break;
@@ -21919,12 +22513,12 @@ break;
 case State296:
 break;
 case State297:
-if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 break;
 case State298:
 if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 break;
 case State299:
+if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 break;
 case State300:
 break;
@@ -21941,24 +22535,24 @@ break;
 case State306:
 break;
 case State307:
+break;
+case State308:
 if(Cookie[Count.Cookie].Value.Begin < 0)Cookie[Count.Cookie].Value.Begin = i- 1;
 if(Count.Cookie < Max.Cookie)Cookie[Count.Cookie].Value.End = i;
 break;
-case State308:
-break;
 case State309:
-Count.Cookie++;
 break;
 case State310:
+Count.Cookie++;
 break;
 case State311:
 break;
 case State312:
 break;
 case State313:
-if(Host.Host.Begin < 0)Host.Host.Begin = i- 1;
 break;
 case State314:
+if(Host.Host.Begin < 0)Host.Host.Begin = i- 1;
 break;
 case State315:
 break;
@@ -21979,8 +22573,11 @@ break;
 case State323:
 break;
 case State324:
+if(IfMatches[Count.IfMatches].Begin < 0)IfMatches[Count.IfMatches].Begin = i;
 break;
 case State325:
+if(IfMatches[Count.IfMatches].Begin < 0)IfMatches[Count.IfMatches].Begin = i- 1;
+if(Count.IfMatches < Max.IfMatches)IfMatches[Count.IfMatches].End = i;
 break;
 case State326:
 break;
@@ -21999,7 +22596,6 @@ break;
 case State333:
 break;
 case State334:
-Referer.End = i;
 break;
 case State335:
 break;
@@ -22011,7 +22607,6 @@ break;
 case State338:
 break;
 case State339:
-Referer.End = i;
 break;
 case State340:
 Referer.End = i;
@@ -22019,8 +22614,10 @@ break;
 case State341:
 break;
 case State342:
+Referer.End = i;
 break;
 case State343:
+Referer.End = i;
 break;
 case State344:
 break;
@@ -22043,13 +22640,13 @@ break;
 case State353:
 break;
 case State354:
-if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 break;
 case State355:
 break;
 case State356:
 break;
 case State357:
+if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 break;
 case State358:
 break;
@@ -22064,14 +22661,14 @@ break;
 case State363:
 break;
 case State364:
-if(Cookie[Count.Cookie].Value.Begin < 0)Cookie[Count.Cookie].Value.Begin = i- 1;
-if(Count.Cookie < Max.Cookie)Cookie[Count.Cookie].Value.End = i;
 break;
 case State365:
 break;
 case State366:
 break;
 case State367:
+if(Cookie[Count.Cookie].Value.Begin < 0)Cookie[Count.Cookie].Value.Begin = i- 1;
+if(Count.Cookie < Max.Cookie)Cookie[Count.Cookie].Value.End = i;
 break;
 case State368:
 break;
@@ -22112,6 +22709,8 @@ break;
 case State386:
 break;
 case State387:
+if(IfMatches[Count.IfMatches].Begin < 0)IfMatches[Count.IfMatches].Begin = i;
+if(Count.IfMatches < Max.IfMatches)IfMatches[Count.IfMatches].End = i;
 break;
 case State388:
 break;
@@ -22164,7 +22763,6 @@ break;
 case State412:
 break;
 case State413:
-Referer.End = i;
 break;
 case State414:
 break;
@@ -22175,6 +22773,7 @@ break;
 case State417:
 break;
 case State418:
+Referer.End = i;
 break;
 case State419:
 break;
@@ -22199,7 +22798,6 @@ break;
 case State429:
 break;
 case State430:
-if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 break;
 case State431:
 break;
@@ -22210,6 +22808,7 @@ break;
 case State434:
 break;
 case State435:
+if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 break;
 case State436:
 break;
@@ -22226,8 +22825,6 @@ break;
 case State442:
 break;
 case State443:
-if(Host.Host.Begin < 0)Host.Host.Begin = i- 1;
-Host.Host.End = i;
 break;
 case State444:
 break;
@@ -22238,6 +22835,8 @@ break;
 case State447:
 break;
 case State448:
+if(Host.Host.Begin < 0)Host.Host.Begin = i- 1;
+Host.Host.End = i;
 break;
 case State449:
 break;
@@ -22258,10 +22857,15 @@ break;
 case State457:
 break;
 case State458:
+Count.IfMatches++;
 break;
 case State459:
+if(IfMatches[Count.IfMatches].Begin < 0)IfMatches[Count.IfMatches].Begin = i;
+if(Count.IfMatches < Max.IfMatches)IfMatches[Count.IfMatches].End = i;
 break;
 case State460:
+if(IfMatches[Count.IfMatches].Begin < 0)IfMatches[Count.IfMatches].Begin = i;
+if(Count.IfMatches < Max.IfMatches)IfMatches[Count.IfMatches].End = i;
 break;
 case State461:
 break;
@@ -22288,7 +22892,6 @@ break;
 case State472:
 break;
 case State473:
-if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 break;
 case State474:
 break;
@@ -22303,6 +22906,7 @@ break;
 case State479:
 break;
 case State480:
+if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 break;
 case State481:
 break;
@@ -22321,7 +22925,6 @@ break;
 case State488:
 break;
 case State489:
-Host.Host.End = i;
 break;
 case State490:
 break;
@@ -22336,6 +22939,7 @@ break;
 case State495:
 break;
 case State496:
+Host.Host.End = i;
 break;
 case State497:
 break;
@@ -22414,7 +23018,6 @@ break;
 case State534:
 break;
 case State535:
-if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 break;
 case State536:
 break;
@@ -22433,18 +23036,15 @@ break;
 case State543:
 break;
 case State544:
-Count.AuthorizationCount++;
 break;
 case State545:
+if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 break;
 case State546:
 break;
 case State547:
 break;
 case State548:
-if(ContentType.Type.Begin < 0)ContentType.Type.Begin = i- 1;
-if(ContentType.Value.Begin < 0)ContentType.Value.Begin = i- 1;
-ContentType.Type.End = i;
 break;
 case State549:
 break;
@@ -22457,7 +23057,7 @@ break;
 case State553:
 break;
 case State554:
-Host.Host.End = i;
+Count.AuthorizationCount++;
 break;
 case State555:
 break;
@@ -22466,6 +23066,9 @@ break;
 case State557:
 break;
 case State558:
+if(ContentType.Type.Begin < 0)ContentType.Type.Begin = i- 1;
+if(ContentType.Value.Begin < 0)ContentType.Value.Begin = i- 1;
+ContentType.Type.End = i;
 break;
 case State559:
 break;
@@ -22478,6 +23081,7 @@ break;
 case State563:
 break;
 case State564:
+Host.Host.End = i;
 break;
 case State565:
 break;
@@ -22492,6 +23096,7 @@ break;
 case State570:
 break;
 case State571:
+Count.IfMatches++;
 break;
 case State572:
 break;
@@ -22500,7 +23105,6 @@ break;
 case State574:
 break;
 case State575:
-if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 break;
 case State576:
 break;
@@ -22527,6 +23131,7 @@ break;
 case State587:
 break;
 case State588:
+if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 break;
 case State589:
 break;
@@ -22559,7 +23164,6 @@ break;
 case State603:
 break;
 case State604:
-ContentType.Type.End = i;
 break;
 case State605:
 break;
@@ -22586,6 +23190,7 @@ break;
 case State616:
 break;
 case State617:
+ContentType.Type.End = i;
 break;
 case State618:
 break;
@@ -22610,6 +23215,7 @@ break;
 case State628:
 break;
 case State629:
+if(IfMatches[Count.IfMatches].Begin < 0)IfMatches[Count.IfMatches].Begin = i;
 break;
 case State630:
 break;
@@ -22626,7 +23232,6 @@ break;
 case State636:
 break;
 case State637:
-if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 break;
 case State638:
 break;
@@ -22663,16 +23268,13 @@ break;
 case State654:
 break;
 case State655:
+if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 break;
 case State656:
 break;
 case State657:
-ContentLength = (ContentLength << 1) * 5 + bytes[i - 1] - 48;
 break;
 case State658:
-if(ContentType.Subtype.Begin < 0)ContentType.Subtype.Begin = i- 1;
-ContentType.Subtype.End = i;
-ContentType.Value.End = i;
 break;
 case State659:
 break;
@@ -22707,9 +23309,12 @@ break;
 case State674:
 break;
 case State675:
+ContentLength = (ContentLength << 1) * 5 + bytes[i - 1] - 48;
 break;
 case State676:
-if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
+if(ContentType.Subtype.Begin < 0)ContentType.Subtype.Begin = i- 1;
+ContentType.Subtype.End = i;
+ContentType.Value.End = i;
 break;
 case State677:
 break;
@@ -22766,10 +23371,9 @@ break;
 case State703:
 break;
 case State704:
+if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Other;
 break;
 case State705:
-ContentType.Subtype.End = i;
-ContentType.Value.End = i;
 break;
 case State706:
 break;
@@ -22798,7 +23402,6 @@ break;
 case State718:
 break;
 case State719:
-if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Websocket;
 break;
 case State720:
 break;
@@ -22827,6 +23430,8 @@ break;
 case State732:
 break;
 case State733:
+ContentType.Subtype.End = i;
+ContentType.Value.End = i;
 break;
 case State734:
 break;
@@ -22865,6 +23470,7 @@ break;
 case State751:
 break;
 case State752:
+if(Count.Upgrade < Max.Upgrade) Upgrade[Count.Upgrade] = Upgrades.Websocket;
 break;
 case State753:
 break;
@@ -22971,7 +23577,6 @@ break;
 case State804:
 break;
 case State805:
-if(SecWebSocketKey.Begin < 0)SecWebSocketKey.Begin = i- 1;
 break;
 case State806:
 break;
@@ -23048,10 +23653,8 @@ break;
 case State842:
 break;
 case State843:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthScheme = AuthSchemes.Digest;
 break;
 case State844:
-ContentType.Value.End = i;
 break;
 case State845:
 break;
@@ -23066,6 +23669,7 @@ break;
 case State850:
 break;
 case State851:
+if(SecWebSocketKey.Begin < 0)SecWebSocketKey.Begin = i- 1;
 break;
 case State852:
 break;
@@ -23142,8 +23746,10 @@ break;
 case State888:
 break;
 case State889:
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthScheme = AuthSchemes.Digest;
 break;
 case State890:
+ContentType.Value.End = i;
 break;
 case State891:
 break;
@@ -23154,7 +23760,6 @@ break;
 case State894:
 break;
 case State895:
-ContentType.Value.End = i;
 break;
 case State896:
 break;
@@ -23255,6 +23860,7 @@ break;
 case State944:
 break;
 case State945:
+ContentType.Value.End = i;
 break;
 case State946:
 break;
@@ -23265,10 +23871,8 @@ break;
 case State949:
 break;
 case State950:
-SecWebSocketKey.End = i;
 break;
 case State951:
-SecWebSocketKey.End = i;
 break;
 case State952:
 break;
@@ -23355,28 +23959,26 @@ break;
 case State993:
 break;
 case State994:
-Count.SecWebSocketProtocol++;
 break;
 case State995:
 break;
 case State996:
 break;
 case State997:
-SecWebSocketVersion = (SecWebSocketVersion << 1) * 5 + bytes[i - 1] - 48;
 break;
 case State998:
-SecWebSocketVersion = (SecWebSocketVersion << 1) * 5 + bytes[i - 1] - 48;
 break;
 case State999:
-SecWebSocketVersion = (SecWebSocketVersion << 1) * 5 + bytes[i - 1] - 48;
 break;
 case State1000:
 break;
 case State1001:
 break;
 case State1002:
+SecWebSocketKey.End = i;
 break;
 case State1003:
+SecWebSocketKey.End = i;
 break;
 case State1004:
 break;
@@ -23427,7 +24029,6 @@ break;
 case State1027:
 break;
 case State1028:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
 break;
 case State1029:
 break;
@@ -23452,8 +24053,6 @@ break;
 case State1039:
 break;
 case State1040:
-if(SecWebSocketProtocol[Count.SecWebSocketProtocol].Begin < 0)SecWebSocketProtocol[Count.SecWebSocketProtocol].Begin = i- 1;
-if(Count.SecWebSocketProtocol < Max.SecWebSocketProtocol)SecWebSocketProtocol[Count.SecWebSocketProtocol].End = i;
 break;
 case State1041:
 break;
@@ -23466,16 +24065,20 @@ break;
 case State1045:
 break;
 case State1046:
+Count.SecWebSocketProtocol++;
 break;
 case State1047:
 break;
 case State1048:
 break;
 case State1049:
+SecWebSocketVersion = (SecWebSocketVersion << 1) * 5 + bytes[i - 1] - 48;
 break;
 case State1050:
+SecWebSocketVersion = (SecWebSocketVersion << 1) * 5 + bytes[i - 1] - 48;
 break;
 case State1051:
+SecWebSocketVersion = (SecWebSocketVersion << 1) * 5 + bytes[i - 1] - 48;
 break;
 case State1052:
 break;
@@ -23534,6 +24137,7 @@ break;
 case State1079:
 break;
 case State1080:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
 break;
 case State1081:
 break;
@@ -23548,20 +24152,18 @@ break;
 case State1086:
 break;
 case State1087:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1088:
 break;
 case State1089:
 break;
 case State1090:
-if(Authorization[Count.AuthorizationCount].MessageQop.Begin < 0)Authorization[Count.AuthorizationCount].MessageQop.Begin = i;
 break;
 case State1091:
 break;
 case State1092:
+if(SecWebSocketProtocol[Count.SecWebSocketProtocol].Begin < 0)SecWebSocketProtocol[Count.SecWebSocketProtocol].Begin = i- 1;
+if(Count.SecWebSocketProtocol < Max.SecWebSocketProtocol)SecWebSocketProtocol[Count.SecWebSocketProtocol].End = i;
 break;
 case State1093:
 break;
@@ -23572,7 +24174,6 @@ break;
 case State1096:
 break;
 case State1097:
-Count.SecWebSocketExtensions++;
 break;
 case State1098:
 break;
@@ -23581,7 +24182,6 @@ break;
 case State1100:
 break;
 case State1101:
-if(Count.SecWebSocketProtocol < Max.SecWebSocketProtocol)SecWebSocketProtocol[Count.SecWebSocketProtocol].End = i;
 break;
 case State1102:
 break;
@@ -23646,29 +24246,28 @@ break;
 case State1132:
 break;
 case State1133:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1134:
 break;
 case State1135:
 break;
 case State1136:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].MessageQop.End = i;
 break;
 case State1137:
 break;
 case State1138:
 break;
 case State1139:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1140:
 break;
 case State1141:
-if(Authorization[Count.AuthorizationCount].DigestUri.Begin < 0)Authorization[Count.AuthorizationCount].DigestUri.Begin = i;
 break;
 case State1142:
+if(Authorization[Count.AuthorizationCount].MessageQop.Begin < 0)Authorization[Count.AuthorizationCount].MessageQop.Begin = i;
 break;
 case State1143:
 break;
@@ -23677,14 +24276,13 @@ break;
 case State1145:
 break;
 case State1146:
-if(SecWebSocketExtensions[Count.SecWebSocketExtensions].Begin < 0)SecWebSocketExtensions[Count.SecWebSocketExtensions].Begin = i- 1;
-if(Count.SecWebSocketExtensions < Max.SecWebSocketExtensions)SecWebSocketExtensions[Count.SecWebSocketExtensions].End = i;
 break;
 case State1147:
 break;
 case State1148:
 break;
 case State1149:
+Count.SecWebSocketExtensions++;
 break;
 case State1150:
 break;
@@ -23693,6 +24291,7 @@ break;
 case State1152:
 break;
 case State1153:
+if(Count.SecWebSocketProtocol < Max.SecWebSocketProtocol)SecWebSocketProtocol[Count.SecWebSocketProtocol].End = i;
 break;
 case State1154:
 break;
@@ -23757,15 +24356,16 @@ break;
 case State1184:
 break;
 case State1185:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1186:
 break;
 case State1187:
 break;
 case State1188:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].MessageQop.End = i;
 break;
 case State1189:
 break;
@@ -23781,14 +24381,14 @@ break;
 case State1194:
 break;
 case State1195:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1196:
 break;
 case State1197:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1198:
+if(SecWebSocketExtensions[Count.SecWebSocketExtensions].Begin < 0)SecWebSocketExtensions[Count.SecWebSocketExtensions].Begin = i- 1;
+if(Count.SecWebSocketExtensions < Max.SecWebSocketExtensions)SecWebSocketExtensions[Count.SecWebSocketExtensions].End = i;
 break;
 case State1199:
 break;
@@ -23801,7 +24401,6 @@ break;
 case State1203:
 break;
 case State1204:
-if(Count.SecWebSocketExtensions < Max.SecWebSocketExtensions)SecWebSocketExtensions[Count.SecWebSocketExtensions].End = i;
 break;
 case State1205:
 break;
@@ -23866,32 +24465,28 @@ break;
 case State1235:
 break;
 case State1236:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1237:
-if(Authorization[Count.AuthorizationCount].Nonce.Begin < 0)Authorization[Count.AuthorizationCount].Nonce.Begin = i;
 break;
 case State1238:
 break;
 case State1239:
-if(Authorization[Count.AuthorizationCount].Realm.Begin < 0)Authorization[Count.AuthorizationCount].Realm.Begin = i;
 break;
 case State1240:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1241:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1242:
 break;
 case State1243:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1244:
 break;
 case State1245:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
+if(Authorization[Count.AuthorizationCount].DigestUri.Begin < 0)Authorization[Count.AuthorizationCount].DigestUri.Begin = i;
 break;
 case State1246:
 break;
@@ -23899,19 +24494,15 @@ case State1247:
 if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1248:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1249:
 if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1250:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1251:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1252:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1253:
 break;
@@ -23920,6 +24511,7 @@ break;
 case State1255:
 break;
 case State1256:
+if(Count.SecWebSocketExtensions < Max.SecWebSocketExtensions)SecWebSocketExtensions[Count.SecWebSocketExtensions].End = i;
 break;
 case State1257:
 break;
@@ -23984,44 +24576,52 @@ break;
 case State1287:
 break;
 case State1288:
-break;
-case State1289:
-break;
-case State1290:
-break;
-case State1291:
-break;
-case State1292:
-break;
-case State1293:
-break;
-case State1294:
-break;
-case State1295:
-break;
-case State1296:
-break;
-case State1297:
-break;
-case State1298:
-break;
-case State1299:
-break;
-case State1300:
-break;
-case State1301:
-if(Authorization[Count.AuthorizationCount].Cnonce.Begin < 0)Authorization[Count.AuthorizationCount].Cnonce.Begin = i;
-break;
-case State1302:
 if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
 if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
 Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
-case State1303:
+case State1289:
 if(Authorization[Count.AuthorizationCount].Nonce.Begin < 0)Authorization[Count.AuthorizationCount].Nonce.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Nonce.End = i;
+break;
+case State1290:
+break;
+case State1291:
+if(Authorization[Count.AuthorizationCount].Realm.Begin < 0)Authorization[Count.AuthorizationCount].Realm.Begin = i;
+break;
+case State1292:
+break;
+case State1293:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
+break;
+case State1294:
+break;
+case State1295:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
+break;
+case State1296:
+break;
+case State1297:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
+break;
+case State1298:
+break;
+case State1299:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
+break;
+case State1300:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
+break;
+case State1301:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
+break;
+case State1302:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
+break;
+case State1303:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1304:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1305:
 break;
@@ -24036,11 +24636,8 @@ break;
 case State1310:
 break;
 case State1311:
-if(Authorization[Count.AuthorizationCount].Opaque.Begin < 0)Authorization[Count.AuthorizationCount].Opaque.Begin = i;
 break;
 case State1312:
-if(Authorization[Count.AuthorizationCount].Realm.Begin < 0)Authorization[Count.AuthorizationCount].Realm.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Realm.End = i;
 break;
 case State1313:
 break;
@@ -24123,10 +24720,16 @@ break;
 case State1352:
 break;
 case State1353:
+if(Authorization[Count.AuthorizationCount].Cnonce.Begin < 0)Authorization[Count.AuthorizationCount].Cnonce.Begin = i;
 break;
 case State1354:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1355:
+if(Authorization[Count.AuthorizationCount].Nonce.Begin < 0)Authorization[Count.AuthorizationCount].Nonce.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Nonce.End = i;
 break;
 case State1356:
 break;
@@ -24143,10 +24746,11 @@ break;
 case State1362:
 break;
 case State1363:
+if(Authorization[Count.AuthorizationCount].Opaque.Begin < 0)Authorization[Count.AuthorizationCount].Opaque.Begin = i;
 break;
 case State1364:
-if(Authorization[Count.AuthorizationCount].Cnonce.Begin < 0)Authorization[Count.AuthorizationCount].Cnonce.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Cnonce.End = i;
+if(Authorization[Count.AuthorizationCount].Realm.Begin < 0)Authorization[Count.AuthorizationCount].Realm.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Realm.End = i;
 break;
 case State1365:
 break;
@@ -24163,23 +24767,14 @@ break;
 case State1371:
 break;
 case State1372:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1373:
 break;
 case State1374:
-if(Authorization[Count.AuthorizationCount].Nonce.Begin < 0)Authorization[Count.AuthorizationCount].Nonce.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Nonce.End = i;
 break;
 case State1375:
-if(Authorization[Count.AuthorizationCount].Nonce.Begin < 0)Authorization[Count.AuthorizationCount].Nonce.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Nonce.End = i;
 break;
 case State1376:
-if(Authorization[Count.AuthorizationCount].Opaque.Begin < 0)Authorization[Count.AuthorizationCount].Opaque.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Opaque.End = i;
 break;
 case State1377:
 break;
@@ -24198,15 +24793,10 @@ break;
 case State1384:
 break;
 case State1385:
-if(Authorization[Count.AuthorizationCount].Realm.Begin < 0)Authorization[Count.AuthorizationCount].Realm.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Realm.End = i;
 break;
 case State1386:
-if(Authorization[Count.AuthorizationCount].Realm.Begin < 0)Authorization[Count.AuthorizationCount].Realm.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Realm.End = i;
 break;
 case State1387:
-Authorization[Count.AuthorizationCount].HasResponse = true;
 break;
 case State1388:
 break;
@@ -24265,6 +24855,8 @@ break;
 case State1415:
 break;
 case State1416:
+if(Authorization[Count.AuthorizationCount].Cnonce.Begin < 0)Authorization[Count.AuthorizationCount].Cnonce.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Cnonce.End = i;
 break;
 case State1417:
 break;
@@ -24281,17 +24873,25 @@ break;
 case State1423:
 break;
 case State1424:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1425:
 break;
 case State1426:
+if(Authorization[Count.AuthorizationCount].Nonce.Begin < 0)Authorization[Count.AuthorizationCount].Nonce.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Nonce.End = i;
 break;
 case State1427:
+if(Authorization[Count.AuthorizationCount].Nonce.Begin < 0)Authorization[Count.AuthorizationCount].Nonce.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Nonce.End = i;
 break;
 case State1428:
+if(Authorization[Count.AuthorizationCount].Opaque.Begin < 0)Authorization[Count.AuthorizationCount].Opaque.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Opaque.End = i;
 break;
 case State1429:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
 break;
 case State1430:
 break;
@@ -24308,21 +24908,19 @@ break;
 case State1436:
 break;
 case State1437:
+if(Authorization[Count.AuthorizationCount].Realm.Begin < 0)Authorization[Count.AuthorizationCount].Realm.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Realm.End = i;
 break;
 case State1438:
+if(Authorization[Count.AuthorizationCount].Realm.Begin < 0)Authorization[Count.AuthorizationCount].Realm.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Realm.End = i;
 break;
 case State1439:
-if(Authorization[Count.AuthorizationCount].Cnonce.Begin < 0)Authorization[Count.AuthorizationCount].Cnonce.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Cnonce.End = i;
+Authorization[Count.AuthorizationCount].HasResponse = true;
 break;
 case State1440:
-if(Authorization[Count.AuthorizationCount].Cnonce.Begin < 0)Authorization[Count.AuthorizationCount].Cnonce.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Cnonce.End = i;
 break;
 case State1441:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1442:
 break;
@@ -24341,12 +24939,8 @@ break;
 case State1449:
 break;
 case State1450:
-if(Authorization[Count.AuthorizationCount].Opaque.Begin < 0)Authorization[Count.AuthorizationCount].Opaque.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Opaque.End = i;
 break;
 case State1451:
-if(Authorization[Count.AuthorizationCount].Opaque.Begin < 0)Authorization[Count.AuthorizationCount].Opaque.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Opaque.End = i;
 break;
 case State1452:
 break;
@@ -24363,10 +24957,8 @@ break;
 case State1458:
 break;
 case State1459:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
 break;
 case State1460:
-if(Authorization[Count.AuthorizationCount].Username.Begin < 0)Authorization[Count.AuthorizationCount].Username.Begin = i;
 break;
 case State1461:
 break;
@@ -24409,6 +25001,7 @@ break;
 case State1480:
 break;
 case State1481:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
 break;
 case State1482:
 break;
@@ -24429,10 +25022,17 @@ break;
 case State1490:
 break;
 case State1491:
+if(Authorization[Count.AuthorizationCount].Cnonce.Begin < 0)Authorization[Count.AuthorizationCount].Cnonce.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Cnonce.End = i;
 break;
 case State1492:
+if(Authorization[Count.AuthorizationCount].Cnonce.Begin < 0)Authorization[Count.AuthorizationCount].Cnonce.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Cnonce.End = i;
 break;
 case State1493:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1494:
 break;
@@ -24445,18 +25045,18 @@ break;
 case State1498:
 break;
 case State1499:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1500:
 break;
 case State1501:
 break;
 case State1502:
-if(Authorization[Count.AuthorizationCount].MessageQop.Begin < 0)Authorization[Count.AuthorizationCount].MessageQop.Begin = i;
+if(Authorization[Count.AuthorizationCount].Opaque.Begin < 0)Authorization[Count.AuthorizationCount].Opaque.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Opaque.End = i;
 break;
 case State1503:
+if(Authorization[Count.AuthorizationCount].Opaque.Begin < 0)Authorization[Count.AuthorizationCount].Opaque.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Opaque.End = i;
 break;
 case State1504:
 break;
@@ -24465,18 +25065,18 @@ break;
 case State1506:
 break;
 case State1507:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
 case State1508:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
 case State1509:
 break;
 case State1510:
 break;
 case State1511:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
 break;
 case State1512:
+if(Authorization[Count.AuthorizationCount].Username.Begin < 0)Authorization[Count.AuthorizationCount].Username.Begin = i;
 break;
 case State1513:
 break;
@@ -24485,8 +25085,6 @@ break;
 case State1515:
 break;
 case State1516:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1517:
 break;
@@ -24507,12 +25105,8 @@ break;
 case State1525:
 break;
 case State1526:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1527:
-if(Authorization[Count.AuthorizationCount].Username.Begin < 0)Authorization[Count.AuthorizationCount].Username.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Username.End = i;
 break;
 case State1528:
 break;
@@ -24561,12 +25155,16 @@ break;
 case State1550:
 break;
 case State1551:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1552:
 break;
 case State1553:
 break;
 case State1554:
+if(Authorization[Count.AuthorizationCount].MessageQop.Begin < 0)Authorization[Count.AuthorizationCount].MessageQop.Begin = i;
 break;
 case State1555:
 break;
@@ -24577,18 +25175,16 @@ break;
 case State1558:
 break;
 case State1559:
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
 case State1560:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
 case State1561:
 break;
 case State1562:
 break;
 case State1563:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].MessageQop.End = i;
 break;
 case State1564:
 break;
@@ -24599,36 +25195,34 @@ break;
 case State1567:
 break;
 case State1568:
-if(Authorization[Count.AuthorizationCount].DigestUri.Begin < 0)Authorization[Count.AuthorizationCount].DigestUri.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1569:
 break;
 case State1570:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
 case State1571:
 break;
 case State1572:
 break;
 case State1573:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1574:
 break;
 case State1575:
-if(Authorization[Count.AuthorizationCount].Username.Begin < 0)Authorization[Count.AuthorizationCount].Username.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Username.End = i;
 break;
 case State1576:
-if(Authorization[Count.AuthorizationCount].Username.Begin < 0)Authorization[Count.AuthorizationCount].Username.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Username.End = i;
 break;
 case State1577:
 break;
 case State1578:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1579:
+if(Authorization[Count.AuthorizationCount].Username.Begin < 0)Authorization[Count.AuthorizationCount].Username.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Username.End = i;
 break;
 case State1580:
 break;
@@ -24687,9 +25281,6 @@ break;
 case State1607:
 break;
 case State1608:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1609:
 break;
@@ -24698,44 +25289,50 @@ break;
 case State1611:
 break;
 case State1612:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1613:
-if(Authorization[Count.AuthorizationCount].DigestUri.Begin < 0)Authorization[Count.AuthorizationCount].DigestUri.Begin = i;
 break;
 case State1614:
 break;
 case State1615:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].MessageQop.End = i;
 break;
 case State1616:
 break;
 case State1617:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1618:
 break;
 case State1619:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Md5;
 break;
 case State1620:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+if(Authorization[Count.AuthorizationCount].DigestUri.Begin < 0)Authorization[Count.AuthorizationCount].DigestUri.Begin = i;
 break;
 case State1621:
 break;
 case State1622:
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
 case State1623:
 break;
 case State1624:
 break;
 case State1625:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1626:
 break;
 case State1627:
+if(Authorization[Count.AuthorizationCount].Username.Begin < 0)Authorization[Count.AuthorizationCount].Username.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Username.End = i;
 break;
 case State1628:
+if(Authorization[Count.AuthorizationCount].Username.Begin < 0)Authorization[Count.AuthorizationCount].Username.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Username.End = i;
 break;
 case State1629:
 break;
@@ -24784,63 +25381,55 @@ break;
 case State1651:
 break;
 case State1652:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1653:
-if(Authorization[Count.AuthorizationCount].Nonce.Begin < 0)Authorization[Count.AuthorizationCount].Nonce.Begin = i;
 break;
 case State1654:
 break;
 case State1655:
-if(Authorization[Count.AuthorizationCount].Realm.Begin < 0)Authorization[Count.AuthorizationCount].Realm.Begin = i;
 break;
 case State1656:
 break;
 case State1657:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1658:
 break;
 case State1659:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1660:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1661:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1662:
 break;
 case State1663:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1664:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1665:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
+if(Authorization[Count.AuthorizationCount].DigestUri.Begin < 0)Authorization[Count.AuthorizationCount].DigestUri.Begin = i;
 break;
 case State1666:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1667:
 if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1668:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1669:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1670:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
 case State1671:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Md5;
 break;
 case State1672:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1673:
 break;
@@ -24873,15 +25462,10 @@ break;
 case State1687:
 break;
 case State1688:
-if(Authorization[Count.AuthorizationCount].Cnonce.Begin < 0)Authorization[Count.AuthorizationCount].Cnonce.Begin = i;
 break;
 case State1689:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1690:
-if(Authorization[Count.AuthorizationCount].Opaque.Begin < 0)Authorization[Count.AuthorizationCount].Opaque.Begin = i;
 break;
 case State1691:
 break;
@@ -24896,11 +25480,8 @@ break;
 case State1696:
 break;
 case State1697:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
 case State1698:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1699:
 break;
@@ -24913,67 +25494,69 @@ break;
 case State1703:
 break;
 case State1704:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1705:
+if(Authorization[Count.AuthorizationCount].Nonce.Begin < 0)Authorization[Count.AuthorizationCount].Nonce.Begin = i;
 break;
 case State1706:
 break;
 case State1707:
+if(Authorization[Count.AuthorizationCount].Realm.Begin < 0)Authorization[Count.AuthorizationCount].Realm.Begin = i;
 break;
 case State1708:
 break;
 case State1709:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1710:
-Authorization[Count.AuthorizationCount].HasResponse = true;
 break;
 case State1711:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1712:
 break;
 case State1713:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1714:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
 case State1715:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1716:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1717:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1718:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1719:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1720:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].DigestUri.End = i;
 break;
 case State1721:
 break;
 case State1722:
-break;
-case State1723:
-if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
-break;
-case State1724:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-break;
-case State1725:
-if(Authorization[Count.AuthorizationCount].Username.Begin < 0)Authorization[Count.AuthorizationCount].Username.Begin = i;
-break;
-case State1726:
 if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
-case State1727:
+case State1723:
 if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
 if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1724:
+break;
+case State1725:
+break;
+case State1726:
+break;
+case State1727:
 break;
 case State1728:
 break;
@@ -24986,33 +25569,29 @@ break;
 case State1732:
 break;
 case State1733:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
 case State1734:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
 case State1735:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
-Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1736:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1737:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Md5Sess;
 break;
 case State1738:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1739:
 break;
 case State1740:
+if(Authorization[Count.AuthorizationCount].Cnonce.Begin < 0)Authorization[Count.AuthorizationCount].Cnonce.Begin = i;
 break;
 case State1741:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1742:
+if(Authorization[Count.AuthorizationCount].Opaque.Begin < 0)Authorization[Count.AuthorizationCount].Opaque.Begin = i;
 break;
 case State1743:
 break;
@@ -25021,19 +25600,17 @@ break;
 case State1745:
 break;
 case State1746:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
 case State1747:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1748:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1749:
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
 case State1750:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1751:
 break;
@@ -25050,19 +25627,18 @@ break;
 case State1757:
 break;
 case State1758:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Md5;
 break;
 case State1759:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1760:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1761:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1762:
+Authorization[Count.AuthorizationCount].HasResponse = true;
 break;
 case State1763:
 break;
@@ -25071,8 +25647,11 @@ break;
 case State1765:
 break;
 case State1766:
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
 case State1767:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1768:
 break;
@@ -25089,15 +25668,18 @@ break;
 case State1774:
 break;
 case State1775:
+if(Authorization[Count.AuthorizationCount].NonceCountBytes.Begin < 0)Authorization[Count.AuthorizationCount].NonceCountBytes.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
 break;
 case State1776:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
 break;
 case State1777:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
+if(Authorization[Count.AuthorizationCount].Username.Begin < 0)Authorization[Count.AuthorizationCount].Username.Begin = i;
 break;
 case State1778:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
 case State1779:
 if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
@@ -25114,17 +25696,21 @@ break;
 case State1784:
 break;
 case State1785:
-break;
-case State1786:
-break;
-case State1787:
-break;
-case State1788:
 if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
-case State1789:
+case State1786:
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
+break;
+case State1787:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].NonceCountBytes.End = i;
+Authorization[Count.AuthorizationCount].NonceCount = (Authorization[Count.AuthorizationCount].NonceCount << 4) + AsciiCodeToHex[bytes[i - 1]];
+break;
+case State1788:
 if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
 if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1789:
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Md5Sess;
 break;
 case State1790:
 if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
@@ -25143,32 +25729,27 @@ break;
 case State1796:
 break;
 case State1797:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
 case State1798:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
 case State1799:
 if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
 if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1800:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1801:
 break;
 case State1802:
 break;
 case State1803:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
 case State1804:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1805:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1806:
 break;
@@ -25177,79 +25758,52 @@ break;
 case State1808:
 break;
 case State1809:
-if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Md5Sess;
 break;
 case State1810:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Md5;
 break;
 case State1811:
 if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
 if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1812:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1813:
 break;
 case State1814:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1815:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1816:
 break;
 case State1817:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1818:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1819:
 break;
 case State1820:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1821:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1822:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1823:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1824:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1825:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1826:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1827:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1828:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1829:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
 case State1830:
 if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
@@ -25260,40 +25814,23 @@ if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Coun
 if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1832:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1833:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1834:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1835:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1836:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1837:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1838:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1839:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1840:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
 case State1841:
 if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
@@ -25304,31 +25841,19 @@ if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Coun
 if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1843:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1844:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1845:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1846:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1847:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1848:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1849:
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
 case State1850:
 if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
@@ -25339,25 +25864,210 @@ if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Coun
 if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1852:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1853:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1854:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1855:
-if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
-if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Other;
 break;
 case State1856:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
 if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
 break;
 case State1857:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1858:
+break;
+case State1859:
+break;
+case State1860:
+break;
+case State1861:
+if(Count.AuthorizationCount < Max.AuthorizationCount) Authorization[Count.AuthorizationCount].AuthAlgorithm = AuthAlgorithms.Md5Sess;
+break;
+case State1862:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1863:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1864:
+break;
+case State1865:
+break;
+case State1866:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1867:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1868:
+break;
+case State1869:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1870:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1871:
+break;
+case State1872:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1873:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1874:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1875:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1876:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1877:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1878:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1879:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1880:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1881:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1882:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1883:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1884:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1885:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1886:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1887:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1888:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1889:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1890:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1891:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1892:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1893:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1894:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1895:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1896:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1897:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1898:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1899:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1900:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1901:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1902:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1903:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1904:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1905:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1906:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1907:
+if(Authorization[Count.AuthorizationCount].Response.Begin < 0)Authorization[Count.AuthorizationCount].Response.Begin = i;
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1908:
+if(Count.AuthorizationCount < Max.AuthorizationCount)Authorization[Count.AuthorizationCount].Response.End = i;
+break;
+case State1909:
 i--;
 Error = true;
 goto exit1;

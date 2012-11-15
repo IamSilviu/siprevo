@@ -10,10 +10,19 @@ namespace Http.Message
 			public readonly static byte[] HTTP_1_0_ = Create(@"HTTP/1.0 ");
 			public readonly static byte[] HTTP_1_1_ = Create(@"HTTP/1.1 ");
 
+			public readonly static byte[] http___ = Create(@"http://");
+			public readonly static byte[] https___ = Create(@"https://");
+
 			public readonly static byte[] Connection__Upgrade__ = Create("Connection: Upgrade\r\n");
 			public readonly static byte[] Upgrade__websocket__ = Create("Upgrade: websocket\r\n");
 			public readonly static byte[] Connection__close__ = Create("Connection: close\r\n");
 			public readonly static byte[] Content_Type__text_html__charset_utf_8__ = Create("Content-Type: text/html; charset=utf-8\r\n");
+			
+			public readonly static byte[] Allow__ = Create("Allow: ");
+
+			public readonly static byte[] ETag__ = Create("ETag: ");
+
+			public readonly static byte[] Location__ = Create("Location: ");
 
 			public readonly static byte[] Sec_WebSocket_Accept__ = Create("Sec-WebSocket-Accept: ");
 			public readonly static byte[] Sec_WebSocket_Protocol__ = Create("Sec-WebSocket-Protocol: ");
@@ -28,6 +37,12 @@ namespace Http.Message
 			public readonly static byte[] __nonce__ = Create(" ,nonce=\"");
 			public readonly static byte[] __algorithm_MD5 = Create(" ,algorithm=MD5");
 
+			public readonly static byte[] Access_Control_Allow_Origin__ = Create("Access-Control-Allow-Origin: ");
+			public readonly static byte[] Access_Control_Allow_Credentials__ = Create("Access-Control-Allow-Credentials: ");
+			public readonly static byte[] Access_Control_Expose_Headers__ = Create("Access-Control-Expose-Headers: ");
+			public readonly static byte[] Access_Control_Max_Age__ = Create("Access-Control-Max-Age: ");
+			public readonly static byte[] Access_Control_Allow_Methods__ = Create("Access-Control-Allow-Methods: ");
+			public readonly static byte[] Access_Control_Allow_Headers__ = Create("Access-Control-Allow-Headers: ");
 
 			public readonly static byte[] text_html__charset_utf_8__ = Create("text/html; charset=utf-8\r\n");
 			public readonly static byte[] text_html__ = Create("text/html\r\n");
@@ -47,6 +62,7 @@ namespace Http.Message
 			public readonly static byte[] application_rls_services_xml__ = Create("application/rls-services+xml\r\n");
 			public readonly static byte[] application_auth_policy_xml__ = Create("application/auth-policy+xml\r\n");
 			public readonly static byte[] application_xcap_error_xml__ = Create("application/xcap-error+xml\r\n");
+			public readonly static byte[] application_pidf_xml__ = Create("application/pidf+xml\r\n");
 
 			public readonly static byte[] SP = Create(' ');
 			public readonly static byte[] CRLF = Create("\r\n");
@@ -59,6 +75,7 @@ namespace Http.Message
 			public readonly static byte[] COMMA = Create(',');
 			public readonly static byte[] SLASH = Create('/');
 			public readonly static byte[] BACKSLASH = Create('\\');
+			public readonly static byte[] STAR = Create('*');
 
 			public readonly static byte[] Digest = Create(@"Digest");
 			public readonly static byte[] NTLM = Create(@"NTLM");
@@ -74,9 +91,10 @@ namespace Http.Message
 			public readonly static byte[] MD5 = Create(@"MD5");
 			public readonly static byte[] MD5_sess = Create(@"MD5-sess");
 			public readonly static byte[] stale = Create(@"stale");
-			public readonly static byte[] _true = Create(@"true");
-			public readonly static byte[] _false = Create(@"false");
+			public readonly static byte[] @true = Create(@"true");
+			public readonly static byte[] @false = Create(@"false");
 			public readonly static byte[] opaque = Create(@"opaque");
+			public readonly static byte[] @null = Create("null");
 
 			public static byte[] Create(string text)
 			{

@@ -254,12 +254,20 @@ namespace Base.Message
 			return ip;
 		}
 
-		public new string ToString()
+		public override string ToString()
 		{
 			if (Bytes == null || Begin < 0 || End < 0)
 				return null;
 
 			return Encoding.UTF8.GetString(Bytes, Offset, Length);
+		}
+
+		public string ToString(int startIndex)
+		{
+			if (Bytes == null || Begin < 0 || End < 0)
+				return null;
+
+			return Encoding.UTF8.GetString(Bytes, Offset + startIndex, Length - startIndex);
 		}
 
 		public ArraySegment<byte> ToArraySegment()

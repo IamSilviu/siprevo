@@ -92,6 +92,16 @@ req.cookie-header.HCOLON.: -> Count = Cookie, 8, -1;
 req.cookie-header.cookie-string.; -> Count = Cookie, 8, -1;
 
 //
+// -------------------------------------------------------------------------------[ If-Match
+//
+req.request-header.If-Match.* -> LookupRange = IfMatches[IfMatches];
+req.request-header.If-Match.entity-tag.opaque-tag.quoted-string.qdtext -> Range = IfMatches[IfMatches];
+req.request-header.If-Match.entity-tag.opaque-tag.quoted-string.quoted-pair -> Range = IfMatches[IfMatches];
+req.request-header.If-Match.HCOLON.: -> Count = IfMatches, 8, -1;
+req.request-header.If-Match.COMMA., -> Count = IfMatches, 8, -1;
+
+
+//
 // -------------------------------------------------------------------------------[ .CREDENTIALS
 //
 
