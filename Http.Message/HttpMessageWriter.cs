@@ -405,11 +405,14 @@ namespace Http.Message
 		{
 			Write(C.Location__);
 			Write(httpOrHttps ? C.http___ : C.https___);
-			Write(host);
-			if (port > 0)
+			if (host.IsValid)
 			{
-				Write(C.HCOLON);
-				Write(port);
+				Write(host);
+				if (port > 0)
+				{
+					Write(C.HCOLON);
+					Write(port);
+				}
 			}
 			if (extra != null)
 				Write(extra);
