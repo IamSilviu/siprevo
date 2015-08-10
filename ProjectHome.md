@@ -1,0 +1,1 @@
+SIP.NET is SIP stack .NET library written in C#. SIP message parser realized on Deterministic Finite-state Machine (DFA parse all SIP message for one pass). DFA generates automatically from Augmented Backus–Naur Form from RFC3261.
